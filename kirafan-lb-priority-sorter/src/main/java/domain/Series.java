@@ -3,12 +3,12 @@ package domain;
 public class Series {
     private String nameEN;
     private String nameJP;
-    private Crea crea;
+    private CreaStatus creaStatus;
 
-    public Series(String nameEN, String nameJP, Crea crea) {
+    public Series(String nameEN, String nameJP, CreaStatus creaStatus) {
         this.nameEN = nameEN;
         this.nameJP = nameJP;
-        this.crea = crea;
+        this.creaStatus = creaStatus;
     }
 
     public String getNameEN() {
@@ -27,11 +27,11 @@ public class Series {
         this.nameJP = nameJP;
     }
 
-    public Crea getCrea() {
-        return crea;
+    public CreaStatus getCrea() {
+        return creaStatus;
     }
 
-    public void setCrea(Crea crea) {
-        this.crea = crea;
+    public void setCrea(CreaStatus creaStatus) {
+        this.creaStatus = creaStatus;
     }
 }

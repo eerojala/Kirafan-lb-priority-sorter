@@ -1,30 +1,90 @@
 package domain;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class Character implements  Comparable<Character> {
+public class Character {
+    public static class Builder {
+        private String name;
+        private Series series;
+        private CharacterClass characterClass;
+        private CharacterElement characterElement;
+        private List<Skill> skills;
+        private boolean hasWeapon;
+        private boolean limitBroken;
+        private int wokeLevel;
+        private int personalPreference;
+
+        public Builder(String name, Series series, CharacterClass characterClass, CharacterElement characterElement) {
+            this.name = name;
+            this.series = series;
+            this.characterClass = characterClass;
+            this.characterElement = characterElement;
+            skills = new ArrayList<>();
+            hasWeapon = false;
+            limitBroken = false;
+            wokeLevel = 0;
+            personalPreference = 0;
+        }
+
+        public Builder withSkill(Skill skill) {
+            skills.add(skill);
+
+            return this;
+        }
+
+        public Builder withWeapon() {
+            hasWeapon = true;
+
+            return this;
+        }
+
+        public Builder limitBroken() {
+            limitBroken = true;
+
+            return this;
+        }
+
+        public Builder withWokeLevel(int wokeLevel) {
+            this.wokeLevel = wokeLevel;
+
+            return this;
+        }
+
+        public Builder withPersonalPreference(int personalPreference) {
+            this.personalPreference = personalPreference;
+
+            return this;
+        }
+
+        public Character build() {
+            Character character = new Character();
+            character.name = name;
+            character.series = series;
+            character.characterClass = characterClass;
+            character.characterElement = characterElement;
+            character.skills = skills;
+            character.hasWeapon = hasWeapon;
+            character.limitBroken = limitBroken;
+            character.wokeLevel = wokeLevel;
+            character.personalPreference = personalPreference;
+
+            return character;
+        }
+    }
+
     private String name;
     private Series series;
     private CharacterClass characterClass;
     private CharacterElement characterElement;
+    private List<Skill> skills;
     private boolean hasWeapon;
+    private boolean limitBroken;
     private int wokeLevel;
-    private Niche niche; // See comment in domain.Niche for explanation
     private int personalPreference;
-    private String description;
 
-    public Character(String name, Series series, CharacterClass characterClass, CharacterElement characterElement,
-                     boolean hasWeapon, int wokeLevel, Niche niche, int personalPreference, String description) {
-        this.name = name;
-        this.series = series;
-        this.characterClass = characterClass;
-        this.characterElement = characterElement;
-        this.hasWeapon = hasWeapon;
-        this.wokeLevel = wokeLevel;
-        this.niche = niche;
-        this.personalPreference = personalPreference;
-        this.description = description;
-    }
+    private Character() {}
 
     public String getName() {
         return name;
@@ -58,12 +118,36 @@ public class Character implements  Comparable<Character> {
         this.characterElement = characterElement;
     }
 
-    public boolean isHasWeapon() {
+    public List<Skill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<Skill> skills) {
+        this.skills = skills;
+    }
+
+    public void addSkill(Skill skill) {
+        this.skills.add(skill);
+    }
+
+    public void removeSkill(Skill skill) {
+        this.skills.remove(skill);
+    }
+
+    public boolean hasWeapon() {
         return hasWeapon;
     }
 
     public void setHasWeapon(boolean hasWeapon) {
         this.hasWeapon = hasWeapon;
+    }
+
+    public boolean isLimitBroken() {
+        return limitBroken;
+    }
+
+    public void setLimitBroken(boolean limitBroken) {
+        this.limitBroken = limitBroken;
     }
 
     public int getWokeLevel() {
@@ -74,28 +158,12 @@ public class Character implements  Comparable<Character> {
         this.wokeLevel = wokeLevel;
     }
 
-    public Niche getNiche() {
-        return niche;
-    }
-
-    public void setNiche(Niche niche) {
-        this.niche = niche;
-    }
-
     public int getPersonalPreference() {
         return personalPreference;
     }
 
     public void setPersonalPreference(int personalPreference) {
         this.personalPreference = personalPreference;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     @Override
@@ -112,100 +180,5 @@ public class Character implements  Comparable<Character> {
     @Override
     public int hashCode() {
         return Objects.hash(name, series, characterClass, characterElement);
-    }
-
-    /*
-    * Comparison hierarchy, from highest to lowest
-    *
-    * 01: Important niche
-    * 02: High personal preference (9-10)
-    * 03: Incomplete crea
-    * 04: Medium personal preference (7-8)
-    * 05: Character does not have a weapon
-    * 06: Non-important niche
-    * 07: Lower number of not yet limit broken characters which have the same class
-    * 08: Low personal preference (<7)
-    */
-    public int compareTo(Character o) {
-        int importantNicheCheck = compareNiche(o, Niche.IMPORTANT); // Check for important niche
-        /*
-        * If either character (but not both) has an important niche
-        *   return comparison value, otherwise continue
-        */
-        if (importantNicheCheck != 0) {
-            return importantNicheCheck;
-        }
-
-        int highPersonalPreferenceCheck = comparePreference(0, 9, 10); // Check for high personal preference
-        /*
-        * If either character has a high personal preference (9-10)
-        * which is also higher than the other's personal preference
-        *   return comparison value, otherwise continue
-        */
-        if (highPersonalPreferenceCheck != 0) {
-            return highPersonalPreferenceCheck;
-        }
-
-
-    }
-
-    /*
-    * if this character fills the niche but the other doesn't
-    *   return -1 (this character has higher priority)
-    *
-    * else if the other fills the niche but this doesn't
-    *   return 1 (the other character has higher priority)
-    *
-    * else (both characters fill the niche or neither character fills the niche)
-    *   return 0 (both characters have the same priority)
-    */
-    private int compareNiche(Character o, Niche niche) {
-        Niche nicheThis = this.niche;
-        Niche nicheOther = o.getNiche();
-
-        if (nicheThis == niche && nicheOther != niche) {
-            return -1;
-        } else if (nicheOther == niche && nicheThis != niche) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
-    /* Note: min and max are inclusive, i.e. [min, max]
-    *
-    * if this character's personal preference is within given range
-    * and if this character's personal preference is higher than the other's
-    *   return -1 (this character has higher priority)
-    *
-    * if the other character's personal preference is within given range
-    * and the other character's personal preference is higher than this character's
-    *   return 1 (the other character has higher priority)
-    *
-    * else (if both characters are in the given range and have the same personal preference
-    * or neither character has a personal preference in the given range)
-    *   return 0 (both characters have the same priority)
-    * */
-    private int comparePreference(Character o, int min, int max) {
-        int personalPreferenceThis = this.personalPreference;
-        int personalPreferenceOther = o.getPersonalPreference();
-
-        if (personalPreferenceWithinRange(personalPreferenceThis, min, max)
-                && personalPreferenceThis > personalPreferenceOther) {
-            return -1;
-        } else if (personalPreferenceWithinRange(personalPreferenceOther, min, max)
-                && personalPreferenceOther > personalPreferenceThis) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
-    private boolean personalPreferenceWithinRange(int personalPreference, int min, int max) {
-        return personalPreference >= min && personalPreference <= max;
-    }
-
-    private int compareCrea(Character o) {
-
     }
 }
