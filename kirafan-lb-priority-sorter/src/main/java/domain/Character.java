@@ -11,6 +11,7 @@ public class Character {
         private CharacterClass characterClass;
         private CharacterElement characterElement;
         private List<Skill> skills;
+        private int damageDealingStat;
         private boolean hasWeapon;
         private boolean limitBroken;
         private int wokeLevel;
@@ -22,6 +23,7 @@ public class Character {
             this.characterClass = characterClass;
             this.characterElement = characterElement;
             skills = new ArrayList<>();
+            damageDealingStat = 0;
             hasWeapon = false;
             limitBroken = false;
             wokeLevel = 0;
@@ -30,6 +32,12 @@ public class Character {
 
         public Builder withSkill(Skill skill) {
             skills.add(skill);
+
+            return this;
+        }
+
+        public Builder damageDealingStatIs(int amount) {
+            damageDealingStat = amount;
 
             return this;
         }
@@ -79,6 +87,7 @@ public class Character {
     private CharacterClass characterClass;
     private CharacterElement characterElement;
     private List<Skill> skills;
+    private int damageDealingStat;
     private boolean hasWeapon;
     private boolean limitBroken;
     private int wokeLevel;
@@ -126,12 +135,12 @@ public class Character {
         this.skills = skills;
     }
 
-    public void addSkill(Skill skill) {
-        this.skills.add(skill);
+    public int getDamageDealingStat() {
+        return damageDealingStat;
     }
 
-    public void removeSkill(Skill skill) {
-        this.skills.remove(skill);
+    public void setDamageDealingStat(int damageDealingStat) {
+        this.damageDealingStat = damageDealingStat;
     }
 
     public boolean hasWeapon() {
