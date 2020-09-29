@@ -8,9 +8,9 @@ public enum SkillType {
     MDF("MDF", "SPD"), // Stat which determines defense from magical damage
     LUK("LUK", "LUK"), // Stat which determines chance for critical damage (both dealing or receiving damage)
     CRIT_DAMAGE("Critical damage", "クリティカルダメージ"), // Affect the damage of a critical hit
-    NEXT_ATK("Next physical attack up", "次回の物理攻撃の威力アップ"), // ATK for next attack only
-    NEXT_MAT("Next magical attack up", "次回の魔法攻撃の威力アップ"), // MAT for next attack only
-    ELEMENT_RESIST("Elemental resistance", "属性耐性"), // Reduces damage of a specific or all elements
+    NEXT_ATK("Next physical attack up", "次回の物理攻撃の威力アップ"), // Affect ATK for next attack only
+    NEXT_MAT("Next magical attack up", "次回の魔法攻撃の威力アップ"), // Affect MAT for next attack only
+    ELEMENT_RESIST("Elemental resistance", "属性耐性"), // Reduces damage of a specific element
 
     // Skill types which cause/cure status affects
     CONFUSION("Confusion", "混乱"), // Causes enemies to take damage randomly instead of using a skills / player characters to select a random skill
@@ -27,7 +27,6 @@ public enum SkillType {
     BARRIER("Barrier", "バリア"), // Blocks all of the received damage from the next attack
     BARRIER_TRIPLE("Triple barrier", "三重バリア"), // Blocks all of the received damage from the 3 next attacks
     DAMAGE("Damage", "ダメージ"); // Deal physical or magical damage
-
 
     private final String nameEN;
     private final String nameJP;
