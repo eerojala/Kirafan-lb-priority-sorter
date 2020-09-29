@@ -13,11 +13,6 @@ public class Skill {
         this.amount = amount;
     }
 
-    // For barrier and status effect clear skills which do not need a change or an amount
-    public Skill(SkillType type, SkillTarget target) {
-        this(type, null, target, 100);
-    }
-
     public SkillType getType() {
         return type;
     }
