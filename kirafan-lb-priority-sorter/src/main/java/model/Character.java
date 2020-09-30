@@ -99,7 +99,29 @@ public class Character {
     private int wokeLevel;
     private int personalPreference;
 
-    private Character() {}
+    public Character(String id, String name, Series series, CharacterClass characterClass,
+                     CharacterElement characterElement, List<Skill> skills, int damageDealingStat, boolean hasWeapon,
+                     boolean limitBroken, int wokeLevel, int personalPreference) {
+        this.id = id;
+        this.name = name;
+        this.series = series;
+        this.characterClass = characterClass;
+        this.characterElement = characterElement;
+        this.skills = skills;
+        this.damageDealingStat = damageDealingStat;
+        this.hasWeapon = hasWeapon;
+        this.limitBroken = limitBroken;
+        this.wokeLevel = wokeLevel;
+        this.personalPreference = personalPreference;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
