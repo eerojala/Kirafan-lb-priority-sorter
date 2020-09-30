@@ -1,4 +1,4 @@
-package domain;
+package model;
 
 public enum SkillType {
     // Skill types which affect stats

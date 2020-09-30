@@ -19,6 +19,13 @@
             </plugin>
         </plugins>
     </build>
+    <dependencies>
+        <dependency>
+            <groupId>io.jsondb</groupId>
+            <artifactId>jsondb-core</artifactId>
+            <version>1.0.115-j11</version>
+        </dependency>
+    </dependencies>
 
 
 </project>

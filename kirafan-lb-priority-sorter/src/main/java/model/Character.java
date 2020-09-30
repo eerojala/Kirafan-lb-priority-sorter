@@ -1,87 +1,93 @@
-package domain;
+package model;
+
+import io.jsondb.annotation.Document;
+import io.jsondb.annotation.Id;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Document(collection = "characters", schemaVersion = "1.0")
 public class Character {
-    public static class Builder {
-        private String name;
-        private Series series;
-        private CharacterClass characterClass;
-        private CharacterElement characterElement;
-        private List<Skill> skills;
-        private int damageDealingStat;
-        private boolean hasWeapon;
-        private boolean limitBroken;
-        private int wokeLevel;
-        private int personalPreference;
+//    public static class Builder {
+//        private String name;
+//        private Series series;
+//        private CharacterClass characterClass;
+//        private CharacterElement characterElement;
+//        private List<Skill> skills;
+//        private int damageDealingStat;
+//        private boolean hasWeapon;
+//        private boolean limitBroken;
+//        private int wokeLevel;
+//        private int personalPreference;
+//
+//        public Builder(String name, Series series, CharacterClass characterClass, CharacterElement characterElement) {
+//            this.name = name;
+//            this.series = series;
+//            this.characterClass = characterClass;
+//            this.characterElement = characterElement;
+//            skills = new ArrayList<>();
+//            damageDealingStat = 0;
+//            hasWeapon = false;
+//            limitBroken = false;
+//            wokeLevel = 0;
+//            personalPreference = 0;
+//        }
+//
+//        public Builder withSkill(Skill skill) {
+//            skills.add(skill);
+//
+//            return this;
+//        }
+//
+//        public Builder damageDealingStatIs(int amount) {
+//            damageDealingStat = amount;
+//
+//            return this;
+//        }
+//
+//        public Builder withWeapon() {
+//            hasWeapon = true;
+//
+//            return this;
+//        }
+//
+//        public Builder limitBroken() {
+//            limitBroken = true;
+//
+//            return this;
+//        }
+//
+//        public Builder withWokeLevel(int wokeLevel) {
+//            this.wokeLevel = wokeLevel;
+//
+//            return this;
+//        }
+//
+//        public Builder withPersonalPreference(int personalPreference) {
+//            this.personalPreference = personalPreference;
+//
+//            return this;
+//        }
+//
+//        public Character build() {
+//            Character character = new Character();
+//            character.name = name;
+//            character.series = series;
+//            character.characterClass = characterClass;
+//            character.characterElement = characterElement;
+//            character.skills = skills;
+//            character.hasWeapon = hasWeapon;
+//            character.limitBroken = limitBroken;
+//            character.wokeLevel = wokeLevel;
+//            character.personalPreference = personalPreference;
+//
+//            return character;
+//        }
+//    }
 
-        public Builder(String name, Series series, CharacterClass characterClass, CharacterElement characterElement) {
-            this.name = name;
-            this.series = series;
-            this.characterClass = characterClass;
-            this.characterElement = characterElement;
-            skills = new ArrayList<>();
-            damageDealingStat = 0;
-            hasWeapon = false;
-            limitBroken = false;
-            wokeLevel = 0;
-            personalPreference = 0;
-        }
-
-        public Builder withSkill(Skill skill) {
-            skills.add(skill);
-
-            return this;
-        }
-
-        public Builder damageDealingStatIs(int amount) {
-            damageDealingStat = amount;
-
-            return this;
-        }
-
-        public Builder withWeapon() {
-            hasWeapon = true;
-
-            return this;
-        }
-
-        public Builder limitBroken() {
-            limitBroken = true;
-
-            return this;
-        }
-
-        public Builder withWokeLevel(int wokeLevel) {
-            this.wokeLevel = wokeLevel;
-
-            return this;
-        }
-
-        public Builder withPersonalPreference(int personalPreference) {
-            this.personalPreference = personalPreference;
-
-            return this;
-        }
-
-        public Character build() {
-            Character character = new Character();
-            character.name = name;
-            character.series = series;
-            character.characterClass = characterClass;
-            character.characterElement = characterElement;
-            character.skills = skills;
-            character.hasWeapon = hasWeapon;
-            character.limitBroken = limitBroken;
-            character.wokeLevel = wokeLevel;
-            character.personalPreference = personalPreference;
-
-            return character;
-        }
-    }
-
+    @Id
+    private String id;
     private String name;
     private Series series;
     private CharacterClass characterClass;

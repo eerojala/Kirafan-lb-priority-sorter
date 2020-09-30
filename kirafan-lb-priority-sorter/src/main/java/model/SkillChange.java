@@ -1,4 +1,4 @@
-package domain;
+package model;
 // Enum for representing whether a skill has an increasing or a decreasing effect, e.g. "MAT UP, DEF DOWN";
 public enum SkillChange {
     UP("Up", "アップ"),

@@ -1,4 +1,4 @@
-package domain;
+package model;
 
 public enum SkillTarget {
     SELF("Self", "自身"),
