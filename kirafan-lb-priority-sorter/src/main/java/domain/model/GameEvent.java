@@ -1,4 +1,4 @@
-package model;
+package domain.model;
 
 import io.jsondb.annotation.Document;
 import io.jsondb.annotation.Id;
@@ -12,6 +12,10 @@ public class GameEvent {
     private String id;
     private List<Character> bonusCharacters; // Characters which give out bonus during the event
     private List<Series> availableSeries; // Series which have limit breaks available during the event
+
+    // Jackson requires a public constructor with no parameters
+    public GameEvent() {
+    }
 
     public GameEvent(String id) {
         this.id = id;

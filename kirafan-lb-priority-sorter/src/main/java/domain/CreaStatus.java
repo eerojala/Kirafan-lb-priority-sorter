@@ -1,4 +1,4 @@
-package model;
+package domain;
 
 public enum CreaStatus {
     COMPLETE("Complete", "完成"),

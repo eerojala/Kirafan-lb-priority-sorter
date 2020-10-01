@@ -1,5 +1,6 @@
-package model;
+package domain.model;
 
+import domain.CreaStatus;
 import io.jsondb.annotation.Document;
 import io.jsondb.annotation.Id;
 
@@ -11,19 +12,18 @@ public class Series {
     private String nameJP;
     private CreaStatus creaStatus;
 
-    public Series(String id, String nameEN, String nameJP, CreaStatus creaStatus) {
-        this.id = id;
+    // Jackson requires a public constructor with no parameters
+    public Series() {}
+
+    public Series(String nameEN, String nameJP, CreaStatus creaStatus) {
         this.nameEN = nameEN;
         this.nameJP = nameJP;
         this.creaStatus = creaStatus;
+        this.id = this.nameEN;
     }
 
     public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+        return this.id;
     }
 
     public String getNameEN() {

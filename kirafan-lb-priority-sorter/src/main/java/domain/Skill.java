@@ -1,12 +1,17 @@
-package model;
+package domain;
+
+import java.util.Objects;
 
 public class Skill {
     private SkillType type;
     private SkillChange change;
     private SkillTarget target;
-    private float amount; //
+    private double amount; //
 
-    public Skill(SkillType type, SkillChange change, SkillTarget target, float amount) {
+    // Jackson requires a public constructor with no parameters
+    public Skill() {}
+
+    public Skill(SkillType type, SkillChange change, SkillTarget target, double amount) {
         this.type = type;
         this.change = change;
         this.target = target;
@@ -37,11 +42,11 @@ public class Skill {
         this.target = target;
     }
 
-    public float getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
@@ -50,7 +55,7 @@ public class Skill {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Skill skill = (Skill) o;
-        return Float.compare(skill.amount, amount) == 0 &&
+        return Double.compare(skill.amount, amount) == 0 &&
                 type == skill.type &&
                 change == skill.change &&
                 target == skill.target;
