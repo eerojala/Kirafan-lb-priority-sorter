@@ -26,8 +26,9 @@ public class Main {
 //
 //        database.insertSeries(series);
 
-        Database seriesDatabase = new Database("src/main/resources", "domain.model", "series");
+        Database seriesDatabase = new Database("kirafan-lb-priority-sorter/src/main/resources", "domain.model", "series");
         Series series = new Series("Hanayamata","ハナヤマタ", CreaStatus.INCOMPLETE);
+        seriesDatabase.createCollection();
         seriesDatabase.insert(series);
     }
 }

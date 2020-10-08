@@ -8,14 +8,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class DatabaseTest {
+    private static final String seriesJsonSecondLine = "{\"id\":\"1\",\"name\":\"series1\",\"status\":\"COMPLETE\"}";
     private String dbFilesLocation;
     private File dbFilesFolder;
+    private File skillsJson;
     private File seriesJson;
-    private Database database;
+    private Database seriesDatabase;
 
     private Series series1;
     private Series series2;
@@ -24,6 +27,7 @@ class DatabaseTest {
     public DatabaseTest() {
         dbFilesLocation = "src/test/resources/db test files";
         dbFilesFolder = new File(dbFilesLocation);
+        skillsJson = new File(dbFilesFolder, "skills.json");
         seriesJson = new File(dbFilesFolder, "series.json");
 
         series1 = new Series("1", "Series1", Series.Status.COMPLETE);
@@ -33,14 +37,29 @@ class DatabaseTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        dbFilesFolder.mkdir();
+//        dbFilesFolder.mkdir();
 //        Files.copy(new File("src/test/resources/db test files/series.json"), seriesJson);
-        database = new Database(dbFilesLocation, "logic.model", "series");
+        seriesJson.createNewFile();
+        seriesDatabase = new Database(dbFilesLocation, "logic.model", "series");
     }
 
     @AfterEach
     void tearDown() {
-        Util.delete(dbFilesFolder);
+        skillsJson.delete();
+    }
+
+    @Test
+    void testCreateCollection_createsNewJson() {
+        File seriesJson = new File(dbFilesFolder, "skills.json");
+        assertFalse(seriesJson.exists()); // file named skills.json should not exist yet
+
+        Database db = new Database(dbFilesLocation, "logic.model", "skills");
+        boolean result = db.createCollection();
+        seriesJson = new File(dbFilesFolder, "skills.json");
+
+        assertTrue(result); // Function should return true if json creation succeeded
+        assertTrue(seriesJson.exists()); // file named skills should now exist after calling the function
+        assertEquals(3, dbFilesFolder.list().length); // lock, series.json and skills.json
     }
 
     @Test
@@ -51,19 +70,22 @@ class DatabaseTest {
         boolean result = db.createCollection();
 
         assertFalse(result); // Function should return false if json creation failed
-        assertEquals(1, dbFilesFolder.list().length); // a folder named lock is created regardless if json creation succeeded or not
+        assertEquals(2, dbFilesFolder.list().length); // directory should only contain the lock folder and series.json
     }
 
     @Test
-    void testCreateCollection_createsNewJson() {
-        File seriesJson = new File(dbFilesFolder, "series.json");
-        assertFalse(seriesJson.exists()); // file named series.json should not exist yet
+    void testCreateCollection_doesNotOverwriteExistingJson() throws Exception {
+        assertTrue(seriesJson.exists()); // series.json should already exist
+        long sizeBeforeOperation = seriesJson.length();
 
-        boolean result = database.createCollection();
-        seriesJson = new File(dbFilesFolder, "series.json");
+        boolean result = seriesDatabase.createCollection();
 
-        assertTrue(result);
-        assertTrue(seriesJson.exists()); // file named series should now exist after calling the function
-        assertEquals(2, dbFilesFolder.list().length); // the other file is the lock folder which is created along with the json
+        assertFalse(result); // Function should return false if json already exists
+
+        Scanner scanner = new Scanner(seriesJson);
+        scanner.nextLine();
+        String secondLine = scanner.nextLine();
+
+        assertEquals(seriesJsonSecondLine, secondLine); // series.json should not be overwritten
     }
 }
