@@ -14,15 +14,24 @@ public class Database<T> {
         this.collectionName = collectionName;
     }
 
+    public boolean createCollection() {
+        try {
+            database.createCollection(collectionName);
+
+            return true;
+        } catch (Exception e) {
+            System.out.println(e);
+
+            return false;
+        }
+    }
+
     public boolean insert(T type) {
         try {
             database.insert(type);
+
             return true;
         } catch (Exception e) {
-            if (!database.collectionExists(collectionName)) {
-                database.createCollection(collectionName);
-                return insert(type);
-            }
             System.out.println(e);
 
             return false;

@@ -9,5 +9,8 @@
         <module name="kirafan-lb-priority-sorter" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="kirafan-lb-priority-sorter" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

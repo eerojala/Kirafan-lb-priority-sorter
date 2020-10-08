@@ -1,0 +1,3 @@
+logic\model\Series.class
+logic\model\Series$Status.class
+domain\SkillTest.class

@@ -10,7 +10,7 @@ public class Main {
 //        SeriesDatabase seriesDatabase = new SeriesDatabase("src/main/resources");
 //        Database characterDatabase = new CharacterDatabase("src/main/resources");
 //
-//        Series series = new Series("Hanayamata","ハナヤマタ", CreaStatus.INCOMPLETE);
+
 //        Character character = new Character.Builder("Naru",series, CharacterElement.SUN, CharacterClass.PRIEST)
 //                .withSkill(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ALLIES_ALL, 36.6))
 //                .withWeapon()
@@ -22,8 +22,12 @@ public class Main {
 //        characterDatabase.insert(character);
 //
 //        Series fetchedSeries = seriesDatabase.get
-
+//
 //
 //        database.insertSeries(series);
+
+        Database seriesDatabase = new Database("src/main/resources", "domain.model", "series");
+        Series series = new Series("Hanayamata","ハナヤマタ", CreaStatus.INCOMPLETE);
+        seriesDatabase.insert(series);
     }
 }
