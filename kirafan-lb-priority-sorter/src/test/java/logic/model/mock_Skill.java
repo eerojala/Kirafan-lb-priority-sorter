@@ -4,11 +4,11 @@ import io.jsondb.annotation.Document;
 import io.jsondb.annotation.Id;
 
 @Document(collection = "skills", schemaVersion = "1.0")
-public class Skill {
+public class mock_Skill {
     @Id
     private String id;
 
-    public Skill() {
+    public mock_Skill() {
     }
 
     public String getId() {

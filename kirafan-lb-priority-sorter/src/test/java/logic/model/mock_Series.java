@@ -4,7 +4,7 @@ import io.jsondb.annotation.Document;
 import io.jsondb.annotation.Id;
 
 @Document(collection = "series", schemaVersion = "1.0")
-public class Series {
+public class mock_Series {
     public enum Status {
         COMPLETE, INCOMPLETE, NONE
     }
@@ -14,10 +14,10 @@ public class Series {
     private String name;
     private Status status;
 
-    public Series() {
+    public mock_Series() {
     }
 
-    public Series(String id, String name, Status status) {
+    public mock_Series(String id, String name, Status status) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -51,7 +51,7 @@ public class Series {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Series series = (Series) o;
+        mock_Series series = (mock_Series) o;
         return id.equals(series.id) &&
                 name.equals(series.name) &&
                 status == series.status;
