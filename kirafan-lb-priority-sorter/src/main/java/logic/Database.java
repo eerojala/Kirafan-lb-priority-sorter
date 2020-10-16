@@ -38,4 +38,14 @@ public class Database<T> {
         }
     }
 
+    public T findById(String id) {
+        try {
+            return database.findById(id, collectionName);
+        } catch (Exception e) {
+            System.out.println(e);
+
+            return null;
+        }
+    }
+
 }

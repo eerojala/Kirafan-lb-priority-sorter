@@ -142,6 +142,18 @@ class DatabaseTest {
         assertFalse(lineExistsInFile(seriesJson, 3)); // series1 should not be inserted into series.json
     }
 
+    @Test
+    public void testFindById_returnsDesiredObjectWithCorrectId() {
+        mock_Series fetchedSeries = seriesDatabase.findById("1");
+        assertEquals(series1, fetchedSeries); // function returns correct object
+    }
+
+    @Test
+    public void testFindById_returnsNullIfNoObjectFoundMatchingId() {
+        mock_Series fetchedSeries = seriesDatabase.findById("asdf");
+        assertNull(fetchedSeries);
+    }
+
 
     private String getLineFromFile(File file, int lineNumber) throws Exception {
         Scanner scanner = new Scanner(file);
