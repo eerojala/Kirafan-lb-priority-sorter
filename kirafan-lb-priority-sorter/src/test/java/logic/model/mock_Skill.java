@@ -11,6 +11,10 @@ public class mock_Skill {
     public mock_Skill() {
     }
 
+    public mock_Skill(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }

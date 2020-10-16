@@ -36,6 +36,7 @@ class DatabaseTest {
     private mock_Series series1;
     private mock_Series series2;
     private mock_Character character1;
+    private mock_Skill skill1;
 
 
     public DatabaseTest() {
@@ -49,6 +50,7 @@ class DatabaseTest {
         series1 = new mock_Series("1", "series1", mock_Series.Status.COMPLETE);
         series2 = new mock_Series("2", "series2", mock_Series.Status.INCOMPLETE);
         character1 = new mock_Character("1", "character1");
+        skill1 = new mock_Skill("1");
     }
 
     @BeforeEach
@@ -56,8 +58,8 @@ class DatabaseTest {
         dbFilesFolder.mkdir();
 
         seriesJson.createNewFile();
-        writeLineIntoJson(seriesJson, schemaVersion);
-        writeLineIntoJson(seriesJson, series1Entry);
+        writeLineIntoFile(seriesJson, schemaVersion);
+        writeLineIntoFile(seriesJson, series1Entry);
 
 //        charactersJson.createNewFile();
 //        charactersJsonLock.createNewFile();
@@ -74,14 +76,12 @@ class DatabaseTest {
 
     @Test
     void testCreateCollection_createsNewJson() {
-        File seriesJson = new File(dbFilesFolder, "skills.json");
-        assertFalse(seriesJson.exists()); // file named skills.json should not exist yet
+        assertFalse(skillsJson.exists()); // file named skills.json should not exist yet
 
         boolean result = skillDatabasee.createCollection();
-        seriesJson = new File(dbFilesFolder, "skills.json");
 
         assertTrue(result); // Function should return true if json creation succeeded
-        assertTrue(seriesJson.exists()); // file named skills should now exist after calling the function
+        assertTrue(skillsJson.exists()); // file named skills should now exist after calling the function
         assertEquals(3, dbFilesFolder.list().length); // lock, series.json and skills.json
     }
 
@@ -102,7 +102,7 @@ class DatabaseTest {
         boolean result = seriesDatabase.createCollection();
         assertFalse(result); // Function should return false if json already exists
 
-        String firstEntry = getLineFromJson(seriesJson, 2);  // First entry in the json is on the seoncd line
+        String firstEntry = getLineFromFile(seriesJson, 2);  // First entry in the json is on the seoncd line
         assertEquals(series1Entry, firstEntry); // series.json should not be overwritten
     }
 
@@ -110,19 +110,40 @@ class DatabaseTest {
     void testInsert_insertsObjectIntoJson() throws Exception {
         assertTrue(seriesJson.exists()); // series.json should already exist
 
-        assertEquals(schemaVersion, getLineFromJson(seriesJson, 1)); // the first line should be the schema version
-        assertEquals(series1Entry, getLineFromJson(seriesJson, 2)); // the second line should be the first entry
-
+        assertEquals(schemaVersion, getLineFromFile(seriesJson, 1)); // the first line should be the schema version
+        assertEquals(series1Entry, getLineFromFile(seriesJson, 2)); // the second line should be the first entry
 
         boolean result = seriesDatabase.insert(series2);
         assertTrue(result); // function should return true on successful insert
+        assertEquals(series1Entry, getLineFromFile(seriesJson, 2)); // first entry should not be overwritten
+        assertEquals(series2Entry, getLineFromFile(seriesJson, 3)); // the new entry is successfully inserted
+    }
 
-        assertEquals(series1Entry, getLineFromJson(seriesJson, 2)); // first entry should not be overwritten
-        assertEquals(series2Entry, getLineFromJson(seriesJson, 3)); // the new entry is successfully inserted
+    @Test
+    void testInsert_failsIfUncreatedCollection() throws Exception {
+        assertFalse(skillsJson.exists()); // file named skills.json should not exist yet
+
+        boolean result = skillDatabasee.insert(skill1);
+        assertFalse(result); // function should return false on unsuccessful insert
+        assertFalse(skillsJson.exists()); // skills.json should not be created with function insert
+
+        // The existing json series.json should not be modified
+        assertEquals(schemaVersion, getLineFromFile(seriesJson, 1));  // the first line should be the schema version
+        assertEquals(series1Entry, getLineFromFile(seriesJson, 2)); // the second line should be the first entry
+        assertFalse(lineExistsInFile(seriesJson, 3)); // skill1 should not be inserted into series.json
+    }
+
+    @Test
+    void testInsert_failsIfObjectAlreadyExistsInJson() throws Exception {
+        boolean result = seriesDatabase.insert(series1);
+        assertFalse(result); // function should return false on unsuccessful insert
+        assertEquals(schemaVersion, getLineFromFile(seriesJson, 1));  // the first line should be the schema version
+        assertEquals(series1Entry, getLineFromFile(seriesJson, 2)); // the second line should be the first entry
+        assertFalse(lineExistsInFile(seriesJson, 3)); // series1 should not be inserted into series.json
     }
 
 
-    private String getLineFromJson(File file, int lineNumber) throws Exception {
+    private String getLineFromFile(File file, int lineNumber) throws Exception {
         Scanner scanner = new Scanner(file);
         String line = null;
 
@@ -136,9 +157,27 @@ class DatabaseTest {
         return line;
     }
 
-    private void writeLineIntoJson(File file, String line) throws Exception {
+    private void writeLineIntoFile(File file, String line) throws Exception {
         FileWriter writer = new FileWriter(file, true);
         writer.write(line + "\n");
         writer.close();
+    }
+
+    private boolean lineExistsInFile(File file, int lineNumber) throws Exception {
+        Scanner scanner = new Scanner(file);
+
+        for (int i = 1; i <= lineNumber; i++) {
+            if (scanner.hasNext()) {
+                scanner.nextLine();
+            } else {
+                scanner.close();
+
+                return false;
+            }
+        }
+
+        scanner.close();
+
+        return true;
     }
  }
