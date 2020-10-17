@@ -48,4 +48,14 @@ public class Database<T> {
         }
     }
 
+    public List<T> findAll() {
+        try {
+            return database.findAll(collectionName);
+        } catch (Exception e) {
+            System.out.println(e);
+
+            return null;
+        }
+    }
+
 }
