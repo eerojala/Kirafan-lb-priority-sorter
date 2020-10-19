@@ -26,18 +26,6 @@ public class Database<T> {
         }
     }
 
-    public boolean insert(T type) {
-        try {
-            database.insert(type);
-
-            return true;
-        } catch (Exception e) {
-            System.out.println(e);
-
-            return false;
-        }
-    }
-
     public T findById(String id) {
         try {
             return database.findById(id, collectionName);
@@ -58,9 +46,33 @@ public class Database<T> {
         }
     }
 
+    public boolean insert(T type) {
+        try {
+            database.insert(type);
+
+            return true;
+        } catch (Exception e) {
+            System.out.println(e);
+
+            return false;
+        }
+    }
+
     public boolean update(T t) {
         try {
             database.save(t, this.collectionName);
+
+            return true;
+        } catch (Exception e) {
+            System.out.println(e);
+
+            return false;
+        }
+    }
+
+    public boolean remove(T t) {
+        try {
+            database.remove(t, this.collectionName);
 
             return true;
         } catch (Exception e) {

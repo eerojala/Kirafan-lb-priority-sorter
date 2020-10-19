@@ -91,7 +91,7 @@ class DatabaseTest {
     @Test
     public void testCreateCollection_createsNewJson() {
         assertFalse(skillsJson.exists()); // file named skills.json should not exist yet
-        assertEquals(4, dbFilesFolder.length()); // lock folder and the json files series, characters and events
+        assertEquals(4, dbFilesFolder.list().length); // lock folder and the json files series, characters and events
 
         boolean result = skillDatabasee.createCollection();
         assertTrue(result); // Function should return true if json creation succeeded
@@ -211,6 +211,26 @@ class DatabaseTest {
         boolean result = seriesDatabase.update(series2);
         assertFalse(result); // function should return false if attempting to update an object which is not in the json file yet
         defaultSeriesJsonAsserts(); // series.json should not be modified in any way
+    }
+
+    @Test
+    public void remove_removesGivenObjectSuccessfully() throws Exception {
+        defaultCharactersJsonAsserts(); // characters.json should already exist with correct content
+
+        boolean result = characterDatabase.remove(character2);
+        assertTrue(result); // Function should return true on successful removal
+        assertEquals(schemaVersion, getLineFromFile(charactersJson, 1));
+        assertEquals(character1Entry, getLineFromFile(charactersJson, 2));
+        assertEquals(character3Entry, getLineFromFile(charactersJson, 3));
+    }
+
+    @Test
+    public void remove_doesNotAffectJsonIfTryingToRemoveNonExistentObject() throws Exception {
+        defaultSeriesJsonAsserts(); // series.json should already exist with correct content
+
+        boolean result = seriesDatabase.remove(series2);
+        assertFalse(result); // Function should return false if trying to remove an object which is not in the Json
+        defaultSeriesJsonAsserts(); // series.json should be unaffected after failed remove operation
     }
 
     private void writeLineIntoFile(File file, String line) throws Exception {
