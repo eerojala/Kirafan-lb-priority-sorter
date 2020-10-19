@@ -58,4 +58,16 @@ public class Database<T> {
         }
     }
 
+    public boolean update(T t) {
+        try {
+            database.save(t, this.collectionName);
+
+            return true;
+        } catch (Exception e) {
+            System.out.println(e);
+
+            return false;
+        }
+    }
+
 }
