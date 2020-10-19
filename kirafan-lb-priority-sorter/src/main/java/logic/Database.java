@@ -26,6 +26,15 @@ public class Database<T> {
         }
     }
 
+    public List<T> find (String jxQuery) {
+        try {
+            return database.find(jxQuery, collectionName);
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
     public T findById(String id) {
         try {
             return database.findById(id, collectionName);
