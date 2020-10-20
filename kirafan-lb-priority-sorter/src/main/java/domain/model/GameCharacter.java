@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Document(collection = "characters", schemaVersion = "1.0")
-public class Character {
+public class GameCharacter {
     public static class Builder {
         private String id;
         private String name;
@@ -75,8 +75,8 @@ public class Character {
             return this;
         }
 
-        public Character build() {
-            Character character = new Character();
+        public GameCharacter build() {
+            GameCharacter character = new GameCharacter();
             character.id = id;
             character.name = name;
             character.series = series;
@@ -106,7 +106,7 @@ public class Character {
     private int personalPreference;
 
     // Jackson requires a public constructor with no parameters
-    public Character() {
+    public GameCharacter() {
     }
 
     public String getId() {
@@ -201,7 +201,7 @@ public class Character {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Character character = (Character) o;
+        GameCharacter character = (GameCharacter) o;
         return name.equals(character.name) &&
                 series.equals(character.series) &&
                 characterClass == character.characterClass &&

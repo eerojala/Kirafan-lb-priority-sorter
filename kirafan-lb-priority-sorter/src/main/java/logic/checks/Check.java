@@ -1,17 +1,18 @@
 package logic.checks;
 
-import domain.model.Character;
-import domain.model.Event;
-import logic.Searchable;
+import domain.model.GameCharacter;
+import domain.model.GameEvent;
+
+import java.util.List;
 
 public abstract class Check {
-    protected Searchable<Character> characterDatabase;
-    protected Event currentEvent;
+    protected List<GameCharacter> characters;
+    protected GameEvent currentEvent;
 
-    public Check(Searchable<Character> characterDatabase, Event currentEvent) {
-        this.characterDatabase = characterDatabase;
+    public Check(List<GameCharacter> characters, GameEvent currentEvent) {
+        this.characters = characters;
         this.currentEvent = currentEvent;
     }
 
-    public abstract int check(Character c1, Character c2);
+    public abstract int check(GameCharacter c1, GameCharacter c2);
 }

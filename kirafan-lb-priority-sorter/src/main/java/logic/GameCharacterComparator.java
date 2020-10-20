@@ -1,7 +1,7 @@
 package logic;
 
-import domain.model.Character;
-import domain.model.Event;
+import domain.model.GameCharacter;
+import domain.model.GameEvent;
 import logic.checks.Check;
 import logic.checks.EventBonusCheck;
 
@@ -9,17 +9,17 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class CharacterComparator implements Comparator<Character> {
-    private Searchable characterDatabase;
-    private Event currentEvent;
+public class GameCharacterComparator implements Comparator<GameCharacter> {
+    private List<GameCharacter> characters;
+    private GameEvent currentEvent;
     private List<Check> checks;
 
-    public CharacterComparator(Searchable characterDatabase, Event currentEvent) {
-        this.characterDatabase = characterDatabase;
+    public GameCharacterComparator(List<GameCharacter> characters, GameEvent currentEvent) {
+        this.characters = characters;
         this.currentEvent = currentEvent;
 
         checks = new ArrayList<>();
-        checks.add(new EventBonusCheck(characterDatabase, currentEvent));
+        checks.add(new EventBonusCheck(characters, currentEvent));
     }
 
     /*
@@ -27,7 +27,7 @@ public class CharacterComparator implements Comparator<Character> {
     * 01: Bonus character for current event
     * */
     @Override
-    public int compare(Character c1, Character c2) {
+    public int compare(GameCharacter c1, GameCharacter c2) {
         for (Check check : checks) {
             int checkResult = check.check(c1, c2);
 

@@ -22,6 +22,10 @@ public class Series {
         this.id = this.nameEN;
     }
 
+    public Series(String nameEn, CreaStatus creaStatus) {
+        this(nameEn, "", creaStatus);
+    }
+
     public String getId() {
         return this.id;
     }
