@@ -1,9 +1,6 @@
 import domain.*;
-import domain.model.Character;
 import domain.model.Series;
 import logic.Database;
-
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) {

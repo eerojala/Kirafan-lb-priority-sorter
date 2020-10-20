@@ -5,7 +5,7 @@ import io.jsondb.JsonDBTemplate;
 import java.util.Collections;
 import java.util.List;
 
-public class Database<T> {
+public class Database<T> implements Searchable<T> {
     private JsonDBTemplate database;
     private String collectionName;
 
@@ -26,6 +26,7 @@ public class Database<T> {
         }
     }
 
+    @Override
     public List<T> find (String jxQuery) {
         try {
             return database.find(jxQuery, collectionName);
@@ -45,6 +46,7 @@ public class Database<T> {
         }
     }
 
+    @Override
     public List<T> findAll() {
         try {
             return database.findAll(collectionName);

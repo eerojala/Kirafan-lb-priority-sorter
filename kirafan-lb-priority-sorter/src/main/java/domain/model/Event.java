@@ -7,17 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "events", schemaVersion = "1.0")
-public class GameEvent {
+public class Event {
     @Id
     private String id;
     private List<Character> bonusCharacters; // Characters which give out bonus during the event
     private List<Series> availableSeries; // Series which have limit breaks available during the event
 
     // Jackson requires a public constructor with no parameters
-    public GameEvent() {
+    public Event() {
     }
 
-    public GameEvent(String id) {
+    public Event(String id) {
         this.id = id;
         bonusCharacters = new ArrayList<>();
         availableSeries = new ArrayList<>();
