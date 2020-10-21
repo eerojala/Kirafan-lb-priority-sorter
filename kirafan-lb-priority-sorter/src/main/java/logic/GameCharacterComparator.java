@@ -10,9 +10,10 @@ import java.util.Comparator;
 import java.util.List;
 
 public class GameCharacterComparator implements Comparator<GameCharacter> {
+    private final List<Check> checks;
     private List<GameCharacter> characters;
     private GameEvent currentEvent;
-    private List<Check> checks;
+
 
     public GameCharacterComparator(List<GameCharacter> characters, GameEvent currentEvent) {
         this.characters = characters;
@@ -20,6 +21,22 @@ public class GameCharacterComparator implements Comparator<GameCharacter> {
 
         checks = new ArrayList<>();
         checks.add(new EventBonusCheck(characters, currentEvent));
+    }
+
+    public List<GameCharacter> getCharacters() {
+        return characters;
+    }
+
+    public void setCharacters(List<GameCharacter> characters) {
+        this.characters = characters;
+    }
+
+    public GameEvent getCurrentEvent() {
+        return currentEvent;
+    }
+
+    public void setCurrentEvent(GameEvent currentEvent) {
+        this.currentEvent = currentEvent;
     }
 
     /*

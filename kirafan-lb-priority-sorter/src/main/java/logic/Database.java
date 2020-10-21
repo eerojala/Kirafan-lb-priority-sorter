@@ -44,7 +44,7 @@ public class Database<T> {
             return null;
         }
     }
-    
+
     public List<T> findAll() {
         try {
             return database.findAll(collectionName);
