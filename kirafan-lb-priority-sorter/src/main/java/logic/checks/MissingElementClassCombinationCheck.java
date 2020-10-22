@@ -17,8 +17,13 @@ public class MissingElementClassCombinationCheck extends Check {
 
     @Override
     public int compare(GameCharacter c1, GameCharacter c2) {
-        if ((!limitBrokenCharacterWithSameElementAndClassExists(c1) && limitBrokenCharacterWithSameElementAndClassExists(c2))
-                || (!limitBrokenCharacterWithSameElementAndClassExists(c1) && charactersClassHasAHigherPriority(c1, c2))) {
+        boolean c1HasAnElementClassCombinationWhichAlreadyExists = limitBrokenCharacterWithSameElementAndClassExists(c1);
+        boolean c2HasAnElementClassCombinationWhichAlreadyExists = limitBrokenCharacterWithSameElementAndClassExists(c2);
+        boolean c1sClassHasHigherPriority = charactersClassHasAHigherPriority(c1, c2);
+        boolean c2sClassHasHigherPriority = charactersClassHasAHigherPriority(c2, c1);
+
+        if ((!c1HasAnElementClassCombinationWhichAlreadyExists && c2HasAnElementClassCombinationWhichAlreadyExists)
+                || (!c1HasAnElementClassCombinationWhichAlreadyExists && c1sClassHasHigherPriority)) {
             /*
             * If c1 has an element/class combination which NO currently limit broken character has AND
             *       c2 has an element/class combination which a currently limit broken character has
@@ -27,8 +32,8 @@ public class MissingElementClassCombinationCheck extends Check {
             * c1 has higher priority
             */
             return -1;
-        } else if ((!limitBrokenCharacterWithSameElementAndClassExists(c2) && limitBrokenCharacterWithSameElementAndClassExists(c1))
-                || (!limitBrokenCharacterWithSameElementAndClassExists(c2)) && charactersClassHasAHigherPriority(c2, c1)) {
+        } else if ((!c2HasAnElementClassCombinationWhichAlreadyExists && c1HasAnElementClassCombinationWhichAlreadyExists)
+                || (!c2HasAnElementClassCombinationWhichAlreadyExists && c2sClassHasHigherPriority)) {
             /*
             * If c2 has an element/class combination which NO currently limit broken character has AND
             *       c1 has an element/class combination which a currently limit broken character has
@@ -40,7 +45,10 @@ public class MissingElementClassCombinationCheck extends Check {
         } else {
             /*
             * Else, e.g. when neither character has an element/class combination which NO currently limit broken character has
-            * OR both characters have an element/class combination which NO currently limit broken has and their classes have the same priority
+            * OR both characters have an element/class combination which NO currently limit broken characters has AND
+            *       they both have the same element and class
+            *       OR they both hav the same class
+            *       OR their classes have the same priority
             *
             * both characters have the same priority
             */
@@ -72,7 +80,7 @@ public class MissingElementClassCombinationCheck extends Check {
      */
     private boolean charactersClassHasAHigherPriority(GameCharacter character, GameCharacter comparedCharacter) {
         CharacterClass charactersClass = character.getCharacterClass();
-        CharacterClass comparedCharactersClass = character.getCharacterClass();
+        CharacterClass comparedCharactersClass = comparedCharacter.getCharacterClass();
 
         /*
          * if character's class is a knight or priest and the compared character's class is neither a knight or priest

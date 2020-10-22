@@ -38,7 +38,7 @@ class EventBonusCheckTest {
 
 
     @Test
-    public void check_returnsNegativeOneWhenC1IsBonusAndC2IsNot() {
+    public void compare_returnsNegativeOne_whenC1IsBonusAndC2IsNot() {
         assertNotEquals(-1, check.compare(cA, cB)); // both characters are bonus
         assertNotEquals(-1, check.compare(cD, cA)); // cD is not bonus, cA is bonus
         assertEquals(-1, check.compare(cA, cC)); // cA is bonus,  cC is not bonus
@@ -46,7 +46,7 @@ class EventBonusCheckTest {
     }
 
     @Test
-    public void check_returnsOneWhenC2IsBonusAndC1IsNot() {
+    public void compare_returnsOne_whenC2IsBonusAndC1IsNot() {
         assertNotEquals(1, check.compare(cA, cB)); // both characters are bonus
         assertEquals(1, check.compare(cD, cA)); // cD is not bonus, cA is bonus
         assertNotEquals(1, check.compare(cA, cC)); // cA is bonus,  cC is not bonus
@@ -54,7 +54,7 @@ class EventBonusCheckTest {
     }
 
     @Test
-    public void check_returnsZero_WhenEventIsNull() {
+    public void compare_returnsZero_whenEventIsNull() {
         EventBonusCheck anotherCheck = new EventBonusCheck(null);
         assertEquals(0, anotherCheck.compare(cA, cB));
         assertEquals(0, anotherCheck.compare(cA, cC));
@@ -65,13 +65,13 @@ class EventBonusCheckTest {
     }
 
     @Test
-    public void check_returnsZero_whenBothCharactersAreBonus() {
+    public void compare_returnsZero_whenBothCharactersAreBonus() {
         assertEquals(0, check.compare(cA, cB));
         assertEquals(0, check.compare(cB, cA));
     }
 
     @Test
-    public void check_returns_zeroWhenNeitherCharacterIsBonus() {
+    public void compare_returnsZero_whenNeitherCharacterIsBonus() {
         assertEquals(0, check.compare(cC, cD));
         assertEquals(0, check.compare(cD, cC));
     }

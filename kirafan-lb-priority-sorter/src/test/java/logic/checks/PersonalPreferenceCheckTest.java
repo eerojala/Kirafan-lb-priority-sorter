@@ -49,7 +49,7 @@ class PersonalPreferenceCheckTest {
     }
 
     @Test
-    public void check_returnsNegativeOne_whenC1HasHigherPreferenceWhichIsInRange() {
+    public void compare_returnsNegativeOne_whenC1HasHigherPreferenceWhichIsInRange() {
         // cA has a priority of 9 which is within the given range (>=8)
         assertEquals(-1, check.compare(cA, cB)); // cB has a priority of 8 which is within range and lower than cA's
         assertNotEquals(-1, check.compare(cA, cC)); // cC has a priority of 9 which is within range and equal to cA's
@@ -69,7 +69,7 @@ class PersonalPreferenceCheckTest {
     }
 
     @Test
-    public void check_returnsOne_whenC2HasHigherPreferenceWhichIsInRange() {
+    public void compare_returnsOne_whenC2HasHigherPreferenceWhichIsInRange() {
         // cA has a priority of 9 which is within the given range (>=8)
         assertNotEquals(1, check.compare(cA, cB)); // cB has a priority of 8 which is within range and lower than cA's
         assertNotEquals(1, check.compare(cA, cC)); // cC has a priority of 9 which is within range and equal to cA's
@@ -89,12 +89,12 @@ class PersonalPreferenceCheckTest {
     }
 
     @Test
-    public void check_returnsZero_whenBothCharactersHaveEqualPreferenceWhichIsInRange() {
+    public void compare_returnsZero_whenBothCharactersHaveEqualPreferenceWhichIsInRange() {
         assertEquals(0, check.compare(cA, cC)); // Both have preference of 9 is within range
     }
 
     @Test
-    public void check_returnsZero_whenBothCharactersPreferenceIsNotInRange() {
+    public void compare_returnsZero_whenBothCharactersPreferenceIsNotInRange() {
         // cD has a priority of 7 which is NOT within the given range
         assertEquals(0, check.compare(cD, cE)); // cE has a preference of 5 which is NOT within range and lower than cD's
         assertEquals(0, check.compare(cD, cF)); // cF has a preference of 7 which is NOT within range and equal to cD's
