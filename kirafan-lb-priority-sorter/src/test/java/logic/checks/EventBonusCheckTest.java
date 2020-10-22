@@ -33,46 +33,46 @@ class EventBonusCheckTest {
         List<GameCharacter> bonusCharacters = new ArrayList<>(Arrays.asList(cA, cB));
         event.setBonusCharacters(bonusCharacters);
 
-        check = new EventBonusCheck(new ArrayList<GameCharacter>(), event);
+        check = new EventBonusCheck(event);
     }
 
 
     @Test
     public void check_returnsNegativeOneWhenC1IsBonusAndC2IsNot() {
-        assertNotEquals(-1, check.check(cA, cB)); // both characters are bonus
-        assertNotEquals(-1, check.check(cD, cA)); // cD is not bonus, cA is bonus
-        assertEquals(-1, check.check(cA, cC)); // cA is bonus,  cC is not bonus
-        assertNotEquals(-1, check.check(cC, cD)); // Neither character is bonus
+        assertNotEquals(-1, check.compare(cA, cB)); // both characters are bonus
+        assertNotEquals(-1, check.compare(cD, cA)); // cD is not bonus, cA is bonus
+        assertEquals(-1, check.compare(cA, cC)); // cA is bonus,  cC is not bonus
+        assertNotEquals(-1, check.compare(cC, cD)); // Neither character is bonus
     }
 
     @Test
     public void check_returnsOneWhenC2IsBonusAndC1IsNot() {
-        assertNotEquals(1, check.check(cA, cB)); // both characters are bonus
-        assertEquals(1, check.check(cD, cA)); // cD is not bonus, cA is bonus
-        assertNotEquals(1, check.check(cA, cC)); // cA is bonus,  cC is not bonus
-        assertNotEquals(1, check.check(cC, cD)); // Neither character is bonus
+        assertNotEquals(1, check.compare(cA, cB)); // both characters are bonus
+        assertEquals(1, check.compare(cD, cA)); // cD is not bonus, cA is bonus
+        assertNotEquals(1, check.compare(cA, cC)); // cA is bonus,  cC is not bonus
+        assertNotEquals(1, check.compare(cC, cD)); // Neither character is bonus
     }
 
     @Test
     public void check_returnsZero_WhenEventIsNull() {
-        EventBonusCheck anotherCheck = new EventBonusCheck(new ArrayList<GameCharacter>(), null);
-        assertEquals(0, anotherCheck.check(cA, cB));
-        assertEquals(0, anotherCheck.check(cA, cC));
-        assertEquals(0, anotherCheck.check(cA, cD));
-        assertEquals(0, anotherCheck.check(cB, cC));
-        assertEquals(0, anotherCheck.check(cB, cD));
-        assertEquals(0, anotherCheck.check(cC, cD));
+        EventBonusCheck anotherCheck = new EventBonusCheck(null);
+        assertEquals(0, anotherCheck.compare(cA, cB));
+        assertEquals(0, anotherCheck.compare(cA, cC));
+        assertEquals(0, anotherCheck.compare(cA, cD));
+        assertEquals(0, anotherCheck.compare(cB, cC));
+        assertEquals(0, anotherCheck.compare(cB, cD));
+        assertEquals(0, anotherCheck.compare(cC, cD));
     }
 
     @Test
     public void check_returnsZero_whenBothCharactersAreBonus() {
-        assertEquals(0, check.check(cA, cB));
-        assertEquals(0, check.check(cB, cA));
+        assertEquals(0, check.compare(cA, cB));
+        assertEquals(0, check.compare(cB, cA));
     }
 
     @Test
     public void check_returns_zeroWhenNeitherCharacterIsBonus() {
-        assertEquals(0, check.check(cC, cD));
-        assertEquals(0, check.check(cD, cC));
+        assertEquals(0, check.compare(cC, cD));
+        assertEquals(0, check.compare(cD, cC));
     }
 }
