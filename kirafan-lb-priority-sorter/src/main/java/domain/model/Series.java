@@ -4,6 +4,8 @@ import domain.CreaStatus;
 import io.jsondb.annotation.Document;
 import io.jsondb.annotation.Id;
 
+import java.util.Objects;
+
 @Document(collection = "series", schemaVersion = "1.0")
 public class Series {
     @Id
@@ -52,5 +54,18 @@ public class Series {
 
     public void setCreaStatus(CreaStatus creaStatus) {
         this.creaStatus = creaStatus;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Series series = (Series) o;
+        return Objects.equals(getId(), series.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

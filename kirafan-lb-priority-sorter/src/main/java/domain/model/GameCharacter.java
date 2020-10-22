@@ -93,7 +93,7 @@ public class GameCharacter {
     }
 
     @Id
-    private String id; // Jsondb requries a string variable named id for all model classes
+    private String id; // Jsondb requires a string variable named id for all model classes
     private String name;
     private Series series;
     private CharacterElement characterElement;
@@ -201,15 +201,12 @@ public class GameCharacter {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        GameCharacter character = (GameCharacter) o;
-        return name.equals(character.name) &&
-                series.equals(character.series) &&
-                characterClass == character.characterClass &&
-                characterElement == character.characterElement;
+        GameCharacter that = (GameCharacter) o;
+        return getId().equals(that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, series, characterClass, characterElement);
+        return Objects.hash(getId());
     }
 }
