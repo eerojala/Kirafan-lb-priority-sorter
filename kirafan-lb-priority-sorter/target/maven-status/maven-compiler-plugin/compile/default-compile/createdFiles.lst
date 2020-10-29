@@ -8,6 +8,4 @@ domain\SkillChange.class
 domain\Skill.class
 domain\SkillTarget.class
 Main.class
-domain\model\Character.class
-domain\model\Character$Builder.class
 domain\model\GameEvent.class

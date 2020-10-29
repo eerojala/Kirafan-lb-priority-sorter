@@ -9,7 +9,7 @@ import java.util.*;
 public class GameCharacterMapper {
     private Map<AbstractMap.SimpleEntry<CharacterElement, CharacterClass>, List<GameCharacter>> charactersByElementAndClass;
 
-    public GameCharacterMapper(List<GameCharacter> characters) {
+    public GameCharacterMapper() {
         charactersByElementAndClass = new HashMap<>();
     }
 
