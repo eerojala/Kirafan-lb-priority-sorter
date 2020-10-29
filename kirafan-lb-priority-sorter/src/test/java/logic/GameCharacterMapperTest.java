@@ -30,9 +30,7 @@ class GameCharacterMapperTest {
         chara1 = new GameCharacter.Builder("chara1", series1, CharacterElement.SUN, CharacterClass.ALCHEMIST).build();
         chara2 = new GameCharacter.Builder("chara2", series2, CharacterElement.SUN, CharacterClass.ALCHEMIST).build();
         chara3 = new GameCharacter.Builder("chara3", series1, CharacterElement.SUN, CharacterClass.WARRIOR).build();
-        chara4 = new GameCharacter.Builder("chara4", series2, CharacterElement.MOON, CharacterClass.ALCHEMIST).build();
-
-
+        chara4 = new GameCharacter.Builder("chara4", series1, CharacterElement.MOON, CharacterClass.ALCHEMIST).build();
     }
 
     @Test
@@ -59,7 +57,28 @@ class GameCharacterMapperTest {
     }
 
     @Test
-    public void addCharacters_addCharacters_toCharactersByElementAndClass() {
+    public void addCharacter_addsCharacter_toCharactersBySeries() {
+        assertTrue(mapper.getCharactersBySeries().isEmpty());
+
+        mapper.addCharacter(chara1);
+        mapper.addCharacter(chara2);
+        mapper.addCharacter(chara3);
+        mapper.addCharacter(chara4);
+        Map<Series, List<GameCharacter>> map = mapper.getCharactersBySeries();
+        List<GameCharacter> series1Characters = map.get(series1);
+        List<GameCharacter> series2Characters = map.get(series2);
+
+        assertEquals(2, map.size());
+        assertEquals(3, series1Characters.size());
+        assertEquals(chara1, series1Characters.get(0));
+        assertEquals(chara3, series1Characters.get(1));
+        assertEquals(chara4, series1Characters.get(2));
+        assertEquals(1, series2Characters.size());
+        assertEquals(chara2, series2Characters.get(0));
+    }
+
+    @Test
+    public void addCharacters_addsCharacters_toCharactersByElementAndClass() {
         assertTrue(mapper.getCharactersByElementAndClass().isEmpty());
 
         mapper.addCharacters(Arrays.asList(chara1));
@@ -79,5 +98,24 @@ class GameCharacterMapperTest {
         assertEquals(chara3, sunWarriors.get(0));
         assertEquals(1, moonAlchemists.size());
         assertEquals(chara4, moonAlchemists.get(0));
+    }
+
+    @Test
+    public void addCharacters_addsCharacters_toCharactersBySeries() {
+        assertTrue(mapper.getCharactersBySeries().isEmpty());
+
+        mapper.addCharacters(Arrays.asList(chara1));
+        mapper.addCharacters(Arrays.asList(chara2, chara3, chara4));
+        Map<Series, List<GameCharacter>> map = mapper.getCharactersBySeries();
+        List<GameCharacter> series1Characters = map.get(series1);
+        List<GameCharacter> series2Characters = map.get(series2);
+
+        assertEquals(2, map.size());
+        assertEquals(3, series1Characters.size());
+        assertEquals(chara1, series1Characters.get(0));
+        assertEquals(chara3, series1Characters.get(1));
+        assertEquals(chara4, series1Characters.get(2));
+        assertEquals(1, series2Characters.size());
+        assertEquals(chara2, series2Characters.get(0));
     }
 }
