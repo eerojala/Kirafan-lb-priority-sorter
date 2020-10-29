@@ -1,11 +1,9 @@
 package logic;
 
+import domain.CreaStatus;
 import domain.model.GameCharacter;
 import domain.model.GameEvent;
-import logic.checks.Check;
-import logic.checks.EventBonusCheck;
-import logic.checks.MissingElementClassCombinationCheck;
-import logic.checks.PersonalPreferenceCheck;
+import logic.checks.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,7 +14,6 @@ public class GameCharacterComparator implements Comparator<GameCharacter> {
     private GameCharacterMapper mapper;
     private GameEvent currentEvent;
 
-
     public GameCharacterComparator(GameCharacterMapper mapper, GameEvent currentEvent) {
         this.mapper = mapper;
         this.currentEvent = currentEvent;
@@ -25,6 +22,7 @@ public class GameCharacterComparator implements Comparator<GameCharacter> {
         checks.add(new EventBonusCheck(currentEvent));
         checks.add(new PersonalPreferenceCheck(9));
         checks.add(new MissingElementClassCombinationCheck(mapper.getCharactersByElementAndClass()));
+        checks.add(new CreaCheck(CreaStatus.INCOMPLETE));
     }
 
     public GameEvent getCurrentEvent() {
@@ -47,6 +45,8 @@ public class GameCharacterComparator implements Comparator<GameCharacter> {
     *   A: Knights and Priests
     *   B: Warriors and Mages
     *   C: Alchemists
+    *
+    * 04: Character belongs to a series with incomplete crea
     * */
     @Override
     public int compare(GameCharacter c1, GameCharacter c2) {
