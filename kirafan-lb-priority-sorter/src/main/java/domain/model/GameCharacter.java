@@ -76,6 +76,8 @@ public class GameCharacter {
 
         public Builder magicDefenseIs(int amount) {
             magicDefense = amount;
+
+            return this;
         }
 
         public Builder wokeLevelIs(int wokeLevel) {
