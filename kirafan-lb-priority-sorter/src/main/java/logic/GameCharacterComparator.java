@@ -23,6 +23,7 @@ public class GameCharacterComparator implements Comparator<GameCharacter> {
         checks.add(new PersonalPreferenceCheck(9));
         checks.add(new MissingElementClassCombinationCheck(mapper.getCharactersByElementAndClass()));
         checks.add(new CreaCheck(CreaStatus.INCOMPLETE));
+        checks.add(new PersonalPreferenceCheck(7));
     }
 
     public GameEvent getCurrentEvent() {
@@ -47,6 +48,8 @@ public class GameCharacterComparator implements Comparator<GameCharacter> {
     *   C: Alchemists
     *
     * 04: Character belongs to a series with incomplete crea
+    *
+    * 05: Medium personal preference (>=7)
     * */
     @Override
     public int compare(GameCharacter c1, GameCharacter c2) {
