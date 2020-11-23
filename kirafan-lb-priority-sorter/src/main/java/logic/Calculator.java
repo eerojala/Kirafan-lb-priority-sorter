@@ -9,7 +9,7 @@ import java.util.*;
 public final class Calculator {
     private Calculator() {}
 
-    public static long calculateDamage(GameCharacter chara) {
+    public static long calculateMaxDamage(GameCharacter chara) {
         /*
         * Formula for damage calculation:
         * (character's base offensive power * skill power * offensive stat buff multiplier * next attack buff multiplier *
