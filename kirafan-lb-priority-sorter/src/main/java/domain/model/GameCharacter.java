@@ -3,7 +3,6 @@ package domain.model;
 import domain.CharacterClass;
 import domain.CharacterElement;
 import domain.Skill;
-import domain.Weapon;
 import io.jsondb.annotation.Document;
 import io.jsondb.annotation.Id;
 
@@ -20,9 +19,9 @@ public class GameCharacter {
         private CharacterClass characterClass;
         private CharacterElement characterElement;
         private List<Skill> skills;
-        private Weapon weapon;
+        private Weapon preferredWeapon;
         private boolean limitBroken;
-        private int attackPower;
+        private int offensivePower;
         private int defense;
         private int magicDefense;
         private int wokeLevel;
@@ -35,9 +34,9 @@ public class GameCharacter {
             this.characterClass = characterClass;
             id = name + series.getNameEN() +  characterElement.getNameEN() + characterClass.getNameEN();
             skills = new ArrayList<>();
-            weapon = null;
+            preferredWeapon = null;
             limitBroken = false;
-            attackPower = 0;
+            offensivePower = 0;
             defense = 0;
             magicDefense = 0;
             wokeLevel = 0;
@@ -50,8 +49,8 @@ public class GameCharacter {
             return this;
         }
 
-        public Builder withWeapon(Weapon weapon) {
-            this.weapon = weapon;
+        public Builder prefersWeapon(Weapon weapon) {
+            this.preferredWeapon = weapon;
 
             return this;
         }
@@ -62,8 +61,8 @@ public class GameCharacter {
             return this;
         }
 
-        public Builder attackPowerIs(int amount) {
-            attackPower = amount;
+        public Builder offensivePowerIs(int amount) {
+            offensivePower = amount;
 
             return this;
         }
@@ -100,9 +99,9 @@ public class GameCharacter {
             character.characterElement = characterElement;
             character.characterClass = characterClass;
             character.skills = skills;
-            character.weapon = weapon;
+            character.preferredWeapon = preferredWeapon;
             character.limitBroken = limitBroken;
-            character.attackPower = attackPower;
+            character.offensivePower = offensivePower;
             character.defense = defense;
             character.magicDefense = magicDefense;
             character.wokeLevel = wokeLevel;
@@ -119,9 +118,9 @@ public class GameCharacter {
     private CharacterElement characterElement;
     private CharacterClass characterClass;
     private List<Skill> skills;
-    private Weapon weapon;
+    private Weapon preferredWeapon;
     private boolean limitBroken;
-    private int attackPower;
+    private int offensivePower;
     private int defense;
     private int magicDefense;
     private int wokeLevel;
@@ -179,12 +178,12 @@ public class GameCharacter {
         this.skills = skills;
     }
 
-    public Weapon getWeapon() {
-        return weapon;
+    public Weapon getPreferredWeapon() {
+        return preferredWeapon;
     }
 
-    public void setWeapon(Weapon weapon) {
-        this.weapon = weapon;
+    public void setPreferredWeapon(Weapon weapon) {
+        this.preferredWeapon = weapon;
     }
 
     public boolean isLimitBroken() {
@@ -195,12 +194,12 @@ public class GameCharacter {
         this.limitBroken = limitBroken;
     }
 
-    public int getAttackPower() {
-        return attackPower;
+    public int getOffensivePower() {
+        return offensivePower;
     }
 
-    public void setAttackPower(int attackPower) {
-        this.attackPower = attackPower;
+    public void setOffensivePower(int offensivePower) {
+        this.offensivePower = offensivePower;
     }
 
     public int getDefense() {

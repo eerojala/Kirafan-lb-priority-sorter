@@ -55,9 +55,13 @@ public class Skill {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Skill skill = (Skill) o;
-        return Double.compare(skill.amount, amount) == 0 &&
-                type == skill.type &&
-                change == skill.change &&
-                target == skill.target;
+        return getType() == skill.getType() &&
+                getChange() == skill.getChange() &&
+                getTarget() == skill.getTarget();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getType(), getChange(), getTarget());
     }
 }
