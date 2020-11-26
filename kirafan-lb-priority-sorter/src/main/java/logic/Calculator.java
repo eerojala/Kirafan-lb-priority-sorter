@@ -14,13 +14,45 @@ public final class Calculator {
     // Returns sum of doubles rounded to 3 decimal places
     public static double sumDoubles(double... doubles) {
         BigDecimal sum = BigDecimal.valueOf(0);
-        sum = sum.setScale(3, RoundingMode.HALF_UP);
 
         for (double d : doubles) {
             sum = sum.add(BigDecimal.valueOf(d));
         }
 
+        sum = sum.setScale(3, RoundingMode.HALF_UP);
         return sum.doubleValue();
+    }
+
+    public static double multiplyDoubles(double... doubles) {
+        BigDecimal product = BigDecimal.valueOf(0);
+
+        for (double d : doubles) {
+            product = product.multiply(BigDecimal.valueOf(d));
+        }
+
+        return product.doubleValue();
+    }
+
+    public static double divide(double a, double b) {
+        if (b != 0) {
+            BigDecimal dividend = BigDecimal.valueOf(a);
+            BigDecimal divisor = BigDecimal.valueOf(b);
+            BigDecimal quotient = dividend.divide(divisor, 3, RoundingMode.HALF_UP);
+
+            return quotient.doubleValue();
+        }
+
+        return 0;
+    }
+
+    // Skill values are stored as percentages and need to be converted to decimals for calculation
+    public static double convertPercentageToDecimal(double percentage) {
+        return divide(percentage, 100);
+    }
+
+    public static double negate(double d) {
+        BigDecimal bd = BigDecimal.valueOf(d);
+        return bd.negate().doubleValue();
     }
 
     public static long calculateMaxDamage(GameCharacter chara) {
@@ -68,11 +100,12 @@ public final class Calculator {
         double defensiveStatBuffMultiplier = getDefensiveStatBuffMultiplier(charaClass, skillTotalAmounts);
         double constant = 0.06;
 
-        double offense = baseOffensivePower * totteokiPower * offensiveStatBuffMultiplier * nextAttackBuffMultiplier
-                * elementalMultiplier * criticalDamageMultiplier;
-        double defense = baseDefensivePower * defensiveStatBuffMultiplier * constant;
+        double offense = multiplyDoubles(baseOffensivePower, totteokiPower, offensiveStatBuffMultiplier,
+                nextAttackBuffMultiplier, elementalMultiplier, criticalDamageMultiplier);
 
-        return Math.round(offense / defense);
+        double defense = multiplyDoubles(baseDefensivePower, defensiveStatBuffMultiplier, constant);
+
+        return Math.round(divide(offense, defense));
     }
 
 
@@ -105,13 +138,12 @@ public final class Calculator {
         Double enemyWideTotteokiPower = skillTotalAmounts.get(new Skill(SkillType.TOTTEOKI, null, SkillTarget.ENEMY_ALL, 0));
         Double singleEnemyTotteokiPower = skillTotalAmounts.get(new Skill(SkillType.TOTTEOKI, null, SkillTarget.ENEMY_SINGLE, 0));
 
-        // Totteokis are stored as percentages, and need to be converted to decimal numbers for calculation
         if (enemyWideTotteokiPower == null && singleEnemyTotteokiPower == null) {
             return 0;
         } else if (enemyWideTotteokiPower == null) {
-            return singleEnemyTotteokiPower / 100;
+            return convertPercentageToDecimal(singleEnemyTotteokiPower);
         } else {
-            return enemyWideTotteokiPower / 100;
+            return convertPercentageToDecimal(enemyWideTotteokiPower);
         }
     }
 
@@ -125,9 +157,10 @@ public final class Calculator {
         * https://calc.kirafan.moe/#/document/2
         */
 
-        double offensiveStatBuffMultiplier = charaClass == CharacterClass.MAGE ?
-                1 + sumCharacterBuffs(SkillType.MAT, skillTotalAmounts) - sumCharacterDebuffs(SkillType.MAT, skillTotalAmounts) :
-                1 + sumCharacterBuffs(SkillType.ATK, skillTotalAmounts) - sumCharacterDebuffs(SkillType.ATK, skillTotalAmounts);
+        SkillType skillType = charaClass == CharacterClass.MAGE ? SkillType.MAT : SkillType.ATK;
+
+        double offensiveStatBuffMultiplier = sumDoubles(
+                1, sumCharacterBuffs(skillType, skillTotalAmounts), sumCharacterDebuffs(skillType, skillTotalAmounts));
 
         offensiveStatBuffMultiplier = Math.max(offensiveStatBuffMultiplier, 0.5);
 
@@ -144,8 +177,7 @@ public final class Calculator {
         Double allyWideBuffs = skillTotalAmounts.get(new Skill(type, SkillChange.UP, SkillTarget.ALLIES_ALL, 0));
         allyWideBuffs = allyWideBuffs == null ? 0 : allyWideBuffs;
 
-
-        return (selfBuffs + singleTargetBuffs + allyWideBuffs) / 100;
+        return convertPercentageToDecimal(sumDoubles(selfBuffs, singleTargetBuffs, allyWideBuffs));
     }
 
     private static double sumCharacterDebuffs(SkillType type, Map<Skill, Double> skillTotalAmounts) {
@@ -158,8 +190,8 @@ public final class Calculator {
         Double allyWideDebuffs = skillTotalAmounts.get(new Skill(type, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0));
         allyWideDebuffs = allyWideDebuffs == null ? 0 : allyWideDebuffs;
 
-        // Buffs and debuffs are stored as percentages, and need to be converted to decimal numbers for calculation
-        return (selfDebuffs + singleTargetDebuffs + allyWideDebuffs) / 100;
+        // Debuffs are stored as positive doubles, but need to be converted to negative doubles for calculation
+        return negate(convertPercentageToDecimal(sumDoubles(selfDebuffs, singleTargetDebuffs, allyWideDebuffs)));
     }
 
     private static double getNextAttackUpBuffMultiplier(CharacterClass charaClass, Map<Skill, Double> skillTotalAmounts) {
@@ -174,11 +206,9 @@ public final class Calculator {
         * https://calc.kirafan.moe/#/document/11
         */
 
-        if (charaClass == CharacterClass.MAGE) {
-            return 1 + getStrongestBuff(SkillType.NEXT_MAT, skillTotalAmounts);
-        } else {
-            return 1 + getStrongestBuff(SkillType.NEXT_ATK, skillTotalAmounts);
-        }
+        SkillType skillType = charaClass == CharacterClass.MAGE ? SkillType.NEXT_MAT : SkillType.NEXT_ATK;
+
+        return sumDoubles(1, getStrongestBuff(skillType, skillTotalAmounts));
     }
 
     private static double getStrongestBuff(SkillType type, Map<Skill, Double> skillTotalAmounts) {
@@ -193,7 +223,7 @@ public final class Calculator {
         allyWideBuffs = allyWideBuffs == null ? 0 : allyWideBuffs;
 
         // Buffs and debuffs are stored as percentages, and need to be converted to decimal numbers for calculation
-        return (Math.max(selfBuffs, Math.max(singleTargetBuffs, allyWideBuffs))) / 100;
+        return convertPercentageToDecimal(Math.max(selfBuffs, Math.max(singleTargetBuffs, allyWideBuffs)));
     }
 
 
@@ -219,15 +249,17 @@ public final class Calculator {
 
         double enemyElementResistanceBuffs = getEnemyElementalResistanceBuffs(charaElement, skillTotalAmounts);
         double enemyElementResistanceDebuffs = getEnemyElementalResistanceDebuffs(charaElement, skillTotalAmounts);
+        double initialElementMultiplier =
+                multiplyDoubles(2.0, sumDoubles(1, enemyElementResistanceBuffs, enemyElementResistanceDebuffs));
 
-        double initialElementMultiplier = 2.0 * (1 + enemyElementResistanceBuffs - enemyElementResistanceDebuffs);
         initialElementMultiplier = Math.max(initialElementMultiplier, 1.6);
         initialElementMultiplier = Math.min(initialElementMultiplier, 2.4);
 
-        double weakElementBonus = sumCharacterBuffs(SkillType.WEAK_ELEMENT_BONUS, skillTotalAmounts) -
-                sumCharacterDebuffs(SkillType.WEAK_ELEMENT_BONUS, skillTotalAmounts);
+        double weakElementBonus = sumDoubles(
+                sumCharacterBuffs(SkillType.WEAK_ELEMENT_BONUS, skillTotalAmounts),
+                sumCharacterDebuffs(SkillType.WEAK_ELEMENT_BONUS, skillTotalAmounts));
 
-        return initialElementMultiplier + weakElementBonus;
+        return sumDoubles(initialElementMultiplier, weakElementBonus);
     }
 
     private static double getEnemyElementalResistanceBuffs(CharacterElement charaElement, Map<Skill, Double> skillTotalAmounts) {
@@ -269,8 +301,7 @@ public final class Calculator {
         Double enemyWideBuffs = skillTotalAmounts.get(new Skill(type, SkillChange.UP, SkillTarget.ENEMY_ALL, 0));
         enemyWideBuffs = enemyWideBuffs == null ? 0 : enemyWideBuffs;
 
-        // Buffs and debuffs are stored as percentages, and need to be converted to decimal numbers for calculation
-        return (singleEnemyBuffs + enemyWideBuffs) / 100;
+        return convertPercentageToDecimal(sumDoubles(singleEnemyBuffs, enemyWideBuffs));
     }
 
     private static double sumEnemyDebuffs(SkillType type, Map<Skill, Double> skillTotalAmounts) {
@@ -280,8 +311,8 @@ public final class Calculator {
         Double enemyWideDebuffs = skillTotalAmounts.get(new Skill(type, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 0));
         enemyWideDebuffs = enemyWideDebuffs == null ? 0 : enemyWideDebuffs;
 
-        // Buffs and debuffs are stored as percentages, and need to be converted to decimal numbers for calculation
-        return (singleEnemyDebuffs + enemyWideDebuffs) / 100;
+        // Debuffs are stored as positive percentages mut need to be converted to negative decimals for calculation
+        return negate(convertPercentageToDecimal(sumDoubles(singleEnemyDebuffs, enemyWideDebuffs)));
     }
 
     private static double getCriticalDamageMultiplier(Map<Skill, Double> skillTotalAmounts) {
@@ -297,11 +328,10 @@ public final class Calculator {
         double critDamageUp = sumCharacterBuffs(SkillType.CRIT_DAMAGE, skillTotalAmounts);
         double critDamageDown = sumCharacterDebuffs(SkillType.CRIT_DAMAGE, skillTotalAmounts);
 
-        double initialCriticalDamageMultiplier = 1.5 * (1 + critDamageUp - critDamageDown);
+        double initialCriticalDamageMultiplier = multiplyDoubles(1.5, sumDoubles(1, critDamageUp, critDamageDown));
         double criticalDamageMultiplier = Math.max(initialCriticalDamageMultiplier, 1.0);
-        criticalDamageMultiplier = Math.min(criticalDamageMultiplier, 2.4);
 
-        return criticalDamageMultiplier;
+        return Math.min(criticalDamageMultiplier, 2.4);
     }
 
     private static double getDefensiveStatBuffMultiplier(CharacterClass charaClass, Map<Skill, Double> skillTotalAmounts) {
@@ -313,9 +343,9 @@ public final class Calculator {
         *
         * https://calc.kirafan.moe/#/document/2
         * */
-        double defensiveStatBuffMultiplier = charaClass == CharacterClass.MAGE ?
-                1 + sumEnemyBuffs(SkillType.MDF, skillTotalAmounts) - sumEnemyDebuffs(SkillType.MDF, skillTotalAmounts) :
-                1 + sumEnemyBuffs(SkillType.DEF, skillTotalAmounts) - sumEnemyDebuffs(SkillType.DEF, skillTotalAmounts);
+        SkillType skillType = charaClass == CharacterClass.MAGE ? SkillType.MDF : SkillType.DEF;
+        double defensiveStatBuffMultiplier =
+                sumDoubles(1, sumEnemyBuffs(skillType, skillTotalAmounts), sumEnemyDebuffs(skillType, skillTotalAmounts));
 
         defensiveStatBuffMultiplier = Math.max(defensiveStatBuffMultiplier, 0.330);
 
