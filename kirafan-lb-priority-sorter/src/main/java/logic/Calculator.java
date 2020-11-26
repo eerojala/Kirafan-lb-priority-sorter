@@ -4,10 +4,24 @@ import domain.*;
 import domain.model.GameCharacter;
 import domain.model.Weapon;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 public final class Calculator {
     private Calculator() {}
+
+    // Returns sum of doubles rounded to 3 decimal places
+    public static double sumDoubles(double... doubles) {
+        BigDecimal sum = BigDecimal.valueOf(0);
+        sum = sum.setScale(3, RoundingMode.HALF_UP);
+
+        for (double d : doubles) {
+            sum = sum.add(BigDecimal.valueOf(d));
+        }
+
+        return sum.doubleValue();
+    }
 
     public static long calculateMaxDamage(GameCharacter chara) {
         /*
@@ -60,7 +74,6 @@ public final class Calculator {
 
         return Math.round(offense / defense);
     }
-
 
 
     private static int getBaseOffensivePower(GameCharacter chara) {

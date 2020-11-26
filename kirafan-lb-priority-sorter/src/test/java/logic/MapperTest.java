@@ -1,8 +1,6 @@
 package logic;
 
-import domain.CharacterClass;
-import domain.CharacterElement;
-import domain.CreaStatus;
+import domain.*;
 import domain.model.GameCharacter;
 import domain.model.Series;
 import org.junit.jupiter.api.Test;
@@ -141,5 +139,45 @@ class MapperTest {
         assertEquals(chara4, series1Characters.get(2));
         assertEquals(1, series2Characters.size());
         assertEquals(chara2, series2Characters.get(0));
+    }
+
+    @Test
+    public void getCharacterTotalSkillAmounts_sumsSkillAmountsCorrectly() {
+        List<Skill> skills = new ArrayList<>();
+        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 10.5));
+        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 5.5));
+        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_ALL, 15.33));
+        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_ALL, 15.16));
+        skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 7.663));
+        skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 2.445));
+        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 10.33));
+        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 10.333));
+        chara1.setSkills(skills);
+        Map<Skill, Double> map = Mapper.getSkillTotalAmounts(chara1);
+
+        assertEquals(16.0, map.get(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0)));
+        assertEquals(30.49, map.get(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_ALL, 0)));
+        assertEquals(10.108, map.get(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0)));
+        assertEquals(20.663, map.get(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 0)));
+        assertEquals(null, map.get(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.SELF, 0)));
+    }
+
+    @Test
+    public void getCharacterTotalSkillAmounts_returnsTheBestNextATKAndMATBuff() {
+        List<Skill> skills = new ArrayList<>();
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.SELF, 10.201));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.SELF, 10.202));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.SELF, 10.2));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ALLIES_ALL, 10.3));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.SELF, 11.55));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.SELF, 11.555));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.SELF, 11.556));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.SELF, 11.554));
+        chara2.setSkills(skills);
+        Map<Skill, Double> map = Mapper.getSkillTotalAmounts(chara2);
+
+        assertEquals(10.202, map.get(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.SELF, 0)));
+        assertEquals(10.3, map.get(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ALLIES_ALL, 0)));
+        assertEquals(11.556, map.get(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.SELF, 0)));
     }
 }

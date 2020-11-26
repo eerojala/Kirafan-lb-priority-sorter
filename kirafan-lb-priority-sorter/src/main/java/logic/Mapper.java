@@ -8,6 +8,7 @@ import domain.model.GameCharacter;
 import domain.model.Series;
 import domain.model.Weapon;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 public final class Mapper {
@@ -99,14 +100,14 @@ public final class Mapper {
         SkillType type = skill.getType();
         double amount = skill.getAmount();
         Double previousTotalAmount = skillTotalAmounts.get(skill);
+        previousTotalAmount = previousTotalAmount == null ? 0 : previousTotalAmount;
 
         if (type == SkillType.NEXT_ATK || type == SkillType.NEXT_MAT) {
             // unlike other buffs and debuffs next ATK and next MAT buffs do not stack and instead overwrite the previous NEXT ATK/MAT buff
             Double totalAmount = amount > previousTotalAmount ? amount : previousTotalAmount;
             skillTotalAmounts.put(skill, totalAmount);
         } else  {
-            previousTotalAmount = previousTotalAmount == null ? 0 : previousTotalAmount;
-            skillTotalAmounts.put(skill, previousTotalAmount + amount);
+            skillTotalAmounts.put(skill, Calculator.sumDoubles(previousTotalAmount, amount));
         }
     }
 }
