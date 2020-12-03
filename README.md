@@ -1,4 +1,4 @@
 # Kirafan-lb-priority-sorter
-Small desktop add for personal use
+Small desktop app for personal use
 
 lb (limit break) refers to increasing a characters level cap
