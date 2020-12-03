@@ -8,7 +8,6 @@ import domain.model.GameCharacter;
 import domain.model.Series;
 import domain.model.Weapon;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 public final class Mapper {
@@ -75,39 +74,39 @@ public final class Mapper {
         charactersBySeries.put(series, charactersOfSameSeries);
     }
 
-    public static Map<Skill,Double> getSkillTotalAmounts(GameCharacter chara) {
-        Map<Skill, Double> skillTotalAmounts = new HashMap<>();
+    public static Map<Skill,Double> getSkillTotalPowers(GameCharacter chara) {
+        Map<Skill, Double> skillTotalPowers = new HashMap<>();
 
         if (chara != null) {
             Weapon weapon = chara.getPreferredWeapon();
 
             for (Skill skill : chara.getSkills()) {
-                addSkillAmount(skill, skillTotalAmounts);
+                addSkillPower(skill, skillTotalPowers);
             }
 
             if (weapon != null) {
                 for (Skill skill : weapon.getSkills()) {
-                    addSkillAmount(skill, skillTotalAmounts);
+                    addSkillPower(skill, skillTotalPowers);
                 }
             }
 
         }
 
-        return skillTotalAmounts;
+        return skillTotalPowers;
     }
 
-    private static void addSkillAmount(Skill skill, Map<Skill, Double> skillTotalAmounts) {
+    private static void addSkillPower(Skill skill, Map<Skill, Double> skillTotalPowers) {
         SkillType type = skill.getType();
-        double amount = skill.getAmount();
-        Double previousTotalAmount = skillTotalAmounts.get(skill);
-        previousTotalAmount = previousTotalAmount == null ? 0 : previousTotalAmount;
+        double power = skill.getPower();
+        Double previousTotalPower = skillTotalPowers.get(skill);
+        previousTotalPower = previousTotalPower == null ? 0 : previousTotalPower;
 
         if (type == SkillType.NEXT_ATK || type == SkillType.NEXT_MAT) {
             // unlike other buffs and debuffs next ATK and next MAT buffs do not stack and instead overwrite the previous NEXT ATK/MAT buff
-            Double totalAmount = amount > previousTotalAmount ? amount : previousTotalAmount;
-            skillTotalAmounts.put(skill, totalAmount);
+            Double totalPower = power > previousTotalPower ? power : previousTotalPower;
+            skillTotalPowers.put(skill, totalPower);
         } else  {
-            skillTotalAmounts.put(skill, Calculator.sumDoubles(previousTotalAmount, amount));
+            skillTotalPowers.put(skill, Calculator.sumDoubles(previousTotalPower, power));
         }
     }
 }

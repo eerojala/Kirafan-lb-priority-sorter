@@ -19,12 +19,16 @@ public final class Calculator {
             sum = sum.add(BigDecimal.valueOf(d));
         }
 
-        sum = sum.setScale(3, RoundingMode.HALF_UP);
+        sum = sum.setScale(4, RoundingMode.HALF_UP);
         return sum.doubleValue();
     }
 
     public static double multiplyDoubles(double... doubles) {
-        BigDecimal product = BigDecimal.valueOf(0);
+        if (doubles.length == 0) {
+            return 0;
+        }
+
+        BigDecimal product = BigDecimal.valueOf(1);
 
         for (double d : doubles) {
             product = product.multiply(BigDecimal.valueOf(d));
@@ -33,11 +37,11 @@ public final class Calculator {
         return product.doubleValue();
     }
 
-    public static double divide(double a, double b) {
+    public static double divideDoubles(double a, double b) {
         if (b != 0) {
             BigDecimal dividend = BigDecimal.valueOf(a);
             BigDecimal divisor = BigDecimal.valueOf(b);
-            BigDecimal quotient = dividend.divide(divisor, 3, RoundingMode.HALF_UP);
+            BigDecimal quotient = dividend.divide(divisor, 4, RoundingMode.HALF_UP);
 
             return quotient.doubleValue();
         }
@@ -47,7 +51,7 @@ public final class Calculator {
 
     // Skill values are stored as percentages and need to be converted to decimals for calculation
     public static double convertPercentageToDecimal(double percentage) {
-        return divide(percentage, 100);
+        return divideDoubles(percentage, 100);
     }
 
     public static double negate(double d) {
@@ -62,9 +66,9 @@ public final class Calculator {
         * elemental multiplier * critical damage multiplier * totteoki chain position multiplier * random value from 0.85
         * to 1.0) / (enemy's base defensive power * defensive stat buff multiplier * 0.06)
         *
-        * The function assumes that the damage is done with the character's totteoki skill (a special attack which deals
-        * a lot of damage), so skill power is referred to totteoki power in the function. (Totteoki means along the lines
-        * of 'ace in the hole' in japanese)
+        * The function assumes that the damage is done with the character's totteoki skill, a special attack which deals
+        * a lot of damage (in the case of mages and warriors), so skill power is referred to totteoki power in the function.
+        * Totteoki means along the lines of 'ace in the hole' in japanese.
         *
         * The function assumes that totteoki chain position is 1st (multiplier: 1.0) and the random value is max (
         * multiplier: 1.0x), so they are omitted from the calculation
@@ -85,7 +89,7 @@ public final class Calculator {
             return 0; // The damage calculator should only be used for mages and warriors
         }
 
-        Map<Skill, Double> skillTotalAmounts = Mapper.getSkillTotalAmounts(chara);
+        Map<Skill, Double> skillTotalAmounts = Mapper.getSkillTotalPowers(chara);
 
         // Offensive modifiers
         int baseOffensivePower = getBaseOffensivePower(chara);
@@ -105,7 +109,7 @@ public final class Calculator {
 
         double defense = multiplyDoubles(baseDefensivePower, defensiveStatBuffMultiplier, constant);
 
-        return Math.round(divide(offense, defense));
+        return Math.round(divideDoubles(offense, defense));
     }
 
 
@@ -158,10 +162,9 @@ public final class Calculator {
         */
 
         SkillType skillType = charaClass == CharacterClass.MAGE ? SkillType.MAT : SkillType.ATK;
-
-        double offensiveStatBuffMultiplier = sumDoubles(
-                1, sumCharacterBuffs(skillType, skillTotalAmounts), sumCharacterDebuffs(skillType, skillTotalAmounts));
-
+        double offensiveBuffs = sumCharacterBuffs(skillType, skillTotalAmounts);
+        double offensiveDebuffs = negate(sumCharacterDebuffs(skillType, skillTotalAmounts));
+        double offensiveStatBuffMultiplier = sumDoubles(1, offensiveBuffs, offensiveDebuffs);
         offensiveStatBuffMultiplier = Math.max(offensiveStatBuffMultiplier, 0.5);
 
         return Math.min(offensiveStatBuffMultiplier, 2.5);
@@ -190,8 +193,7 @@ public final class Calculator {
         Double allyWideDebuffs = skillTotalAmounts.get(new Skill(type, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0));
         allyWideDebuffs = allyWideDebuffs == null ? 0 : allyWideDebuffs;
 
-        // Debuffs are stored as positive doubles, but need to be converted to negative doubles for calculation
-        return negate(convertPercentageToDecimal(sumDoubles(selfDebuffs, singleTargetDebuffs, allyWideDebuffs)));
+        return convertPercentageToDecimal(sumDoubles(selfDebuffs, singleTargetDebuffs, allyWideDebuffs));
     }
 
     private static double getNextAttackUpBuffMultiplier(CharacterClass charaClass, Map<Skill, Double> skillTotalAmounts) {
@@ -202,6 +204,10 @@ public final class Calculator {
         * Mages use MAT, warriors use ATK
         *
         * Unlike other buffs, next attack buffs do not stack and instead overwrite each other
+        *
+        * Next attack down debuffs are not taken into account because a player should not be using a totteoki with them
+        * in the first place since the player can get rid of them simply by attacking an enemy with a basic attack
+        * (plus next attack down debuffs do not currently exist in-game in the first place)
         *
         * https://calc.kirafan.moe/#/document/11
         */
@@ -230,7 +236,7 @@ public final class Calculator {
     private static double getElementMultiplier(CharacterElement charaElement, Map<Skill, Double> skillTotalAmounts) {
         /*
         * Formula for the element multiplier:
-        * [Initial value * (1 - enemy's element resist buff + enemy's element debuff)] + weak element bonus
+        * [Initial value * (1 - enemy's element resist buff + enemy's element resist debuff)] + weak element bonus
         *
         * Initial value is 2.0, 0.5 and 1.0 for weak, strong and regular element respectively.
         * The calculator assumes that the enemy's element is weak against the character, so the function uses 2.0
@@ -241,23 +247,23 @@ public final class Calculator {
         *
         * Currently the game has no weak elemental bonus damage debuffs, but the function takes it into account in case
         * it gets later implemented
-        * From what I gather from the kirafan.moe documentation, weak element bonus has no cap or floor.
+        * From what I gather from the kirafan.moe documentation, weak element bonus has no max or min value
         *
         * https://calc.kirafan.moe/#/document/8
         * https://calc.kirafan.moe/#/document/10
         */
 
-        double enemyElementResistanceBuffs = getEnemyElementalResistanceBuffs(charaElement, skillTotalAmounts);
+        double enemyElementResistanceBuffs = negate(getEnemyElementalResistanceBuffs(charaElement, skillTotalAmounts));
         double enemyElementResistanceDebuffs = getEnemyElementalResistanceDebuffs(charaElement, skillTotalAmounts);
-        double initialElementMultiplier =
-                multiplyDoubles(2.0, sumDoubles(1, enemyElementResistanceBuffs, enemyElementResistanceDebuffs));
+        double sumOfBuffsAndDebuffs = sumDoubles(1, enemyElementResistanceBuffs, enemyElementResistanceDebuffs);
+        double initialElementMultiplier = multiplyDoubles(2.0, sumOfBuffsAndDebuffs);
 
         initialElementMultiplier = Math.max(initialElementMultiplier, 1.6);
         initialElementMultiplier = Math.min(initialElementMultiplier, 2.4);
 
-        double weakElementBonus = sumDoubles(
-                sumCharacterBuffs(SkillType.WEAK_ELEMENT_BONUS, skillTotalAmounts),
-                sumCharacterDebuffs(SkillType.WEAK_ELEMENT_BONUS, skillTotalAmounts));
+        double weakElementBuff = sumCharacterBuffs(SkillType.WEAK_ELEMENT_BONUS, skillTotalAmounts);
+        double weakElementDebuff = negate(sumCharacterDebuffs(SkillType.WEAK_ELEMENT_BONUS, skillTotalAmounts));
+        double weakElementBonus = sumDoubles(weakElementBuff, weakElementDebuff);
 
         return sumDoubles(initialElementMultiplier, weakElementBonus);
     }
@@ -311,27 +317,27 @@ public final class Calculator {
         Double enemyWideDebuffs = skillTotalAmounts.get(new Skill(type, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 0));
         enemyWideDebuffs = enemyWideDebuffs == null ? 0 : enemyWideDebuffs;
 
-        // Debuffs are stored as positive percentages mut need to be converted to negative decimals for calculation
-        return negate(convertPercentageToDecimal(sumDoubles(singleEnemyDebuffs, enemyWideDebuffs)));
+        return convertPercentageToDecimal(sumDoubles(singleEnemyDebuffs, enemyWideDebuffs));
     }
 
     private static double getCriticalDamageMultiplier(Map<Skill, Double> skillTotalAmounts) {
         /*
         * Formula for the critical damage multiplier:
-        * [(critical then 1.5, else 1.0) * (1 + critical damage up - critical damage down)] Max: 3.0, Min: 1.0
+        * 1.5 * (1 + critical damage up - critical damage down)] Max: 3.0, Min: 1.0
         *
-        * The calculator assumes a critical hit so the function uses 1.5
+        * If the attack is not a critical hit then this multiplier is set to 1.0, but since this calculator assumes
+        * that a critical hit always occurs, the function does not need to take it into account
         *
         * https://calc.kirafan.moe/#/document/26
         * */
 
         double critDamageUp = sumCharacterBuffs(SkillType.CRIT_DAMAGE, skillTotalAmounts);
-        double critDamageDown = sumCharacterDebuffs(SkillType.CRIT_DAMAGE, skillTotalAmounts);
+        double critDamageDown = negate(sumCharacterDebuffs(SkillType.CRIT_DAMAGE, skillTotalAmounts));
 
         double initialCriticalDamageMultiplier = multiplyDoubles(1.5, sumDoubles(1, critDamageUp, critDamageDown));
         double criticalDamageMultiplier = Math.max(initialCriticalDamageMultiplier, 1.0);
 
-        return Math.min(criticalDamageMultiplier, 2.4);
+        return Math.min(criticalDamageMultiplier, 3.0);
     }
 
     private static double getDefensiveStatBuffMultiplier(CharacterClass charaClass, Map<Skill, Double> skillTotalAmounts) {
@@ -339,16 +345,19 @@ public final class Calculator {
         * Formula for the defensive buff multiplier:
         * (1 + defensive buff - defensive debuff) Max: 5.0, Min: 0.330
         *
+        * NOTE: For playable characters the max is 2.0 instead (but this calculator is used for calculating damage done
+        * by player characters against enemies, it doesn't need to be taken into account)
+        *
         * Against mages MDF is used, against warriors DEF is used
         *
         * https://calc.kirafan.moe/#/document/2
         * */
         SkillType skillType = charaClass == CharacterClass.MAGE ? SkillType.MDF : SkillType.DEF;
-        double defensiveStatBuffMultiplier =
-                sumDoubles(1, sumEnemyBuffs(skillType, skillTotalAmounts), sumEnemyDebuffs(skillType, skillTotalAmounts));
-
+        double defensiveBuffs = sumEnemyBuffs(skillType, skillTotalAmounts);
+        double defensiveDebuffs = negate(sumEnemyDebuffs(skillType, skillTotalAmounts));
+        double defensiveStatBuffMultiplier = sumDoubles(1, defensiveBuffs, defensiveDebuffs);
         defensiveStatBuffMultiplier = Math.max(defensiveStatBuffMultiplier, 0.330);
 
-        return Math.max(defensiveStatBuffMultiplier, 5.0);
+        return Math.min(defensiveStatBuffMultiplier, 5.0);
     }
 }

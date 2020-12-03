@@ -6,16 +6,16 @@ public class Skill {
     private SkillType type;
     private SkillChange change;
     private SkillTarget target;
-    private double amount; //
+    private double power; //
 
     // Jackson requires a public constructor with no parameters
     public Skill() {}
 
-    public Skill(SkillType type, SkillChange change, SkillTarget target, double amount) {
+    public Skill(SkillType type, SkillChange change, SkillTarget target, double power) {
         this.type = type;
         this.change = change;
         this.target = target;
-        this.amount = amount;
+        this.power = power;
     }
 
     public SkillType getType() {
@@ -42,12 +42,12 @@ public class Skill {
         this.target = target;
     }
 
-    public double getAmount() {
-        return amount;
+    public double getPower() {
+        return power;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public void setPower(double power) {
+        this.power = power;
     }
 
     @Override

@@ -142,7 +142,7 @@ class MapperTest {
     }
 
     @Test
-    public void getCharacterTotalSkillAmounts_sumsSkillAmountsCorrectly() {
+    public void getCharacterTotalSkillPowers_sumsSkillPowersCorrectly() {
         List<Skill> skills = new ArrayList<>();
         skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 10.5));
         skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 5.5));
@@ -153,7 +153,7 @@ class MapperTest {
         skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 10.33));
         skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 10.333));
         chara1.setSkills(skills);
-        Map<Skill, Double> map = Mapper.getSkillTotalAmounts(chara1);
+        Map<Skill, Double> map = Mapper.getSkillTotalPowers(chara1);
 
         assertEquals(16.0, map.get(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0)));
         assertEquals(30.49, map.get(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_ALL, 0)));
@@ -163,7 +163,7 @@ class MapperTest {
     }
 
     @Test
-    public void getCharacterTotalSkillAmounts_returnsTheBestNextATKAndMATBuff() {
+    public void getCharacterTotalSkillPowers_returnsTheBestNextATKAndMATBuff() {
         List<Skill> skills = new ArrayList<>();
         skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.SELF, 10.201));
         skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.SELF, 10.202));
@@ -174,7 +174,7 @@ class MapperTest {
         skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.SELF, 11.556));
         skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.SELF, 11.554));
         chara2.setSkills(skills);
-        Map<Skill, Double> map = Mapper.getSkillTotalAmounts(chara2);
+        Map<Skill, Double> map = Mapper.getSkillTotalPowers(chara2);
 
         assertEquals(10.202, map.get(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.SELF, 0)));
         assertEquals(10.3, map.get(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ALLIES_ALL, 0)));
