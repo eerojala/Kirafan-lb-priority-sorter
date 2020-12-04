@@ -13,12 +13,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
-// Laita vanhoihin testeihin skillejä joiden ei pitäisi vaikuttaa (esim offensivebuffiin vihulle tehtäviä buffeja)
-// Laita loppuun pari testia joilla testaa kaikkia multiplieria samaan aikaan (sekä maksimi ja minimi chara1)
 class CalculatorTest {
-    private GameCharacter chara2;
     private GameCharacter chara1;
+    private GameCharacter chara2;
     private Weapon weapon;
     private long chara1ResultAfterSkills;
     private long chara1ResultBeforeSkills;
@@ -67,16 +64,18 @@ class CalculatorTest {
         chara2ResultAfterSkills = Calculator.calculateMaxDamage(chara2);
     }
 
-    private boolean acceptableResult(long expected, long result, long maxDeviation) {
-        /*
-         * Due to possible rounding errors on my function and/or kirafan.moe's calculator, the results between them
-         * usually vary a bit, but not on a scale which is unacceptable
-         * */
-        return result <= expected + maxDeviation && result >= expected - maxDeviation;
+    private boolean acceptableResult(long expected, long result) {
+        return acceptableResult(expected, result, Math.abs(expected / 100));
     }
 
-    private boolean acceptableResult(long expected, long result) {
-        return acceptableResult(expected, result, 20);
+    private boolean acceptableResult(long expected, long result, long maxDeviation) {
+        // Some times the results vary by under 1% (especially when modifying the defensive buff multiplier) from values given by the kirafan.moe calculator
+        // But most of the time the results vary very little (under 10) or do not vary at all from the kirafan.moe calculator
+        System.out.println("Expected: " + expected);
+        System.out.println("Result: " + result);
+        System.out.println("Difference: " + Math.abs(expected - result));
+        System.out.println("---------------");
+        return Math.abs(expected - result) <= maxDeviation;
     }
 
     private boolean resultsAreDifferentAfterSkills() {
@@ -635,16 +634,47 @@ class CalculatorTest {
 
         addSkillsToCharas(skills);
         calculateMaxDamage();
-
+        System.out.println(45450 + 3685);
+        System.out.println(chara2ResultAfterSkills);
         assertTrue(charasHaveXAmountOfSkills(17));
-        assertTrue(acceptableResult(30672 + 2487, chara1ResultAfterSkills, 300));
-        assertTrue(acceptableResult(45450 + 3685, chara2ResultAfterSkills, 300));
+        assertTrue(acceptableResult(30672 + 2487, chara1ResultAfterSkills));
+        assertTrue(acceptableResult(45450 + 3685, chara2ResultAfterSkills));
         // Alterations to the defensive multiplier seem to provide more different results from the kirafan.moe calculator
-        // compared to the other multipliers (however it is still in a acceptable range, results vary by few hundred at most)
+        // compared to the other multipliers (however it is still in a acceptable range, results vary only within 1% of the
+        // kirafan.moe calculator results)
         // (This might be due to me misunderstanding the documentation or the kirafan.moe calculator rounding values more aggressively)
+        // When chancing defence change value by a single per mille (1/10 of a percent) in the kirafan.moe calculator does
+        // not always change the end result
         assertTrue(resultsAreDifferentAfterSkills());
         // Results should be affected by the enemy's DEF/MAT de(buffs)
         // The influencing stat should be DEF for warriors and MDF for mages
+    }
+
+    @Test
+    public void calculateMaxDamage_defensiveBuffMultiplier_providesAcceptableResultsWithVariousDefenceBuffValues() {
+        assertTrue(charasHaveOnlyTotteoki());
+
+        chara1.getSkills().add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 66.99));
+        assertTrue(acceptableResult(96662 + 7837, Calculator.calculateMaxDamage(chara1)));
+
+        Skill skill = new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_ALL, 21.11);
+        chara1.getSkills().add(skill);
+        assertTrue(acceptableResult(59071 + 4790, Calculator.calculateMaxDamage(chara1)));
+
+        chara1.getSkills().add(skill);
+        assertTrue(acceptableResult(42531 + 3448, Calculator.calculateMaxDamage(chara1)));
+
+        chara1.getSkills().add(skill);
+        assertTrue(acceptableResult(33228 + 2694, Calculator.calculateMaxDamage(chara1)));
+
+        chara1.getSkills().add(skill);
+        assertTrue(acceptableResult(27264 + 2211, Calculator.calculateMaxDamage(chara1)));
+
+        chara1.getSkills().add(skill);
+        assertTrue(acceptableResult(23031 + 1867, Calculator.calculateMaxDamage(chara1)));
+
+        chara1.getSkills().add(skill);
+        assertTrue(acceptableResult(19999 + 1622, Calculator.calculateMaxDamage(chara1)));
     }
 
     @Test
@@ -679,8 +709,8 @@ class CalculatorTest {
         chara1.getSkills().add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_ALL, 399));
         assertTrue(acceptableResult(6392 + 518, Calculator.calculateMaxDamage(chara1), 5));
         // Max value is 5.0 (1 + 4)
-        // In the kirafan.moe calculator damages values do not always change per every per mille, so this and the following
-        // test use whole percentages instead
+        // In the kirafan.moe calculator damages values do not always change per every per mille (1/10 of a percent),
+        // so this and the following test use whole percentages instead
 
         chara1.getSkills().add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 1));
         assertTrue(acceptableResult(6380 + 517, Calculator.calculateMaxDamage(chara1), 5));
@@ -719,15 +749,15 @@ class CalculatorTest {
         skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 15));
         skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN, SkillTarget.SELF, 20));
         skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.SELF, 25));
-        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 34));
+        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 34.84));
+        skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 41.53));
 
         addSkillsToCharas(skills);
         calculateMaxDamage();
-
-        assertTrue(charasHaveXAmountOfSkills(7));
+        System.out.println(51137 + 4164);
+        System.out.println(chara1ResultAfterSkills);
+        assertTrue(charasHaveXAmountOfSkills(8));
         assertTrue(chara1ResultsAreDifferentAfterSkills());
-        assertTrue(acceptableResult(34433 + 2792, chara1ResultAfterSkills, 2000));
-        // Results seem to vary about 10% (mostly because of the above mentioned flaws), but I deem it acceptable enough
-        // and
+        assertTrue(acceptableResult(51137 + 4164, chara1ResultAfterSkills));
     }
 }
