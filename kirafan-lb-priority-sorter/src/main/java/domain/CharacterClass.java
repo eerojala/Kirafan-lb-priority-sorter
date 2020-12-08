@@ -19,7 +19,6 @@ public enum CharacterClass {
         return nameEN;
     }
 
-
     public String getNameJP() {
         return nameJP;
     }
