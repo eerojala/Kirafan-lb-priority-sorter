@@ -72,6 +72,77 @@ public class SkillSetCheck extends Check {
                 || mostStatusEffectPower(chara);
     }
 
+    private boolean knightHasDesiredSkillSet(GameCharacter chara) {
+        /*
+         * A knight has a desired skillset IF she has more:
+         *   1) physical defense
+         *   2) magical defense
+         *   3) party 1x barrier skills
+         *   4) self triple barrier skills
+         *
+         * than other knights of the same element OR:
+         *   5) When the knight has 2 or more AoE attacks and there are no other already limit broken knights of the same
+         *   element that already fullfill this requirement
+         */
+
+        Skill partySingleBarrier = new Skill(SkillType.BARRIER, null, SkillTarget.ALLIES_ALL, 0);
+        Skill selfTripleBarrier = new Skill(SkillType.BARRIER_TRIPLE, null, SkillTarget.SELF, 0);
+        Skill damageAllEnemies = new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_ALL, 0);
+
+        return leastDamageTaken(chara, SkillType.DEF) || leastDamageTaken(chara, SkillType.MDF)
+                || desiredSkillAmount(chara, true, 1, partySingleBarrier)
+                || desiredSkillAmount(chara, true, 1, selfTripleBarrier)
+                || desiredSkillAmount(chara, true, 2, damageAllEnemies);
+    }
+
+    private boolean mageHasDesiredSkillSet(GameCharacter chara) {
+        /*
+         * A mage has a desired skillset IF she:
+         *   1) Has higher max damage than other mages of the same element, OR
+         *   2) She has two attack skills which target all enemies (weapon skills not counted) AND there are no other
+         *   already limit broken characters of the same element and class who fill this niche
+         */
+        Skill damageAllEnemies = new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_ALL, 0);
+
+        return highestMaxDamage(chara) || desiredSkillAmount(chara, false, 2, damageAllEnemies);
+    }
+
+    private boolean priestHasDesiredSkillSet(GameCharacter chara) {
+        /*
+         * A priest has a desired skillset IF she has more:
+         *   1) heal card skills
+         *   2) status effect clear skills
+         *   3) party 1x barrier skills
+         *
+         * than other priests of the same element OR
+         *   4) When the priest SPEED UP skillpower than other priests of the same element
+         */
+
+        Skill healCard = new Skill(SkillType.HEAL_CARD, null, null, 0);
+        Skill statusEffectClearSingle = new Skill(SkillType.STATUS_EFFECT_CLEAR, null, SkillTarget.ALLIES_SINGLE, 0);
+        Skill statusEffectClearAll = new Skill(SkillType.STATUS_EFFECT_CLEAR, null, SkillTarget.ALLIES_ALL, 0);
+        Skill partySingleBarrier = new Skill(SkillType.BARRIER, null, SkillTarget.ALLIES_ALL, 0);
+
+        return desiredSkillAmount(chara, true,1, healCard)
+                || desiredSkillAmount(chara, true,1, statusEffectClearSingle, statusEffectClearAll)
+                || desiredSkillAmount(chara, true,1, partySingleBarrier)
+                || mostSkillPower(chara, SkillType.SPD, SkillChange.UP);
+    }
+
+    private boolean warriorHasDesiredSkillset(GameCharacter chara) {
+        /*
+         * A mage has a desired skillset IF she:
+         *   1) Has higher max damage than other warriors of the same element, OR
+         *   2) She has two attack skills which target a single (weapon skills not counted) AND there are no already limit
+         *   broken characters who already fulfill this condition
+         */
+
+        Skill damageSingleEnemy = new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_SINGLE, 0);
+
+        return highestMaxDamage(chara)
+                || desiredSkillAmount(chara, false, 2, damageSingleEnemy);
+    }
+
     private boolean mostSkillPower(GameCharacter chara, SkillType desiredSkillType, SkillChange desiredSkillChange) {
         /*
         * Return true in the following cases:
@@ -118,29 +189,6 @@ public class SkillSetCheck extends Check {
                 || mostSkillPower(chara, SkillType.SILENCE, null)
                 || mostSkillPower(chara, SkillType.SLEEP, null)
                 || mostSkillPower(chara, SkillType.TIMID, null);
-    }
-
-    private boolean knightHasDesiredSkillSet(GameCharacter chara) {
-        /*
-        * A knight has a desired skillset IF she has more:
-        *   1) physical defense
-        *   2) magical defense
-        *   3) party 1x barrier skills
-        *   4) self triple barrier skills
-        *
-        * than other knights of the same element OR:
-        *   5) When the knight has 2 or more AoE attacks and there are no other already limit broken knights of the same
-        *   element that already fullfill this requirement
-        */
-
-        Skill partySingleBarrier = new Skill(SkillType.BARRIER, null, SkillTarget.ALLIES_ALL, 0);
-        Skill selfTripleBarrier = new Skill(SkillType.BARRIER_TRIPLE, null, SkillTarget.SELF, 0);
-        Skill damageAllEnemies = new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_ALL, 0);
-
-        return leastDamageTaken(chara, SkillType.DEF) || leastDamageTaken(chara, SkillType.MDF)
-                || desiredSkillAmount(chara, true, 1, partySingleBarrier)
-                || desiredSkillAmount(chara, true, 1, selfTripleBarrier)
-                || desiredSkillAmount(chara, true, 2, damageAllEnemies);
     }
 
     private boolean leastDamageTaken(GameCharacter chara, SkillType typeOfDefense) {
@@ -191,41 +239,6 @@ public class SkillSetCheck extends Check {
         return true;
     }
 
-    private boolean priestHasDesiredSkillSet(GameCharacter chara) {
-        /*
-        * A priest has a desired skillset IF she has more:
-        *   1) heal card skills
-        *   2) status effect clear skills
-        *   3) party 1x barrier skills
-        *
-        * than other priests of the same element OR
-        *   4) When the priest SPEED UP skillpower than other priests of the same element
-        */
-
-        Skill healCard = new Skill(SkillType.HEAL_CARD, null, null, 0);
-        Skill statusEffectClearSingle = new Skill(SkillType.STATUS_EFFECT_CLEAR, null, SkillTarget.ALLIES_SINGLE, 0);
-        Skill statusEffectClearAll = new Skill(SkillType.STATUS_EFFECT_CLEAR, null, SkillTarget.ALLIES_ALL, 0);
-        Skill partySingleBarrier = new Skill(SkillType.BARRIER, null, SkillTarget.ALLIES_ALL, 0);
-
-        return desiredSkillAmount(chara, true,1, healCard)
-                || desiredSkillAmount(chara, true,1, statusEffectClearSingle, statusEffectClearAll)
-                || desiredSkillAmount(chara, true,1, partySingleBarrier)
-                || mostSkillPower(chara, SkillType.SPD, SkillChange.UP);
-    }
-
-    private boolean mageHasDesiredSkillSet(GameCharacter chara) {
-        /*
-        * A mage has a desired skillset IF she:
-        *   1) Has higher max damage than other mages of the same element, OR
-        *   2) She has two attack skills which target all enemies (weapon skills not counted) AND there are no other
-        *   already limit broken characters of the same element and class who fill this niche
-        */
-        Skill damageAllEnemies = new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_ALL, 0);
-
-        return highestMaxDamage(chara)
-                || desiredSkillAmount(chara, false, 2, damageAllEnemies);
-    }
-
     private boolean highestMaxDamage(GameCharacter chara) {
         List<GameCharacter> charactersOfSameElementAndClass =
                 getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass());
@@ -237,19 +250,5 @@ public class SkillSetCheck extends Check {
 
         // chara has gives the highest max damage when compared to other characters with same element and class
         return highestDamageCharacter.equals(chara);
-    }
-
-    private boolean warriorHasDesiredSkillset(GameCharacter chara) {
-        /*
-         * A mage has a desired skillset IF she:
-         *   1) Has higher max damage than other warriors of the same element, OR
-         *   2) She has two attack skills which target a single (weapon skills not counted) AND there are no already limit
-         *   broken characters who already fulfill this condition
-         */
-
-        Skill damageSingleEnemy = new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_SINGLE, 0);
-
-        return highestMaxDamage(chara)
-                || desiredSkillAmount(chara, false, 2, damageSingleEnemy);
     }
 }
