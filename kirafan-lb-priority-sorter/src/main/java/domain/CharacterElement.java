@@ -1,29 +1,23 @@
 package domain;
 
 public enum CharacterElement {
-    FIRE("Fire", "Tuli", "炎"),
-    WIND("Wind", "Tuuli", "風"),
-    EARTH("Earth", "Maa", "土"),
-    WATER("Water", "Vesi", "水"),
-    MOON("Moon", "Kuu", "月"),
-    SUN("Sun", "Aurinko", "陽");
+    FIRE("Fire", "炎"),
+    WIND("Wind", "風"),
+    EARTH("Earth", "土"),
+    WATER("Water", "水"),
+    MOON("Moon",  "月"),
+    SUN("Sun", "陽");
 
     private final String nameEN;
-    private final String nameFIN;
     private final String nameJP;
 
-    private CharacterElement(String nameEN, String nameFIN, String nameJP) {
+    private CharacterElement(String nameEN, String nameJP) {
         this.nameEN = nameEN;
-        this.nameFIN = nameFIN;
         this.nameJP = nameJP;
     }
 
     public String getNameEN() {
         return nameEN;
-    }
-
-    public String getNameFIN() {
-        return nameFIN;
     }
 
     public String getNameJP() {
