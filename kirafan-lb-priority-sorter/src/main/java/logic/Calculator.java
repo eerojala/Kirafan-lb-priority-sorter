@@ -280,7 +280,7 @@ public final class Calculator {
         if (weapon == null) {
             return baseOffensiveStat;
         } else {
-            return baseOffensiveStat + weapon.getOffensivePower();
+            return baseOffensiveStat + weapon.getOffensiveStat();
         }
     }
 

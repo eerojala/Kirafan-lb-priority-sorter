@@ -36,7 +36,7 @@ class CalculatorTest {
                 .build();
 
         weapon = new Weapon.Builder("Weapon")
-                .offensivePowerIs(90)
+                .offensiveStatIs(90)
                 .withSkill(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.SELF, 24.0))
                 .build();
 

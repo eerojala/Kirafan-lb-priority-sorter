@@ -12,7 +12,7 @@ public class Weapon {
     public static class Builder {
         private String id;
         private String name;
-        private int offensivePower;
+        private int offensiveStat;
         private int defense;
         private int magicDefense;
         private List<Skill> skills;
@@ -21,15 +21,15 @@ public class Weapon {
         public Builder(String name) {
             id = name;
             this.name = name;
-            offensivePower = 0;
+            offensiveStat = 0;
             defense = 0;
             magicDefense = 0;
             skills = new ArrayList<>();
             exclusiveCharacter = null;
         }
 
-        public Builder offensivePowerIs(int offensivePower) {
-            this.offensivePower = offensivePower;
+        public Builder offensiveStatIs(int offensivePower) {
+            this.offensiveStat = offensivePower;
 
             return this;
         }
@@ -62,7 +62,7 @@ public class Weapon {
             Weapon weapon = new Weapon();
             weapon.id = id;
             weapon.name = name;
-            weapon.offensivePower = offensivePower;
+            weapon.offensiveStat = offensiveStat;
             weapon.defense = defense;
             weapon.magicDefense = magicDefense;
             weapon.skills = skills;
@@ -75,7 +75,7 @@ public class Weapon {
     @Id
     private String id;
     private String name;
-    private int offensivePower;
+    private int offensiveStat;
     private int defense;
     private int magicDefense;
     private List<Skill> skills;
@@ -100,12 +100,12 @@ public class Weapon {
         this.name = name;
     }
 
-    public int getOffensivePower() {
-        return offensivePower;
+    public int getOffensiveStat() {
+        return offensiveStat;
     }
 
-    public void setOffensivePower(int offensivePower) {
-        this.offensivePower = offensivePower;
+    public void setOffensiveStat(int offensiveStat) {
+        this.offensiveStat = offensiveStat;
     }
 
     public int getDefense() {
