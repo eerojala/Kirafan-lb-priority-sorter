@@ -2,11 +2,12 @@ package domain;
 
 public enum SkillType {
     // Skill types which affect stats
-    ATK("ATK", "ATK"), // Stat which determines physical damage
-    MAT("MAT", "MAT"), // Stat which determines magical damage
-    DEF("DEF", "DEF"), // Stat which determines defense from physical damage
-    MDF("MDF", "SPD"), // Stat which determines defense from magical damage
-    LUK("LUK", "LUK"), // Stat which determines chance for critical damage (both dealing or receiving damage)
+    ATK("ATK", "ATK"), // Attack, stat which determines physical damage
+    MAT("MAT", "MAT"), // Magic attack, stat which determines magical damage
+    DEF("DEF", "DEF"), // Defense, stat which determines defense from physical damage
+    MDF("MDF", "SPD"), // Magic defense, stat which determines defense from magical damage
+    LUK("LUK", "LUK"), // Luck, stat which determines chance for critical damage (both dealing or receiving damage)
+    SPD("SPD", "SPD"), // Speed, stat which determines how frequently a character gets to have a turn in the combat timeline
 
     // Skill types which affect damage directly
     CRIT_DAMAGE("Critical damage", "クリティカルダメージ"), // Affect the damage of a critical hit
@@ -53,5 +54,38 @@ public enum SkillType {
 
     public String getNameJP() {
         return nameJP;
+    }
+
+    public static SkillType getAppropriateElementalResistance(CharacterElement element) {
+        switch (element) {
+            case FIRE:
+                return SkillType.FIRE_RESIST;
+
+            case WIND:
+                return SkillType.WIND_RESIST;
+
+            case EARTH:
+                return SkillType.EARTH_RESIST;
+
+            case WATER:
+                return SkillType.WATER_RESIST;
+
+            case MOON:
+                return SkillType.MOON_RESIST;
+
+            default:
+                return SkillType.SUN_RESIST;
+        }
+    }
+
+    public static boolean isElementalResist(SkillType skilltype) {
+        return skilltype == SkillType.FIRE_RESIST || skilltype == SkillType.WIND_RESIST || skilltype == SkillType.EARTH_RESIST
+                || skilltype == SkillType.WATER_RESIST || skilltype == SkillType.MOON_RESIST || skilltype == SkillType.SUN_RESIST;
+    }
+
+    public static boolean isStatusEffect(SkillType skilltype) {
+        return skilltype == SkillType.CONFUSION || skilltype == SkillType.ISOLATION || skilltype == SkillType.HUNGER
+                || skilltype == SkillType.MISFORTUNE || skilltype == SkillType.PARALYSIS || skilltype == SkillType.SILENCE
+                || skilltype == SkillType.SLEEP || skilltype == SkillType.TIMID;
     }
 }

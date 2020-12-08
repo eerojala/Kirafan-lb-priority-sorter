@@ -21,7 +21,7 @@ public class GameCharacter {
         private List<Skill> skills;
         private Weapon preferredWeapon;
         private boolean limitBroken;
-        private int offensivePower;
+        private int offensiveStat;
         private int defense;
         private int magicDefense;
         private int wokeLevel;
@@ -36,7 +36,7 @@ public class GameCharacter {
             skills = new ArrayList<>();
             preferredWeapon = null;
             limitBroken = false;
-            offensivePower = 0;
+            offensiveStat = 0;
             defense = 0;
             magicDefense = 0;
             wokeLevel = 0;
@@ -61,8 +61,8 @@ public class GameCharacter {
             return this;
         }
 
-        public Builder offensivePowerIs(int amount) {
-            offensivePower = amount;
+        public Builder offensiveStatIs(int amount) {
+            offensiveStat = amount;
 
             return this;
         }
@@ -101,7 +101,7 @@ public class GameCharacter {
             character.skills = skills;
             character.preferredWeapon = preferredWeapon;
             character.limitBroken = limitBroken;
-            character.offensivePower = offensivePower;
+            character.offensiveStat = offensiveStat;
             character.defense = defense;
             character.magicDefense = magicDefense;
             character.wokeLevel = wokeLevel;
@@ -120,7 +120,7 @@ public class GameCharacter {
     private List<Skill> skills;
     private Weapon preferredWeapon;
     private boolean limitBroken;
-    private int offensivePower;
+    private int offensiveStat;
     private int defense;
     private int magicDefense;
     private int wokeLevel;
@@ -194,12 +194,12 @@ public class GameCharacter {
         this.limitBroken = limitBroken;
     }
 
-    public int getOffensivePower() {
-        return offensivePower;
+    public int getOffensiveStat() {
+        return offensiveStat;
     }
 
-    public void setOffensivePower(int offensivePower) {
-        this.offensivePower = offensivePower;
+    public void setOffensiveStat(int offensiveStat) {
+        this.offensiveStat = offensiveStat;
     }
 
     public int getDefense() {

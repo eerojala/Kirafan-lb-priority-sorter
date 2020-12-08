@@ -26,12 +26,12 @@ class CalculatorTest {
     public void setUp() {
         Series series = new Series("series", null);
         chara1 = new GameCharacter.Builder("warrior", series, CharacterElement.EARTH, CharacterClass.WARRIOR)
-                .offensivePowerIs(2938)
+                .offensiveStatIs(2938)
                 .withSkill(new Skill(SkillType.TOTTEOKI, null, SkillTarget.ENEMY_SINGLE, 4695))
                 .build();
 
         chara2 = new GameCharacter.Builder("mage", series, CharacterElement.WIND, CharacterClass.MAGE)
-                .offensivePowerIs(2745)
+                .offensiveStatIs(2745)
                 .withSkill(new Skill(SkillType.TOTTEOKI, null, SkillTarget.ENEMY_ALL, 3759))
                 .build();
 
@@ -40,8 +40,8 @@ class CalculatorTest {
                 .withSkill(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.SELF, 24.0))
                 .build();
 
-        chara1ResultBeforeSkills = Calculator.calculateMaxDamage(chara1);
-        chara2ResultBeforeSkills = Calculator.calculateMaxDamage(chara2);
+        chara1ResultBeforeSkills = Calculator.calculateMaxDamageGiven(chara1);
+        chara2ResultBeforeSkills = Calculator.calculateMaxDamageGiven(chara2);
     }
 
     private boolean charasHaveOnlyTotteoki() {
@@ -60,8 +60,8 @@ class CalculatorTest {
 
     private void calculateMaxDamage() {
         // NOTE: Use this function only after adding the desired skills in the test
-        chara1ResultAfterSkills = Calculator.calculateMaxDamage(chara1);
-        chara2ResultAfterSkills = Calculator.calculateMaxDamage(chara2);
+        chara1ResultAfterSkills = Calculator.calculateMaxDamageGiven(chara1);
+        chara2ResultAfterSkills = Calculator.calculateMaxDamageGiven(chara2);
     }
 
     private boolean acceptableResult(long expected, long result) {
@@ -118,25 +118,25 @@ class CalculatorTest {
 
     @Test
     public void calculateMaxDamage_returnsZeroForEveryClassExceptMageAndWarrior() {
-        assertNotEquals(0, Calculator.calculateMaxDamage(chara1)); // chara1.charcterClass = WARRIOR
-        assertNotEquals(0, Calculator.calculateMaxDamage(chara2)); // chara2.characterClass = MAGE
+        assertNotEquals(0, Calculator.calculateMaxDamageGiven(chara1)); // chara1.charcterClass = WARRIOR
+        assertNotEquals(0, Calculator.calculateMaxDamageGiven(chara2)); // chara2.characterClass = MAGE
 
         chara2.setCharacterClass(CharacterClass.KNIGHT);
-        assertEquals(0, Calculator.calculateMaxDamage(chara2));
+        assertEquals(0, Calculator.calculateMaxDamageGiven(chara2));
 
         chara2.setCharacterClass(CharacterClass.PRIEST);
-        assertEquals(0, Calculator.calculateMaxDamage(chara2));
+        assertEquals(0, Calculator.calculateMaxDamageGiven(chara2));
 
         chara2.setCharacterClass(CharacterClass.ALCHEMIST);
-        assertEquals(0, Calculator.calculateMaxDamage(chara2));
+        assertEquals(0, Calculator.calculateMaxDamageGiven(chara2));
     }
 
     @Test
     public void CalculateMaxDamage_calculatesDamageBasedOnTotteokiStrengthCorrectly() {
         assertTrue(charasHaveOnlyTotteoki());
         // chara1 and chara2 should only have the totteoki which they were constructed with in the method setUp
-        assertTrue(acceptableResult(31898 + 2586, Calculator.calculateMaxDamage(chara1)));
-        assertTrue(acceptableResult(23861 + 1935, Calculator.calculateMaxDamage(chara2)));
+        assertTrue(acceptableResult(31898 + 2586, Calculator.calculateMaxDamageGiven(chara1)));
+        assertTrue(acceptableResult(23861 + 1935, Calculator.calculateMaxDamageGiven(chara2)));
 
         chara1.setSkills(new ArrayList<Skill>(Arrays.asList(
                 new Skill(SkillType.TOTTEOKI, null, SkillTarget.ENEMY_ALL, 2000),
@@ -148,16 +148,16 @@ class CalculatorTest {
                 new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_SINGLE, 2000))));
 
         assertTrue(charasHaveXAmountOfSkills(2));
-        assertTrue(acceptableResult(13588 + 1102, Calculator.calculateMaxDamage(chara1)));
-        assertTrue(acceptableResult(6348 + 515, Calculator.calculateMaxDamage(chara2)));
+        assertTrue(acceptableResult(13588 + 1102, Calculator.calculateMaxDamageGiven(chara1)));
+        assertTrue(acceptableResult(6348 + 515, Calculator.calculateMaxDamageGiven(chara2)));
     }
 
     @Test
     public void calculateMaxDamage_calculatesWeaponAttackPowerAndSkillsCorrectly() {
         chara1.setPreferredWeapon(weapon);
         chara2.setPreferredWeapon(weapon);
-        assertTrue(acceptableResult(40758 + 3305, Calculator.calculateMaxDamage(chara1)));
-        assertTrue(acceptableResult(24644 + 1998, Calculator.calculateMaxDamage(chara2)));
+        assertTrue(acceptableResult(40758 + 3305, Calculator.calculateMaxDamageGiven(chara1)));
+        assertTrue(acceptableResult(24644 + 1998, Calculator.calculateMaxDamageGiven(chara2)));
         // chara2 is a mage so the weapon's +24.0% ATK skill should not affect the calculation since Mages use the MAT
         // stat for their damage (but the weapon's base offensive power should)
     }
@@ -234,33 +234,33 @@ class CalculatorTest {
     @Test
     public void calculateMaxDamage_offensiveBuffMultiplier_doesNotIncreasBeyondMaxValue() {
         chara1.getSkills().add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 149.9));
-        assertTrue(acceptableResult(79713 + 6463, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(79713 + 6463, Calculator.calculateMaxDamageGiven(chara1)));
         // Multiplier's max value is 2.5 (1 + 1.5)
 
         chara1.getSkills().add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.SELF, 0.1));
-        assertTrue(acceptableResult(79746 + 6466, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(79746 + 6466, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.SELF, 0.1));
-        assertTrue(acceptableResult(79746 + 6466, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(79746 + 6466, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 10));
-        assertTrue(acceptableResult(79746 + 6466, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(79746 + 6466, Calculator.calculateMaxDamageGiven(chara1)));
     }
 
     @Test
     public void calculateMaxDamage_offensiveBuffMultiplier_doesNotDecreaseBelowMinValue() {
         chara2.getSkills().add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 49.9));
-        assertTrue(acceptableResult(11952 + 969, Calculator.calculateMaxDamage(chara2)));
+        assertTrue(acceptableResult(11952 + 969, Calculator.calculateMaxDamageGiven(chara2)));
         // Multiplier's min value is 0.5 (1 - 0.5)
 
         chara2.getSkills().add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.SELF, 0.1));
-        assertTrue(acceptableResult(11926 + 967, Calculator.calculateMaxDamage(chara2)));
+        assertTrue(acceptableResult(11926 + 967, Calculator.calculateMaxDamageGiven(chara2)));
 
         chara2.getSkills().add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.SELF, 001));
-        assertTrue(acceptableResult(11926 + 967, Calculator.calculateMaxDamage(chara2)));
+        assertTrue(acceptableResult(11926 + 967, Calculator.calculateMaxDamageGiven(chara2)));
 
         chara2.getSkills().add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.SELF, 10));
-        assertTrue(acceptableResult(11926 + 967, Calculator.calculateMaxDamage(chara2)));
+        assertTrue(acceptableResult(11926 + 967, Calculator.calculateMaxDamageGiven(chara2)));
     }
 
     @Test
@@ -368,19 +368,19 @@ class CalculatorTest {
         // Result is affected by enemy's resistance to the character's element
 
         chara1.setCharacterElement(CharacterElement.WIND);
-        assertTrue(acceptableResult(34259 + 2778, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(34259 + 2778, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.setCharacterElement(CharacterElement.FIRE);
-        assertTrue(acceptableResult(36715 + 2977, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(36715 + 2977, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.setCharacterElement(CharacterElement.WATER);
-        assertTrue(acceptableResult(35790 + 2902, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(35790 + 2902, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.setCharacterElement(CharacterElement.MOON);
-        assertTrue(acceptableResult(35028 + 2840, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(35028 + 2840, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.setCharacterElement(CharacterElement.SUN);
-        assertTrue(acceptableResult(37002 + 3000, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(37002 + 3000, Calculator.calculateMaxDamageGiven(chara1)));
         // The function picks the correct elemental resistance for each element
     }
 
@@ -421,14 +421,14 @@ class CalculatorTest {
 
         List<Skill> skills = new ArrayList<>();
         chara1.getSkills().add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 14.97));
-        long chara1ResultAfterResistDown = Calculator.calculateMaxDamage(chara1);
+        long chara1ResultAfterResistDown = Calculator.calculateMaxDamageGiven(chara1);
 
         assertEquals(2, chara1.getSkills().size());
         assertTrue(acceptableResult(36674 + 2974, chara1ResultAfterResistDown));
         assertTrue(chara1ResultAfterResistDown > chara1ResultBeforeSkills);
 
         chara1.getSkills().add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.SELF, 24.53));
-        long chara1ResultAfterWeakElementBonus = Calculator.calculateMaxDamage(chara1);
+        long chara1ResultAfterWeakElementBonus = Calculator.calculateMaxDamageGiven(chara1);
 
         assertEquals(3, chara1.getSkills().size());
         assertTrue(acceptableResult(40586 + 3291, chara1ResultAfterWeakElementBonus));
@@ -481,42 +481,42 @@ class CalculatorTest {
     @Test
     public void calculateMaxDamage_elementMultiplier_maxValueTests() {
         chara1.getSkills().add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 19.9));
-        assertTrue(acceptableResult(38246 + 3101, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(38246 + 3101, Calculator.calculateMaxDamageGiven(chara1)));
         // elemental multipliers initial max value should be 2.4 (before applying weak element bonus)
         // 2 * (1 + 0.2) = 2.4
 
         chara1.getSkills().add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 0.1));
-        assertTrue(acceptableResult(38278 + 3104, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(38278 + 3104, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 0.1));
-        assertTrue(acceptableResult(38278 + 3104, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(38278 + 3104, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 10.0));
-        assertTrue(acceptableResult(38278 + 3104, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(38278 + 3104, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 200));
-        assertTrue(acceptableResult(70177 + 5690, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(70177 + 5690, Calculator.calculateMaxDamageGiven(chara1)));
         // weak element bonus should be applied after the initial value is set to 2.4
     }
 
     @Test
     public void calculateMaxDamage_elementMultiplier_minValueTests() {
         chara1.getSkills().add(new Skill(SkillType.EARTH_RESIST, SkillChange.UP, SkillTarget.ENEMY_ALL, 19.9));
-        assertTrue(acceptableResult(25551 + 2072, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(25551 + 2072, Calculator.calculateMaxDamageGiven(chara1)));
         // elemental multipliers min value should be 1.6
         // 2 * (1 - 0.2) = 1.6
 
         chara1.getSkills().add(new Skill(SkillType.EARTH_RESIST, SkillChange.UP, SkillTarget.ENEMY_ALL, 0.1));
-        assertTrue(acceptableResult(25519 + 2069, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(25519 + 2069, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(new Skill(SkillType.EARTH_RESIST, SkillChange.UP, SkillTarget.ENEMY_ALL, 0.1));
-        assertTrue(acceptableResult(25519 + 2069, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(25519 + 2069, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(new Skill(SkillType.EARTH_RESIST, SkillChange.UP, SkillTarget.ENEMY_ALL, 5.7));
-        assertTrue(acceptableResult(25519 + 2069, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(25519 + 2069, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.SELF, 10));
-        assertTrue(acceptableResult(27114 + 2198, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(27114 + 2198, Calculator.calculateMaxDamageGiven(chara1)));
         // weak element should bonus be applied after the initial value is set to 1.6
     }
 
@@ -572,33 +572,33 @@ class CalculatorTest {
     @Test
     public void calculateMaxDamage_criticalDamageMultiplier_doesNotIncreaseBeyondMaxValue() {
         chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 99.9));
-        assertTrue(acceptableResult(63765 + 5170, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(63765 + 5170, Calculator.calculateMaxDamageGiven(chara1)));
         // Critical damage multiplier's max value is 3.0 (1.5 * (1 + 1))
 
         chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0.1));
-        assertTrue(acceptableResult(63797 + 5173, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(63797 + 5173, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.SELF, 0.1));
-        assertTrue(acceptableResult(63797 + 5173, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(63797 + 5173, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.SELF, 10.5));
-        assertTrue(acceptableResult(63797 + 5173, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(63797 + 5173, Calculator.calculateMaxDamageGiven(chara1)));
     }
 
     @Test
     public void calculateMaxDamage_criticalDamageMultiplier_doesNotDecreaseBelowMinValue() {
         chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 33));
-        assertTrue(acceptableResult(21372 + 1733, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(21372 + 1733, Calculator.calculateMaxDamageGiven(chara1)));
         // Critical damage multiplier's min value is 1.0 (1.5 * (1 - (1/3)))
 
         chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.SELF, 1));
-        assertTrue(acceptableResult(21266 + 1724, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(21266 + 1724, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.SELF, 1));
-        assertTrue(acceptableResult(21266 + 1724, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(21266 + 1724, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 10.0));
-        assertTrue(acceptableResult(21266 + 1724, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(21266 + 1724, Calculator.calculateMaxDamageGiven(chara1)));
     }
 
     @Test
@@ -655,26 +655,26 @@ class CalculatorTest {
         assertTrue(charasHaveOnlyTotteoki());
 
         chara1.getSkills().add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 66.99));
-        assertTrue(acceptableResult(96662 + 7837, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(96662 + 7837, Calculator.calculateMaxDamageGiven(chara1)));
 
         Skill skill = new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_ALL, 21.11);
         chara1.getSkills().add(skill);
-        assertTrue(acceptableResult(59071 + 4790, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(59071 + 4790, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(skill);
-        assertTrue(acceptableResult(42531 + 3448, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(42531 + 3448, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(skill);
-        assertTrue(acceptableResult(33228 + 2694, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(33228 + 2694, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(skill);
-        assertTrue(acceptableResult(27264 + 2211, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(27264 + 2211, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(skill);
-        assertTrue(acceptableResult(23031 + 1867, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(23031 + 1867, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(skill);
-        assertTrue(acceptableResult(19999 + 1622, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(19999 + 1622, Calculator.calculateMaxDamageGiven(chara1)));
     }
 
     @Test
@@ -707,35 +707,35 @@ class CalculatorTest {
     @Test
     public void calculateMaxDamage_defensiveBuffMultiplier_doesNotIncreaseBeyondMaxValue() {
         chara1.getSkills().add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_ALL, 399));
-        assertTrue(acceptableResult(6392 + 518, Calculator.calculateMaxDamage(chara1), 5));
+        assertTrue(acceptableResult(6392 + 518, Calculator.calculateMaxDamageGiven(chara1), 5));
         // Max value is 5.0 (1 + 4)
         // In the kirafan.moe calculator damages values do not always change per every per mille (1/10 of a percent),
         // so this and the following test use whole percentages instead
 
         chara1.getSkills().add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 1));
-        assertTrue(acceptableResult(6380 + 517, Calculator.calculateMaxDamage(chara1), 5));
+        assertTrue(acceptableResult(6380 + 517, Calculator.calculateMaxDamageGiven(chara1), 5));
 
         chara1.getSkills().add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 1));
-        assertTrue(acceptableResult(6380 + 517, Calculator.calculateMaxDamage(chara1), 5));
+        assertTrue(acceptableResult(6380 + 517, Calculator.calculateMaxDamageGiven(chara1), 5));
 
         chara1.getSkills().add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 10));
-        assertTrue(acceptableResult(6380 + 517, Calculator.calculateMaxDamage(chara1), 5));
+        assertTrue(acceptableResult(6380 + 517, Calculator.calculateMaxDamageGiven(chara1), 5));
     }
 
     @Test
     public void calculateMaxDamage_defensiveBuffMultiplier_doesNotDecreaseBelowMinValue() {
         chara1.getSkills().add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 66));
-        assertTrue(acceptableResult(93819 + 7607, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(93819 + 7607, Calculator.calculateMaxDamageGiven(chara1)));
         // Min value is 0.33 (1 - 0.67)
 
         chara1.getSkills().add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 1));
-        assertTrue(acceptableResult(96662 + 7837, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(96662 + 7837, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 1));
-        assertTrue(acceptableResult(96662 + 7837, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(96662 + 7837, Calculator.calculateMaxDamageGiven(chara1)));
 
         chara1.getSkills().add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 10));
-        assertTrue(acceptableResult(96662 + 7837, Calculator.calculateMaxDamage(chara1)));
+        assertTrue(acceptableResult(96662 + 7837, Calculator.calculateMaxDamageGiven(chara1)));
     }
 
     @Test
