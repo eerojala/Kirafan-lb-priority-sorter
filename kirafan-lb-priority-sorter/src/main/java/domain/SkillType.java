@@ -1,6 +1,8 @@
 package domain;
 
 public enum SkillType {
+    // *** BEGIN SKILLTYPES FOR BUFFS/DEBUFFS ***
+
     // Skill types which affect stats
     ATK("ATK", "ATK"), // Attack, stat which determines physical damage
     MAT("MAT", "MAT"), // Magic attack, stat which determines magical damage
@@ -8,12 +10,6 @@ public enum SkillType {
     MDF("MDF", "SPD"), // Magic defense, stat which determines defense from magical damage
     LUK("LUK", "LUK"), // Luck, stat which determines chance for critical damage (both dealing or receiving damage)
     SPD("SPD", "SPD"), // Speed, stat which determines how frequently a character gets to have a turn in the combat timeline
-
-    // Skill types which affect damage directly
-    CRIT_DAMAGE("Critical damage", "クリティカルダメージ"), // Affect the damage of a critical hit
-    NEXT_ATK("Next physical attack up", "次回の物理攻撃の威力アップ"), // Affect ATK for next attack only
-    NEXT_MAT("Next magical attack up", "次回の魔法攻撃の威力アップ"), // Affect MAT for next attack only
-    WEAK_ELEMENT_BONUS("Weak element bonus", "有利属性ボーナス"), // Increases damage done against an opponent with a element which is weak to the damage dealers element
 
     // Skill types which affect elemental resistances
     FIRE_RESIST("Fire resistance", "火耐性"), // Reduces fire damage taken
@@ -23,7 +19,19 @@ public enum SkillType {
     MOON_RESIST("Moon resistance", "月耐性"), // Reduces moon damage taken
     SUN_RESIST("Sun resistance", "日耐性"), // Reduces sun damage taken
 
-    // Skill types which cause/cure status affects
+    // Skill types which affect other multipliers in damage calculation
+    CRIT_DAMAGE("Critical damage", "クリティカルダメージ"), // Affect the damage of a critical hit
+    NEXT_ATK("Next physical attack", "次回の物理攻撃"), // Affect damage for the next physical attack (dispels after 1 attack, other buffs/debuffs dispel usually after 3 attacks)
+    NEXT_MAT("Next magical attack up", "次回の魔法攻撃"), // Affect damage for the next magical attack
+    WEAK_ELEMENT_BONUS("Weak element bonus", "有利属性ボーナス"), // Increases damage done against an opponent with a element which is weak to the damage dealers element
+
+
+
+    // *** END SKILL TYPES FOR BUFFS/DEBUFFS //
+
+    // *** BEGIN SKILL TYPES FOR OTHER EFFECTS //
+
+    // Skill types which cause abnormal effects (known as status affects in other games)
     CONFUSION("Confusion", "混乱"), // Causes enemies to take damage randomly instead of using a skills / player characters to select a random skill
     ISOLATION("Isolation", "孤立"), // Causes the target to be unable to switch places with another party member
     HUNGER("Hunger", "腹ペコ"), // Causes the target to take damage at the end of their turn
@@ -32,14 +40,21 @@ public enum SkillType {
     SILENCE("Silence", "沈黙"), // Causes the target unable to use other skills than their default attack
     SLEEP("Sleep", "眠り"), // Causes the target to skip their turn until they take damage
     TIMID("Timid", "弱気"), // Causes all damage dealt to the target to be critical hits
-    STATUS_EFFECT_CLEAR("Clear status effects", "状態異常解除"), // Clears all status effects
 
-    // Skill types for other effects
-    BARRIER("Barrier", "バリア"), // Blocks all of the received damage from the next attack
-    BARRIER_TRIPLE("Triple barrier", "三重バリア"), // Blocks all of the received damage from the 3 next attacks
+    // Skill types for misc. effects
+    ABNORMAL_DISABLE("Disble abnormals", "状態異常無効"), // Gives character immunity from status effects
+    ABNORMAL_RECOVER("Clear abnormals", "状態異常解除"), // Clears all abnormal effects from character
+    BARRIER_FULL("Full barrier", "フルバリア"), // Blocks all of the received damage from the next attack
+    BARRIER_FULL_TRIPLE("Full triple barrier", "三重フルバリア"), // Blocks all of the received damage from the 3 next attacks
     DAMAGE("Damage", "ダメージ"), // Deal physical or magical damage
     HEAL_CARD("Heal card", "回復カード"), // Places cards on the combat timeline which heal the party when activated
     TOTTEOKI("Totteoki", "とっておき"); // A special attack, totteoki means along the lines of  "ace in the hole" in english
+
+    // *** END SKILLTYPES FOR OTHER EFFECTS **
+
+    // There are even more different types of skills in the actual game, but I consider only these to be relevant for this program
+    // (Might add them later though if I change my mind)
+
     private final String nameEN;
     private final String nameJP;
 
@@ -78,14 +93,37 @@ public enum SkillType {
         }
     }
 
+    public static boolean isBuffOrDebuff(SkillType skillType) {
+        return isStat(skillType) || isElementalResist(skillType) || isOtherMultiplier(skillType);
+    }
+
+    public static boolean isAbnormalOrMiscEffect(SkillType skillType) {
+        return isAbnormalEffect(skillType) || isMiscEffect(skillType);
+    }
+
+    public static boolean isStat(SkillType skillType) {
+        return skillType == SkillType.ATK || skillType == SkillType.MAT || skillType == DEF || skillType == MDF
+                || skillType == LUK || skillType == SPD;
+    }
+
+    public static boolean isOtherMultiplier(SkillType skillType) {
+        return skillType == CRIT_DAMAGE || skillType == NEXT_ATK || skillType == NEXT_MAT || skillType == WEAK_ELEMENT_BONUS;
+    }
+
     public static boolean isElementalResist(SkillType skilltype) {
         return skilltype == SkillType.FIRE_RESIST || skilltype == SkillType.WIND_RESIST || skilltype == SkillType.EARTH_RESIST
                 || skilltype == SkillType.WATER_RESIST || skilltype == SkillType.MOON_RESIST || skilltype == SkillType.SUN_RESIST;
     }
 
-    public static boolean isStatusEffect(SkillType skilltype) {
+    public static boolean isAbnormalEffect(SkillType skilltype) {
         return skilltype == SkillType.CONFUSION || skilltype == SkillType.ISOLATION || skilltype == SkillType.HUNGER
                 || skilltype == SkillType.MISFORTUNE || skilltype == SkillType.PARALYSIS || skilltype == SkillType.SILENCE
                 || skilltype == SkillType.SLEEP || skilltype == SkillType.TIMID;
+    }
+
+    public static boolean isMiscEffect(SkillType skillType) {
+        return skillType == ABNORMAL_DISABLE || skillType == ABNORMAL_RECOVER || skillType == BARRIER_FULL
+                || skillType == BARRIER_FULL_TRIPLE || skillType == DAMAGE || skillType == HEAL_CARD || skillType == TOTTEOKI;
+
     }
 }

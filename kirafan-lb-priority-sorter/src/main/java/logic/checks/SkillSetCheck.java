@@ -54,122 +54,128 @@ public class SkillSetCheck extends Check {
 
     private boolean alchemistHasDesiredSkillSet(GameCharacter chara) {
         /*
-        * An alchemist has a desired skill set if she has :
-        *   1) more DEF DOWN skillpower OR
-        *   2) more MDF DOWN skillpower OR
-        *   3) more element resistance DOWN skillpower (of her own element) OR
-        *   4) more SPD DOWN skillpower OR
-        *   5) more status effect skillpower OR
-        *
-        * than other alchemists of the same element
-        *
-        * */
+        * An alchemist's desire skillsets (compared with alchemists of the same element)
+        *   1) Most DEF DOWN skillpower
+        *   2) Most MDF DOWN skillpower
+        *   3) Most element resistance DOWN skillpower (of her own element)
+        *   4) Most SPD DOWN skillpower
+        *   5) Most abnormal effect skillpower (of any abnormal effect)
+        */
 
-        return mostSkillPower(chara, SkillType.DEF, SkillChange.DOWN)
-                || mostSkillPower(chara, SkillType.MDF, SkillChange.DOWN)
-                || mostSkillPower(chara, SkillType.getAppropriateElementalResistance(chara.getCharacterElement()), SkillChange.DOWN)
-                || mostSkillPower(chara, SkillType.SPD, SkillChange.DOWN)
-                || mostStatusEffectPower(chara);
+        SkillType appropriateElementalResistance = SkillType.getAppropriateElementalResistance(chara.getCharacterElement());
+
+        return mostSkillPowerCheck(chara, SkillType.DEF, SkillChange.DOWN, true)
+                || mostSkillPowerCheck(chara, SkillType.MDF, SkillChange.DOWN, true)
+                || mostSkillPowerCheck(chara, appropriateElementalResistance, SkillChange.DOWN, true)
+                || mostSkillPowerCheck(chara, SkillType.SPD, SkillChange.DOWN, true)
+                || mostAbnormalEffectCheck(chara);
     }
 
     private boolean knightHasDesiredSkillSet(GameCharacter chara) {
         /*
-         * A knight has a desired skillset IF she has more:
-         *   1) physical defense
-         *   2) magical defense
-         *   3) party 1x barrier skills
-         *   4) self triple barrier skills
-         *
-         * than other knights of the same element OR:
-         *   5) When the knight has 2 or more AoE attacks and there are no other already limit broken knights of the same
-         *   element that already fullfill this requirement
+         * A knight's desired skillsets (compared with knights of the same element):
+         *   1) Takes least physical damage (against element which the character is neutral against)
+         *   2) Takes least magical damage (against element which the character is neutral against)
+         *   3) Most abnormal effect disable skills
+         *   4) Most abnormal effect recover skills
+         *   5) Most ALLIES ALL 1x barrier skills
+         *   6) Most self 3x barrier skills
+         *   7) Most damage all enemies skills
          */
 
-        Skill partySingleBarrier = new Skill(SkillType.BARRIER, null, SkillTarget.ALLIES_ALL, 0);
-        Skill selfTripleBarrier = new Skill(SkillType.BARRIER_TRIPLE, null, SkillTarget.SELF, 0);
+        Skill abnormalDisableSelf = new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.SELF, 0);
+        Skill abnormalDisableAllySingle = new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_SINGLE, 0);
+        Skill abnormalDisableAllyAll = new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_ALL, 0);
+        Skill abnormalRecoverSelf = new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.SELF, 0);
+        Skill abnormalRecoverAllySingle = new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLIES_SINGLE, 0);
+        Skill abnormalRecoverAllyAll = new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLIES_ALL, 0);
+        Skill singleBarrierAllyAll = new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLIES_ALL, 0);
+        Skill tripleBarrierSelfAll = new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.SELF, 0);
         Skill damageAllEnemies = new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_ALL, 0);
 
-        return leastDamageTaken(chara, SkillType.DEF) || leastDamageTaken(chara, SkillType.MDF)
-                || desiredSkillAmount(chara, true, 1, partySingleBarrier)
-                || desiredSkillAmount(chara, true, 1, selfTripleBarrier)
-                || desiredSkillAmount(chara, true, 2, damageAllEnemies);
+        return takesLeastDamage(chara, SkillType.DEF) || takesLeastDamage(chara, SkillType.MDF)
+                || mostSkillAmountCheck(chara, true, 1, abnormalDisableSelf, abnormalDisableAllySingle, abnormalDisableAllyAll)
+                || mostSkillAmountCheck(chara, true, 1, abnormalRecoverSelf, abnormalRecoverAllySingle, abnormalRecoverAllyAll)
+                || mostSkillAmountCheck(chara, true, 1, singleBarrierAllyAll)
+                || mostSkillAmountCheck(chara, true, 1, tripleBarrierSelfAll)
+                || mostSkillAmountCheck(chara, true, 2, damageAllEnemies);
     }
 
     private boolean mageHasDesiredSkillSet(GameCharacter chara) {
         /*
-         * A mage has a desired skillset IF she:
-         *   1) Has higher max damage than other mages of the same element, OR
-         *   2) She has two attack skills which target all enemies (weapon skills not counted) AND there are no other
-         *   already limit broken characters of the same element and class who fill this niche
+         * A mage's desired skillsets (compared with mages of the same element)
+         *   1) Highest max damage
+         *   2) Most damage ALL ENEMIES skills
          */
         Skill damageAllEnemies = new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_ALL, 0);
 
-        return highestMaxDamage(chara) || desiredSkillAmount(chara, false, 2, damageAllEnemies);
+        return hasHighestMaxDamage(chara) || mostSkillAmountCheck(chara, false, 2, damageAllEnemies);
     }
 
     private boolean priestHasDesiredSkillSet(GameCharacter chara) {
         /*
-         * A priest has a desired skillset IF she has more:
-         *   1) heal card skills
-         *   2) status effect clear skills
-         *   3) party 1x barrier skills
-         *
-         * than other priests of the same element OR
-         *   4) When the priest SPEED UP skillpower than other priests of the same element
+         * A priest's desired skillsets (compared with priests of the same element)
+         *   1) Most heal card skills
+         *   2) Most abnormal effect disable skills (abnormal disable skills which only target self not counted)
+         *   3) Most abnormal effect recover skills (abnormal recover skills which only target allies not counted)
+         *   4) Most ally all 1x barrier skills
+         *   5) Most SPD UP buffs skillpower
          */
 
         Skill healCard = new Skill(SkillType.HEAL_CARD, null, null, 0);
-        Skill statusEffectClearSingle = new Skill(SkillType.STATUS_EFFECT_CLEAR, null, SkillTarget.ALLIES_SINGLE, 0);
-        Skill statusEffectClearAll = new Skill(SkillType.STATUS_EFFECT_CLEAR, null, SkillTarget.ALLIES_ALL, 0);
-        Skill partySingleBarrier = new Skill(SkillType.BARRIER, null, SkillTarget.ALLIES_ALL, 0);
+        Skill abnormalDisableAllySingle = new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_SINGLE, 0);
+        Skill abnormalDisableAllyAll = new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_ALL, 0);
+        Skill abnormalRecoverAllySingle = new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLIES_SINGLE, 0);
+        Skill abnormalRecoverAllyAll = new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLIES_ALL, 0);
+        Skill singleBarrierAllyAll = new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLIES_ALL, 0);
 
-        return desiredSkillAmount(chara, true,1, healCard)
-                || desiredSkillAmount(chara, true,1, statusEffectClearSingle, statusEffectClearAll)
-                || desiredSkillAmount(chara, true,1, partySingleBarrier)
-                || mostSkillPower(chara, SkillType.SPD, SkillChange.UP);
+        return mostSkillAmountCheck(chara, true,1, healCard)
+                || mostSkillAmountCheck(chara, true, 1, abnormalDisableAllySingle, abnormalDisableAllyAll)
+                || mostSkillAmountCheck(chara, true,1, abnormalRecoverAllySingle, abnormalRecoverAllyAll)
+                || mostSkillAmountCheck(chara, true,1, singleBarrierAllyAll)
+                || mostSkillPowerCheck(chara, SkillType.SPD, SkillChange.UP, false);
     }
 
     private boolean warriorHasDesiredSkillset(GameCharacter chara) {
         /*
-         * A mage has a desired skillset IF she:
-         *   1) Has higher max damage than other warriors of the same element, OR
-         *   2) She has two attack skills which target a single (weapon skills not counted) AND there are no already limit
-         *   broken characters who already fulfill this condition
+         * A warrior's desired skillset::
+         *   1) Highest max damage
+         *   2) Most damage SINGLE ENEMY skills
          */
 
         Skill damageSingleEnemy = new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_SINGLE, 0);
 
-        return highestMaxDamage(chara)
-                || desiredSkillAmount(chara, false, 2, damageSingleEnemy);
+        return hasHighestMaxDamage(chara)
+                || mostSkillAmountCheck(chara, false, 2, damageSingleEnemy);
     }
 
-    private boolean mostSkillPower(GameCharacter chara, SkillType desiredSkillType, SkillChange desiredSkillChange) {
+    private boolean mostSkillPowerCheck(GameCharacter chara, SkillType skillType, SkillChange skillChange, boolean targetEnemy) {
         /*
         * Return true in the following cases:
-        *   -When chara has the highest total power of the desired skill of her element/class combination (whether
-        *   chara is the only one or if there is another character who is not limit broken and is tied with chara for
-        *   highest damage of their element/class combination)
+        *   -When chara has the highest total power of the desired skill of her element/class combination
+        *   (ties with other non-limit broken characters are allowed)
         *
         * Returns false in the following cases:
-        *   -When there is an other character who is limit broken and has the same total power of the desired skill
-        *   -When there is an other character who has more total power of the desired skill
+        *   -When there is an other character who is limit broken and has the same total power (or more) of the desired skills
+        *   -When there is an other character who is not limit broken and has more total power of the desired skills
         */
-
         List<GameCharacter> charactersOfSameElementAndClass =
                 getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass());
 
         // Weapons should be taken into account when counting skill power totals
         Map<Skill, Double> charasSkillPowerTotals = Mapper.getSkillTotalPowers(chara);
-        double charasDesiredSkillsTotalPower = Calculator.sumSkillTotalPowers(charasSkillPowerTotals, desiredSkillType, desiredSkillChange);
+        double charasDesiredSkillsTotalPower = getAppropriateSkillPowerSum(charasSkillPowerTotals, skillType,
+                skillChange, targetEnemy);
 
         for (GameCharacter other : charactersOfSameElementAndClass) {
             Map<Skill, Double> othersTotalSkillPowers = Mapper.getSkillTotalPowers(other);
-            double othersDesiredSkillsTotalPower = Calculator.sumSkillTotalPowers(othersTotalSkillPowers, desiredSkillType, desiredSkillChange);
+            double othersDesiredSkillsTotalPower = getAppropriateSkillPowerSum(othersTotalSkillPowers, skillType,
+                    skillChange, targetEnemy);
 
-            if (othersDesiredSkillsTotalPower >= charasDesiredSkillsTotalPower) {
-                if (other.isLimitBroken() || othersDesiredSkillsTotalPower > charasDesiredSkillsTotalPower) {
-                    return false;
-                }
+            if ((other.isLimitBroken() && othersDesiredSkillsTotalPower >= charasDesiredSkillsTotalPower)
+                    || (other.isLimitBroken() || othersDesiredSkillsTotalPower > charasDesiredSkillsTotalPower)) {
+
+                return false;
             }
         }
 
@@ -180,75 +186,158 @@ public class SkillSetCheck extends Check {
         return charactersByElementAndClass.get(new AbstractMap.SimpleEntry<>(charaElement, charaClass));
     }
 
-    private boolean mostStatusEffectPower(GameCharacter chara) {
-        return mostSkillPower(chara, SkillType.CONFUSION, null)
-                || mostSkillPower(chara, SkillType.ISOLATION, null)
-                || mostSkillPower(chara, SkillType.HUNGER, null)
-                || mostSkillPower(chara, SkillType.MISFORTUNE, null)
-                || mostSkillPower(chara, SkillType.PARALYSIS, null)
-                || mostSkillPower(chara, SkillType.SILENCE, null)
-                || mostSkillPower(chara, SkillType.SLEEP, null)
-                || mostSkillPower(chara, SkillType.TIMID, null);
+    private double getAppropriateSkillPowerSum(Map<Skill, Double> skillPowerTotals, SkillType skillType,
+                                               SkillChange skillChange, boolean targetEnemy) {
+
+        if (SkillType.isBuffOrDebuff(skillType)) {
+            if (skillChange == SkillChange.UP) {
+                if (targetEnemy) {
+                    return Calculator.sumBuffsToOpponent(skillType, skillPowerTotals);
+                } else {
+                    return Calculator.sumBuffsToSelf(skillType, skillPowerTotals);
+                }
+            } else if (skillChange == SkillChange.DOWN) {
+                if (targetEnemy) {
+                    return Calculator.sumDebuffsToOpponent(skillType, skillPowerTotals);
+                } else {
+                    return Calculator.sumDebuffsToSelf(skillType, skillPowerTotals);
+                }
+            } else {
+                return 0;
+            }
+        } else {
+            if (targetEnemy) {
+                return Calculator.sumOtherEffectsToOpponent(skillType, skillPowerTotals);
+            } else {
+                return Calculator.sumOtherEffectsToSelf(skillType, skillPowerTotals);
+            }
+        }
     }
 
-    private boolean leastDamageTaken(GameCharacter chara, SkillType typeOfDefense) {
+    private boolean mostAbnormalEffectCheck(GameCharacter chara) {
+        return mostSkillPowerCheck(chara, SkillType.CONFUSION, null, true)
+                || mostSkillPowerCheck(chara, SkillType.ISOLATION, null, true)
+                || mostSkillPowerCheck(chara, SkillType.HUNGER, null, true)
+                || mostSkillPowerCheck(chara, SkillType.MISFORTUNE, null, true)
+                || mostSkillPowerCheck(chara, SkillType.PARALYSIS, null, true)
+                || mostSkillPowerCheck(chara, SkillType.SILENCE, null, true)
+                || mostSkillPowerCheck(chara, SkillType.SLEEP, null, true)
+                || mostSkillPowerCheck(chara, SkillType.TIMID, null, true);
+    }
+
+    private boolean takesLeastDamage(GameCharacter chara, SkillType typeOfDefense) {
+        /*
+        * Returns true when
+        *   -Chara takes the least damage of given type (physical or magical) when compared to other characters of the
+        *   same element (ties are allowed with other characters if they are no timit broken)
+        *
+        * Returns false when
+        *   -An other already limit broken character of the same element and class takes equal os less damage than chara OR
+        *   -An other non-limit broken character of the same element and class takes less damage than chara
+        * */
+
         if (typeOfDefense != SkillType.DEF && typeOfDefense != SkillType.MDF) {
             return false;
         }
 
-        List<GameCharacter> charactersOfSameElementAndClass =
-                getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass());
+        long takenDamageChara = Calculator.calculateDamageTaken(chara, typeOfDefense);
 
-        GameCharacter leastDamageTakenCharacter = charactersOfSameElementAndClass
-                .stream()
-                .min(Comparator.comparing(c -> Calculator.calculateDamageTaken(c, typeOfDefense)))
-                .orElse(null);
-
-        // chara takes the least damage when compared to other characters with same element and class
-        return leastDamageTakenCharacter.equals(chara);
-    }
-
-    private boolean desiredSkillAmount(GameCharacter chara, boolean includeWeapon, int desiredAmount, Skill desiredSkill) {
-        return desiredSkillAmount(chara, includeWeapon, desiredAmount, desiredSkill);
-    }
-
-    private boolean desiredSkillAmount(GameCharacter chara, boolean includeWeapon, int desiredAmount, Skill... desiredSkills) {
-        long skillAmounts = Calculator.countAmountOfSkills(chara, includeWeapon, desiredSkills);
-
-        if (skillAmounts < desiredAmount) {
-            return false; // chara doesn't have desired amount of the desired skill (e.g. two damage skills)
-        }
-
-        List<GameCharacter> limitBrokenSameElementClassCharas =
+        List<GameCharacter> otherCharactersOfSameElementAndClass =
                 getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass())
-                        .stream()
-                        .filter(c -> c.isLimitBroken())
-                        .collect(Collectors.toList());
+                .stream()
+                .filter(c -> !c.equals(chara))
+                .collect(Collectors.toList());
 
-        for (GameCharacter c : limitBrokenSameElementClassCharas) {
-            skillAmounts = Calculator.countAmountOfSkills(c, includeWeapon, desiredSkills);
+        for (GameCharacter other : otherCharactersOfSameElementAndClass) {
+            long takenDamageOther = Calculator.calculateDamageTaken(other, typeOfDefense);
 
-            if (skillAmounts >= desiredAmount) {
-                // There exists a limit broken character of the same element and class who has a desired amount of skill (or more)
+            if ((other.isLimitBroken() && takenDamageOther <= takenDamageChara)
+                    || (!other.isLimitBroken() && takenDamageOther < takenDamageChara)) {
                 return false;
             }
         }
 
-        // chara has the desired amount of skill and there doesn't exist a limit broken character who fulfills this condition too
-        // (other non-limit broken characters who fulfill this condition are allowed though)
         return true;
     }
 
-    private boolean highestMaxDamage(GameCharacter chara) {
-        List<GameCharacter> charactersOfSameElementAndClass =
-                getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass());
+    private boolean mostSkillAmountCheck(GameCharacter chara, boolean includeWeapon, int minAmount, Skill skill) {
+        return mostSkillAmountCheck(chara, includeWeapon, minAmount, skill);
+    }
 
-        GameCharacter highestDamageCharacter = charactersOfSameElementAndClass
+    private boolean mostSkillAmountCheck(GameCharacter chara, boolean includeWeapon, int minAmount, Skill... skills) {
+        /*
+         * Return true in the following cases:
+         *   -When chara has the most amount of certain skills (at least a min amount) of her element/class combination
+         *   (ties with other non-limit broken characters are allowed)
+         *
+         * Returns false in the following cases:
+         *   -When there is an other character who is limit broken and has the same total amount (or more) of the desired skills
+         *   -When there is an other character who is not limit broken and has more total amount of the desired skills
+         */
+
+        long skillAmountsChara = Calculator.countAmountOfSpecificSkills(chara, includeWeapon, skills);
+
+        if (skillAmountsChara < minAmount) {
+            /* chara doesn't have min amount of the specific skills (e.g. disable status effects ALL ALLIES and
+            disable status effects SINGLE ALLY) */
+            return false;
+        }
+
+        List<GameCharacter> otherCharactersOfSameElementAndClass =
+                getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass())
                 .stream()
-                .max(Comparator.comparing(c -> Calculator.calculateMaxDamageGiven(c)))
-                .orElse(null);
+                .filter(c -> !c.equals(chara))
+                .collect(Collectors.toList());
 
-        // chara has gives the highest max damage when compared to other characters with same element and class
-        return highestDamageCharacter.equals(chara);
+        for (GameCharacter other : otherCharactersOfSameElementAndClass) {
+            long skillAmountsOther = Calculator.countAmountOfSpecificSkills(other, includeWeapon, skills);
+
+            if ((other.isLimitBroken() && skillAmountsOther >= skillAmountsChara)
+                    || (!other.isLimitBroken() && skillAmountsOther > skillAmountsChara)) {
+                /*
+                 * if there is a limit broken character who has more or equal amount of specific skills
+                 * (when compared to the inputted chara) OR:
+                 *
+                 * if there is a non-limit broken character who has more of the inputted skills (when compared to the
+                 * inputted chara)
+                 *
+                 * return false (otherwise return true)
+                 */
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean hasHighestMaxDamage(GameCharacter chara) {
+        /*
+         * Returns true when
+         *   -Chara causes the most amount of damage (physical or magical depending on class) when compared to other characters of the
+         *   same element (ties are allowed with other characters if they are no timit broken)
+         *
+         * Returns false when
+         *   -An other already limit broken character of the same element and class causes equal or more damage than chara OR
+         *   -An other non-limit broken character of the same element and class causes more damage than chara
+         * */
+
+        long maxDamageCausedChara = Calculator.calculateMaxDamageCaused(chara);
+
+        List<GameCharacter> otherCharactersOfSameElementAndClass =
+                getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass())
+                .stream()
+                .filter(c -> !c.equals(chara))
+                .collect(Collectors.toList());
+
+        for (GameCharacter other : otherCharactersOfSameElementAndClass) {
+            long maxDamageCausedOther = Calculator.calculateMaxDamageCaused(other);
+
+            if ((other.isLimitBroken() && maxDamageCausedOther >= maxDamageCausedChara)
+                    || (!other.isLimitBroken() && maxDamageCausedOther > maxDamageCausedChara)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

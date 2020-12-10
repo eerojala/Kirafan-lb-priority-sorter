@@ -2,6 +2,8 @@ package domain;
 
 import java.util.Objects;
 
+
+
 public class Skill {
     private SkillType type;
     private SkillChange change;
@@ -11,6 +13,14 @@ public class Skill {
     // Jackson requires a public constructor with no parameters
     public Skill() {}
 
+    /*
+     * Skills that have their skilltype as buffs/debuffs should have all parameters as non-null
+     * Skills that have their skilltype as other effects should have all parameters as non-null except change
+     *
+     * See enum SkillType to see which skilltypes are buffs/debuffs and which ones are other effects
+     *
+     *
+     * */
     public Skill(SkillType type, SkillChange change, SkillTarget target, double power) {
         this.type = type;
         this.change = change;

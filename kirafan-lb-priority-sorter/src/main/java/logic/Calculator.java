@@ -61,26 +61,6 @@ public final class Calculator {
         return bd.negate().doubleValue();
     }
 
-    public static double sumSkillTotalPowers(Map<Skill, Double> skillPowerTotals, SkillType type, SkillChange change) {
-        /*
-        * Sums all skills of a certain type, e.g. all DEF UP skills (DEF UP to self + DEF UP to single ally + DEF UP
-        * to all allies) or all 'cause hunger status effect single' (HUNGER to a single enemy + HUNGER to all enemies)
-        * */
-
-        if (type == SkillType.DEF || type == SkillType.MDF || SkillType.isElementalResist(type) || type == SkillType.SPD) {
-            if (change == SkillChange.UP) {
-                return sumBuffsToSelf(type, skillPowerTotals);
-            } else { // when change == SkillChange.DOWN
-                return sumDebuffsToOpponent(type, skillPowerTotals);
-            }
-        } else if (SkillType.isStatusEffect(type)) {
-            return sumStatusEffects(type, skillPowerTotals);
-        }
-
-        return 0;
-    }
-
-
     public static double sumBuffsToSelf(SkillType type, Map<Skill, Double> skillTotalPowers) {
         Double selfBuffs = skillTotalPowers.get(new Skill(type, SkillChange.UP, SkillTarget.SELF, 0));
         selfBuffs = selfBuffs == null ? 0 : selfBuffs;
@@ -109,6 +89,21 @@ public final class Calculator {
         return convertPercentageToDecimal(sumDoubles(selfDebuffs, singleTargetDebuffs, allyWideDebuffs));
     }
 
+    public static double sumOtherEffectsToSelf(SkillType type, Map<Skill, Double> skillTotalPowers) {
+        Double selfStatusEffects = skillTotalPowers.get(new Skill(type, null, SkillTarget.SELF, 0));
+        selfStatusEffects = selfStatusEffects == null ? 0 : selfStatusEffects;
+
+        Double singleTargetStatusEffects = skillTotalPowers.get(new Skill(type, null, SkillTarget.ALLIES_SINGLE, 0));
+        singleTargetStatusEffects = singleTargetStatusEffects == null ? 0 : singleTargetStatusEffects;
+
+        Double allyWideStatusEffects = skillTotalPowers.get(new Skill(type, null, SkillTarget.ALLIES_ALL, 0));
+        allyWideStatusEffects = allyWideStatusEffects == null ? 0 : allyWideStatusEffects;
+
+        // Other effect powers don't need to be converted to decimals
+        return sumDoubles(selfStatusEffects, singleTargetStatusEffects, allyWideStatusEffects);
+
+    }
+
     public static double sumBuffsToOpponent(SkillType type, Map<Skill, Double> skillTotalPowers) {
         Double singleEnemyBuffs = skillTotalPowers.get(new Skill(type, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 0));
         singleEnemyBuffs = singleEnemyBuffs == null ? 0 : singleEnemyBuffs;
@@ -129,17 +124,18 @@ public final class Calculator {
         return convertPercentageToDecimal(sumDoubles(singleEnemyDebuffs, enemyWideDebuffs));
     }
 
-    public static double sumStatusEffects(SkillType type, Map<Skill, Double> skillTotalPowers) {
+    public static double sumOtherEffectsToOpponent(SkillType type, Map<Skill, Double> skillTotalPowers) {
         Double singleEnemyStatusEffects = skillTotalPowers.get(new Skill(type, null, SkillTarget.ENEMY_SINGLE, 0));
         singleEnemyStatusEffects = singleEnemyStatusEffects == null ? 0 : singleEnemyStatusEffects;
 
         Double allEnemyStatusEffects = skillTotalPowers.get((new Skill(type, null, SkillTarget.ENEMY_ALL, 0)));
         allEnemyStatusEffects = allEnemyStatusEffects == null ? 0 : allEnemyStatusEffects;
 
-        return sumDoubles(singleEnemyStatusEffects, allEnemyStatusEffects); // Status effect powers don't need to be converted to decimals
+        // Other effect powers don't need to be converted to decimals
+        return sumDoubles(singleEnemyStatusEffects, allEnemyStatusEffects);
     }
 
-    public static long countAmountOfSkills(GameCharacter chara, boolean includeWeapon, Skill... desiredSkills) {
+    public static long countAmountOfSpecificSkills(GameCharacter chara, boolean includeWeapon, Skill... desiredSkills) {
         long amountOfSkills = 0;
 
         for (Skill desiredSkill : desiredSkills) {
@@ -164,7 +160,7 @@ public final class Calculator {
                 .count();
     }
 
-    public static long calculateMaxDamageGiven(GameCharacter chara) {
+    public static long calculateMaxDamageCaused(GameCharacter chara) {
         CharacterClass charaClass = chara.getCharacterClass();
 
         if (!(charaClass == CharacterClass.MAGE || charaClass == CharacterClass.WARRIOR)) {
