@@ -7,13 +7,12 @@ import domain.model.Weapon;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CalculatorTest {
+    private Map<Skill, Double> skillPowerTotals;
     private GameCharacter chara1;
     private GameCharacter chara2;
     private Weapon weapon;
@@ -24,6 +23,7 @@ class CalculatorTest {
 
     @BeforeEach
     public void setUp() {
+        skillPowerTotals = new HashMap<>();
         Series series = new Series("series", null);
         chara1 = new GameCharacter.Builder("warrior", series, CharacterElement.EARTH, CharacterClass.WARRIOR)
                 .offensiveStatIs(2938)
@@ -759,5 +759,119 @@ class CalculatorTest {
         assertTrue(charasHaveXAmountOfSkills(8));
         assertTrue(chara1ResultsAreDifferentAfterSkills());
         assertTrue(acceptableResult(51137 + 4164, chara1ResultAfterSkills));
+    }
+
+    @Test
+    public void sumBuffsToSelf_sumsSkillPowers_and_convertsTheTotalPercentage_toDecimalCorrectly() {
+        // These should be summed:
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.SELF, 0), 15.3);
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0), 2.22);
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_ALL, 0), 43.87);
+
+        // The should NOT be summed:
+        skillPowerTotals.put(new Skill(SkillType.MDF, SkillChange.UP, SkillTarget.SELF, 0), 12.55); // Wrong type
+        skillPowerTotals.put(new Skill(null, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0), 12.55); // Type is null
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0), 12.55); // Wrong change
+        skillPowerTotals.put(new Skill(SkillType.DEF, null, SkillTarget.SELF, 0), 12.55); // Change is null
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_ALL, 0), 12.55); // Wrong target
+
+        // (15.3 + 2.22 + 43.87) / 100 = 0.6139
+        assertEquals(0.6139, Calculator.sumBuffsToSelf(SkillType.DEF, skillPowerTotals));
+    }
+
+    @Test
+    public void sumDebuffsToSelf_sumsSkillPowers_and_convertsTheTotalPercantage_toDecimalCorrectly() {
+        // These should be summed:
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.SELF, 0), 4.44);
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 0), 61.12);
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0), 21.73);
+
+        // These should NOT be summed:
+        skillPowerTotals.put(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.SELF, 0), 12.55); // Wrong type
+        skillPowerTotals.put(new Skill(null, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 0), 12.55); // Type is null
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_ALL, 0), 12.55); // Wrong change
+        skillPowerTotals.put(new Skill(SkillType.DEF, null, SkillTarget.SELF, 0), 12.55); // Change is null
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 0), 12.55); // Wrong target
+
+        // (4.44 + 61.12 + 21.73) / 100 == 0.8729
+        assertEquals(0.8729, Calculator.sumDebuffsToSelf(SkillType.DEF, skillPowerTotals));
+    }
+
+    @Test
+    public void sumOtherEffectsToSelf_sumsSkillPowersCorrectly() {
+        // These should be summed:
+        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.SELF, 0), 29.12);
+        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ALLIES_SINGLE, 0), 1.14);
+        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ALLIES_ALL, 0), 47.50);
+
+        // These should NOT be summed:
+        skillPowerTotals.put(new Skill(SkillType.ISOLATION, null, SkillTarget.SELF, 0), 12.55); // Wrong type
+        skillPowerTotals.put(new Skill(null, null, SkillTarget.ALLIES_SINGLE, 0), 12.55); // Type is null
+        skillPowerTotals.put(new Skill(SkillType.TIMID, SkillChange.UP, SkillTarget.ALLIES_ALL, 0), 12.55); // Wrong change
+        skillPowerTotals.put(new Skill(SkillType.TIMID, SkillChange.DOWN, SkillTarget.SELF, 0), 12.55); // Wrong change
+        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ENEMY_SINGLE, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ENEMY_ALL, 0), 12.55); // Wrong target
+
+        // 29.12 + 1.14 + 47.50 = 77,76
+        assertEquals(77.76, Calculator.sumOtherEffectsToSelf(SkillType.TIMID, skillPowerTotals));
+    }
+
+    @Test
+    public void sumBuffsToOpponent_sumsSkillPowers_andConvertsTheTotalPercentage_toDecimalCorrectly() {
+        // These should be summed:
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 0), 5.41);
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_ALL, 0), 35.67);
+
+        // These should NOT be summed:
+        skillPowerTotals.put(new Skill(SkillType.MDF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 0), 12.55); // Wrong type
+        skillPowerTotals.put(new Skill(null, SkillChange.UP, SkillTarget.ENEMY_ALL, 0), 12.55); // Type is null
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 0), 12.55); // Wrong change
+        skillPowerTotals.put(new Skill(SkillType.DEF, null, SkillTarget.ENEMY_ALL, 0), 12.55); // Change is null
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.SELF, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_ALL, 0), 12.55); // Wrong target
+
+        // (5.41 + 35.67) / 100 = 0.4108
+        assertEquals(0.4108, Calculator.sumBuffsToOpponent(SkillType.DEF, skillPowerTotals));
+    }
+
+    @Test
+    public void sumDebuffsToOpponent_sumsSkillPowers_andConvertsTheTotalPercentage_toDecimalCorrectly() {
+        // These should be summed:
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 0), 67.14);
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 0), 34.61);
+
+        // These should NOT be summed:
+        skillPowerTotals.put(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 0), 12.55); // Wrong type
+        skillPowerTotals.put(new Skill(null, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 0), 12.55); // Type is null
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 0), 12.55); // Wrong change
+        skillPowerTotals.put(new Skill(SkillType.DEF, null, SkillTarget.ENEMY_ALL, 0), 12.55); // Change is null
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.SELF, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0), 12.55); // Wrong target
+
+        // (67.14 + 34.61) / 100 = 1.0175
+        assertEquals(1.0175, Calculator.sumDebuffsToOpponent(SkillType.DEF, skillPowerTotals));
+    }
+
+    @Test
+    public void sumOtherEffectsToOpponent_sumsSkillPowersCorrectly() {
+        // These should be summed:
+        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ENEMY_SINGLE, 0), 33.33);
+        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ENEMY_ALL, 0), 66.66);
+
+        // These should NOT be summed:
+        skillPowerTotals.put(new Skill(SkillType.ISOLATION, null, SkillTarget.ENEMY_SINGLE, 0), 12.55); // Wrong type
+        skillPowerTotals.put(new Skill(null, null, SkillTarget.ENEMY_ALL, 0), 12.55); // Type is null
+        skillPowerTotals.put(new Skill(SkillType.TIMID, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 0), 12.55); // Wrong change
+        skillPowerTotals.put(new Skill(SkillType.TIMID, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 0), 12.55); // Wrong change
+        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.SELF, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ALLIES_SINGLE, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ALLIES_ALL, 0), 12.55); // Wrong target
+
+        // 33.33 + 66.66 + = 99.99
+        assertEquals(99.99, Calculator.sumOtherEffectsToOpponent(SkillType.TIMID, skillPowerTotals));
     }
 }

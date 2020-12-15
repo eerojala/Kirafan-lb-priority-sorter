@@ -99,7 +99,7 @@ public final class Calculator {
         Double allyWideStatusEffects = skillTotalPowers.get(new Skill(type, null, SkillTarget.ALLIES_ALL, 0));
         allyWideStatusEffects = allyWideStatusEffects == null ? 0 : allyWideStatusEffects;
 
-        // Other effect powers don't need to be converted to decimals
+        // Other effect powers don't need to be converted to decimals because they are not used in the damage calculation function
         return sumDoubles(selfStatusEffects, singleTargetStatusEffects, allyWideStatusEffects);
 
     }
