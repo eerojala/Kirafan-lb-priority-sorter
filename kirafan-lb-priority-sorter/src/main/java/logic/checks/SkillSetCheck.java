@@ -62,6 +62,7 @@ public class SkillSetCheck extends Check {
         *   5) Most abnormal effect skillpower (of any abnormal effect)
         */
 
+        // The elemental resist that corresponds to the characters element, e.g. fire resistance for a fire character
         SkillType appropriateElementalResistance = SkillType.getAppropriateElementalResistance(chara.getCharacterElement());
 
         return mostSkillPowerCheck(chara, SkillType.DEF, SkillChange.DOWN, true)
@@ -159,7 +160,9 @@ public class SkillSetCheck extends Check {
         *   -When there is an other character who is limit broken and has the same total power (or more) of the desired skills
         *   -When there is an other character who is not limit broken and has more total power of the desired skills
         */
-        List<GameCharacter> charactersOfSameElementAndClass =
+
+        // Other characters of the same element and class as chara which the comparisons are done against
+        List<GameCharacter> otherCharacters =
                 getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass());
 
         // Weapons should be taken into account when counting skill power totals
@@ -167,7 +170,7 @@ public class SkillSetCheck extends Check {
         double charasDesiredSkillsTotalPower = getAppropriateSkillPowerSum(charasSkillPowerTotals, skillType,
                 skillChange, targetEnemy);
 
-        for (GameCharacter other : charactersOfSameElementAndClass) {
+        for (GameCharacter other : otherCharacters) {
             Map<Skill, Double> othersTotalSkillPowers = Mapper.getSkillTotalPowers(other);
             double othersDesiredSkillsTotalPower = getAppropriateSkillPowerSum(othersTotalSkillPowers, skillType,
                     skillChange, targetEnemy);
@@ -242,13 +245,14 @@ public class SkillSetCheck extends Check {
 
         long takenDamageChara = Calculator.calculateDamageTaken(chara, typeOfDefense);
 
-        List<GameCharacter> otherCharactersOfSameElementAndClass =
+        // Other characters of the same element and class as chara which the comparisons are done against
+        List<GameCharacter> otherCharacters =
                 getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass())
                 .stream()
                 .filter(c -> !c.equals(chara))
                 .collect(Collectors.toList());
 
-        for (GameCharacter other : otherCharactersOfSameElementAndClass) {
+        for (GameCharacter other : otherCharacters) {
             long takenDamageOther = Calculator.calculateDamageTaken(other, typeOfDefense);
 
             if ((other.isLimitBroken() && takenDamageOther <= takenDamageChara)
@@ -283,13 +287,14 @@ public class SkillSetCheck extends Check {
             return false;
         }
 
-        List<GameCharacter> otherCharactersOfSameElementAndClass =
+        // Other characters of the same element and class as chara which the comparisons are done against
+        List<GameCharacter> otherCharacters =
                 getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass())
                 .stream()
                 .filter(c -> !c.equals(chara))
                 .collect(Collectors.toList());
 
-        for (GameCharacter other : otherCharactersOfSameElementAndClass) {
+        for (GameCharacter other : otherCharacters) {
             long skillAmountsOther = Calculator.countAmountOfSpecificSkills(other, includeWeapon, skills);
 
             if ((other.isLimitBroken() && skillAmountsOther >= skillAmountsChara)
@@ -323,13 +328,14 @@ public class SkillSetCheck extends Check {
 
         long maxDamageCausedChara = Calculator.calculateMaxDamageCaused(chara);
 
-        List<GameCharacter> otherCharactersOfSameElementAndClass =
+        // Other characters of the same element and class as chara which the comparisons are done against
+        List<GameCharacter> otherCharacters =
                 getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass())
                 .stream()
                 .filter(c -> !c.equals(chara))
                 .collect(Collectors.toList());
 
-        for (GameCharacter other : otherCharactersOfSameElementAndClass) {
+        for (GameCharacter other : otherCharacters) {
             long maxDamageCausedOther = Calculator.calculateMaxDamageCaused(other);
 
             if ((other.isLimitBroken() && maxDamageCausedOther >= maxDamageCausedChara)
