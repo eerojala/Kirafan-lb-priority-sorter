@@ -15,11 +15,17 @@ class CalculatorTest {
     private Map<Skill, Double> skillPowerTotals;
     private GameCharacter chara1;
     private GameCharacter chara2;
-    private Weapon weapon;
-    private long chara1ResultAfterSkills;
-    private long chara1ResultBeforeSkills;
-    private long chara2ResultAfterSkills;
-    private long chara2ResultBeforeSkills;
+    private GameCharacter chara3;
+    private Weapon weapon1;
+    private Weapon weapon2;
+    private long chara1ResultAfterChanges;
+    private long chara1ResultBeforeChanges;
+    private long chara2ResultAfterChanges;
+    private long chara2ResultBeforeChanges;
+    private long defResultAfterChanges;
+    private long defResultBeforeChanges;
+    private long mdfResultAfterChanges;
+    private long mdfResultBeforeChanges;
 
     @BeforeEach
     public void setUp() {
@@ -35,33 +41,62 @@ class CalculatorTest {
                 .withSkill(new Skill(SkillType.TOTTEOKI, null, SkillTarget.ENEMY_ALL, 3759))
                 .build();
 
-        weapon = new Weapon.Builder("Weapon")
+        chara3 = new GameCharacter.Builder("knight", series, CharacterElement.MOON, CharacterClass.KNIGHT)
+                .defenseIs(5196)
+                .magicDefenseIs(3816)
+                .build();
+
+        weapon1 = new Weapon.Builder("weapon 1")
                 .offensiveStatIs(90)
                 .withSkill(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.SELF, 24.0))
                 .build();
 
-        chara1ResultBeforeSkills = Calculator.calculateMaxDamageCaused(chara1);
-        chara2ResultBeforeSkills = Calculator.calculateMaxDamageCaused(chara2);
+        weapon2 = new Weapon.Builder("weapon 2")
+                .defenseIs(200)
+                .magicDefenseIs(200)
+                .withSkill(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 24.0))
+                .build();
+
+        chara1ResultBeforeChanges = Calculator.calculateMaxDamageCaused(chara1);
+        chara2ResultBeforeChanges = Calculator.calculateMaxDamageCaused(chara2);
+        defResultBeforeChanges = Calculator.calculateDamageTaken(chara3, SkillType.DEF);
+        mdfResultBeforeChanges = Calculator.calculateDamageTaken(chara3, SkillType.MDF);
     }
 
-    private boolean charasHaveOnlyTotteoki() {
+    private boolean chara1And2HaveOnlyTotteoki() {
         // chara1 and chara2 should only have the totteoki which they were constructed with in the method setUp
-        return charasHaveXAmountOfSkills(1);
+        return chara1And2HaveNAmountOfSkills(1);
     }
 
-    private boolean charasHaveXAmountOfSkills(int x) {
-        return chara1.getSkills().size() == x && chara2.getSkills().size() == x;
+    private boolean chara1And2HaveNAmountOfSkills(int n) {
+        return chara1.getSkills().size() == n && chara2.getSkills().size() == n;
+    }
+
+    private boolean chara3HasNoSkills() {
+        return chara3HasNAmountOfSkills(0);
+    }
+
+    private boolean chara3HasNAmountOfSkills(int n) {
+        return chara3.getSkills().size() == n;
     }
 
     private void addSkillsToCharas(List<Skill> skills) {
         chara1.getSkills().addAll(skills);
         chara2.getSkills().addAll(skills);
+        chara3.getSkills().addAll(skills);
     }
 
     private void calculateMaxDamage() {
         // NOTE: Use this function only after adding the desired skills in the test
-        chara1ResultAfterSkills = Calculator.calculateMaxDamageCaused(chara1);
-        chara2ResultAfterSkills = Calculator.calculateMaxDamageCaused(chara2);
+        chara1ResultAfterChanges = Calculator.calculateMaxDamageCaused(chara1);
+        chara2ResultAfterChanges = Calculator.calculateMaxDamageCaused(chara2);
+    }
+
+    private void calculateDamageTaken() {
+        // NOTE: Use this function only after adding the desired skills in the test
+        defResultAfterChanges = Calculator.calculateDamageTaken(chara3, SkillType.DEF);
+        mdfResultAfterChanges = Calculator.calculateDamageTaken(chara3, SkillType.MDF);
+
     }
 
     private boolean acceptableResult(long expected, long result) {
@@ -78,28 +113,52 @@ class CalculatorTest {
         return Math.abs(expected - result) <= maxDeviation;
     }
 
-    private boolean resultsAreDifferentAfterSkills() {
-        return chara1ResultsAreDifferentAfterSkills() && chara2ResultsAreDifferentAfterSkills();
+    private boolean damageGivenResultsAreDifferentAfterChanges() {
+        return chara1ResultsAreDifferentAfterChanges() && chara2ResultsAreDifferentAfterChanges();
     }
 
-    private boolean chara1ResultsAreDifferentAfterSkills() {
-        return chara1ResultAfterSkills != chara1ResultBeforeSkills;
+    private boolean chara1ResultsAreDifferentAfterChanges() {
+        return chara1ResultAfterChanges != chara1ResultBeforeChanges;
     }
 
-    private boolean chara2ResultsAreDifferentAfterSkills() {
-        return chara2ResultAfterSkills > chara2ResultBeforeSkills;
+    private boolean chara2ResultsAreDifferentAfterChanges() {
+        return chara2ResultAfterChanges != chara2ResultBeforeChanges;
     }
 
-    private boolean resultsAreSameAfterSkills() {
-        return chara1ResultsAreSameAfterSkills() && chara2ResultsAreSameAfterSkills();
+    private boolean damageGivenResultsAreSameAfterChanges() {
+        return chara1ResultsAreSameAfterChanges() && chara2ResultsAreSameAfterChanges();
     }
 
-    private boolean chara1ResultsAreSameAfterSkills() {
-        return chara1ResultAfterSkills == chara1ResultBeforeSkills;
+    private boolean chara1ResultsAreSameAfterChanges() {
+        return chara1ResultAfterChanges == chara1ResultBeforeChanges;
     }
 
-    private boolean chara2ResultsAreSameAfterSkills() {
-        return chara2ResultAfterSkills == chara2ResultBeforeSkills;
+    private boolean chara2ResultsAreSameAfterChanges() {
+        return chara2ResultAfterChanges == chara2ResultBeforeChanges;
+    }
+
+    private boolean damageTakenResultsAreSameAfterChanges() {
+        return defResultsAreSameAfterChanges() && mdfResultsAreSameAfterChanges();
+    }
+
+    private boolean defResultsAreSameAfterChanges() {
+        return defResultAfterChanges == defResultBeforeChanges;
+    }
+
+    private boolean mdfResultsAreSameAfterChanges() {
+        return mdfResultAfterChanges == mdfResultBeforeChanges;
+    }
+
+    private boolean damageTakenResultsAreDifferentAfterChanges() {
+        return defResultsAreDifferentAfterChanges() && mdfResultsAreDifferentAfterChanges();
+    }
+
+    private boolean defResultsAreDifferentAfterChanges() {
+        return defResultAfterChanges != defResultBeforeChanges;
+    }
+
+    private boolean mdfResultsAreDifferentAfterChanges() {
+        return mdfResultAfterChanges != mdfResultBeforeChanges;
     }
 
     /*
@@ -117,7 +176,7 @@ class CalculatorTest {
     * */
 
     @Test
-    public void calculateMaxDamage_returnsZeroForEveryClassExceptMageAndWarrior() {
+    public void calculateMaxDamageCaused_returnsZeroForEveryClassExceptMageAndWarrior() {
         assertNotEquals(0, Calculator.calculateMaxDamageCaused(chara1)); // chara1.charcterClass = WARRIOR
         assertNotEquals(0, Calculator.calculateMaxDamageCaused(chara2)); // chara2.characterClass = MAGE
 
@@ -132,8 +191,8 @@ class CalculatorTest {
     }
 
     @Test
-    public void CalculateMaxDamage_calculatesDamageBasedOnTotteokiStrengthCorrectly() {
-        assertTrue(charasHaveOnlyTotteoki());
+    public void CalculateMaxDamageCaused_calculatesDamageBasedOnTotteokiStrengthCorrectly() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
         // chara1 and chara2 should only have the totteoki which they were constructed with in the method setUp
         assertTrue(acceptableResult(31898 + 2586, Calculator.calculateMaxDamageCaused(chara1)));
         assertTrue(acceptableResult(23861 + 1935, Calculator.calculateMaxDamageCaused(chara2)));
@@ -147,24 +206,30 @@ class CalculatorTest {
                 new Skill(SkillType.TOTTEOKI, null, SkillTarget.ENEMY_SINGLE, 1000),
                 new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_SINGLE, 2000))));
 
-        assertTrue(charasHaveXAmountOfSkills(2));
+        assertTrue(chara1And2HaveNAmountOfSkills(2));
         assertTrue(acceptableResult(13588 + 1102, Calculator.calculateMaxDamageCaused(chara1)));
         assertTrue(acceptableResult(6348 + 515, Calculator.calculateMaxDamageCaused(chara2)));
     }
 
     @Test
-    public void calculateMaxDamage_calculatesWeaponAttackPowerAndSkillsCorrectly() {
-        chara1.setPreferredWeapon(weapon);
-        chara2.setPreferredWeapon(weapon);
-        assertTrue(acceptableResult(40758 + 3305, Calculator.calculateMaxDamageCaused(chara1)));
-        assertTrue(acceptableResult(24644 + 1998, Calculator.calculateMaxDamageCaused(chara2)));
+    public void calculateMaxDamageCaused_calculatesWeaponAttackPowerAndSkillsCorrectly() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
+
+        chara1.setPreferredWeapon(weapon1);
+        chara2.setPreferredWeapon(weapon1);
+        calculateMaxDamage();
+
+        assertTrue(chara1And2HaveOnlyTotteoki());
+        assertTrue(damageGivenResultsAreDifferentAfterChanges());
+        assertTrue(acceptableResult(40758 + 3305, chara1ResultAfterChanges));
+        assertTrue(acceptableResult(24644 + 1998, chara2ResultAfterChanges));
         // chara2 is a mage so the weapon's +24.0% ATK skill should not affect the calculation since Mages use the MAT
         // stat for their damage (but the weapon's base offensive power should)
     }
 
     @Test
-    public void calculateMaxDamage_offensiveBuffMultiplier_isAffectedBy_character_ATK_or_MAT() {
-        assertTrue(charasHaveOnlyTotteoki());
+    public void calculateMaxDamageCaused_offensiveBuffMultiplier_isAffectedBy_character_ATK_or_MAT() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
         skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.SELF, 10.4));
@@ -201,17 +266,18 @@ class CalculatorTest {
 
         addSkillsToCharas(skills);
         calculateMaxDamage();
-        assertTrue(charasHaveXAmountOfSkills(25));
-        assertTrue(acceptableResult(38228 + 3100, chara1ResultAfterSkills));
-        assertTrue(acceptableResult(33423 + 2710, chara2ResultAfterSkills));
-        assertTrue(resultsAreDifferentAfterSkills());
+
+        assertTrue(chara1And2HaveNAmountOfSkills(25));
+        assertTrue(damageGivenResultsAreDifferentAfterChanges());
+        assertTrue(acceptableResult(38228 + 3100, chara1ResultAfterChanges));
+        assertTrue(acceptableResult(33423 + 2710, chara2ResultAfterChanges));
         // MAT (de)buffs should not influence the result for a warrior
         // ATK (debuffs) should not influence the result for a mage
     }
 
     @Test
-    public void calculateMaxDamage_offensiveBuffMultiplier_isNotAffectedBy_enemy_ATK_or_MAT() {
-        assertTrue(charasHaveOnlyTotteoki());
+    public void calculateMaxDamageCaused_offensiveBuffMultiplier_isNotAffectedBy_enemy_ATK_or_MAT() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
         skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ENEMY_ALL, 50));
@@ -226,13 +292,13 @@ class CalculatorTest {
         addSkillsToCharas(skills);
         calculateMaxDamage();
 
-        assertTrue(charasHaveXAmountOfSkills(9));
-        assertTrue(resultsAreSameAfterSkills());
+        assertTrue(chara1And2HaveNAmountOfSkills(9));
+        assertTrue(damageGivenResultsAreSameAfterChanges());
         // Enemy's ATK/MAT (de)buffs should not influence the result
     }
 
     @Test
-    public void calculateMaxDamage_offensiveBuffMultiplier_doesNotIncreasBeyondMaxValue() {
+    public void calculateMaxDamageCaused_offensiveBuffMultiplier_doesNotIncreasBeyondMaxValue() {
         chara1.getSkills().add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 149.9));
         assertTrue(acceptableResult(79713 + 6463, Calculator.calculateMaxDamageCaused(chara1)));
         // Multiplier's max value is 2.5 (1 + 1.5)
@@ -248,7 +314,7 @@ class CalculatorTest {
     }
 
     @Test
-    public void calculateMaxDamage_offensiveBuffMultiplier_doesNotDecreaseBelowMinValue() {
+    public void calculateMaxDamageCaused_offensiveBuffMultiplier_doesNotDecreaseBelowMinValue() {
         chara2.getSkills().add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 49.9));
         assertTrue(acceptableResult(11952 + 969, Calculator.calculateMaxDamageCaused(chara2)));
         // Multiplier's min value is 0.5 (1 - 0.5)
@@ -264,8 +330,8 @@ class CalculatorTest {
     }
 
     @Test
-    public void calculateMaxDamage_nextAttackBuffMultiplier_isAffectedBy_character_NEXTATKUP_or_NEXTMATUP() {
-        assertTrue(charasHaveOnlyTotteoki());
+    public void calculateMaxDamageCaused_nextAttackBuffMultiplier_isAffectedBy_character_NEXTATKUP_or_NEXTMATUP() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
         skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.SELF, 50.13));
@@ -287,17 +353,17 @@ class CalculatorTest {
         addSkillsToCharas(skills);
         calculateMaxDamage();
 
-        assertTrue(charasHaveXAmountOfSkills(13));
-        assertTrue(acceptableResult(95810 + 7768, chara1ResultAfterSkills));
-        assertTrue(acceptableResult(107455 + 8713, chara2ResultAfterSkills));
-        assertTrue(resultsAreDifferentAfterSkills());
+        assertTrue(chara1And2HaveNAmountOfSkills(13));
+        assertTrue(damageGivenResultsAreDifferentAfterChanges());
+        assertTrue(acceptableResult(95810 + 7768, chara1ResultAfterChanges));
+        assertTrue(acceptableResult(107455 + 8713, chara2ResultAfterChanges));
         // only the strongest next attack buff should influence the result (they do not stack unlike the other buffs and debuffs)
         // For warriors only NEXT ATK UP and for mages NEXT MAT UP should influence the result
     }
 
     @Test
-    public void calculateMaxDamage_nextAttackBuffMultiplier_isNotAffectedBy_character_NEXTATKDOWN_or_NEXTMATDOWN() {
-        assertTrue(charasHaveOnlyTotteoki());
+    public void calculateMaxDamageCaused_nextAttackBuffMultiplier_isNotAffectedBy_character_NEXTATKDOWN_or_NEXTMATDOWN() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
         skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.DOWN, SkillTarget.SELF, 100));
@@ -311,14 +377,14 @@ class CalculatorTest {
         addSkillsToCharas(skills);
         calculateMaxDamage();
 
-        assertTrue(charasHaveXAmountOfSkills(7));
-        assertTrue(resultsAreSameAfterSkills());
+        assertTrue(chara1And2HaveNAmountOfSkills(7));
+        assertTrue(damageGivenResultsAreSameAfterChanges());
         // Character NEXT ATK DOWN and NEXT MAT DOWN debuffs should not influence the result
     }
 
     @Test
-    public void calculateMaxDamage_nextAttackBuffMultiplier_isNotAffectedBy_enemy_NEXTATK_or_NEXTMAT() {
-        assertTrue(charasHaveOnlyTotteoki());
+    public void calculateMaxDamageCaused_nextAttackBuffMultiplier_isNotAffectedBy_enemy_NEXTATK_or_NEXTMAT() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
         skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 100));
@@ -334,14 +400,14 @@ class CalculatorTest {
         addSkillsToCharas(skills);
         calculateMaxDamage();
 
-        assertTrue(charasHaveXAmountOfSkills(9));
-        assertTrue(resultsAreSameAfterSkills());
+        assertTrue(chara1And2HaveNAmountOfSkills(9));
+        assertTrue(damageGivenResultsAreSameAfterChanges());
         // Enemy NEXT ATK/MAT UP/DOWN (de)buffs should not influence the result
     }
 
     @Test
-    public void calculateMaxDamage_elementMultiplier_isAffectedBy_enemys_resistanceToCharactersElement() {
-        assertTrue(charasHaveOnlyTotteoki());
+    public void calculateMaxDamageCaused_elementMultiplier_isAffectedBy_enemys_resistanceToCharactersElement() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
         skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 50.5));
@@ -362,9 +428,9 @@ class CalculatorTest {
         addSkillsToCharas(skills);
         calculateMaxDamage();
 
-        assertTrue(charasHaveXAmountOfSkills(10));
-        assertTrue(acceptableResult(36674 + 2974, chara1ResultAfterSkills));
-        assertTrue(chara1ResultsAreDifferentAfterSkills());
+        assertTrue(chara1And2HaveNAmountOfSkills(10));
+        assertTrue(chara1ResultsAreDifferentAfterChanges());
+        assertTrue(acceptableResult(36674 + 2974, chara1ResultAfterChanges));
         // Result is affected by enemy's resistance to the character's element
 
         chara1.setCharacterElement(CharacterElement.WIND);
@@ -385,8 +451,8 @@ class CalculatorTest {
     }
 
     @Test
-    public void calculateMaxDamage_elementMultiplier_isAffectedBy_characters_weakElementBonus() {
-        assertTrue(charasHaveOnlyTotteoki());
+    public void calculateMaxDamageCaused_elementMultiplier_isAffectedBy_characters_weakElementBonus() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
         skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.SELF, 11.5));
@@ -409,15 +475,15 @@ class CalculatorTest {
         addSkillsToCharas(skills);
         calculateMaxDamage();
 
-        assertTrue(charasHaveXAmountOfSkills(13));
-        assertTrue(acceptableResult(35811 + 2904, chara1ResultAfterSkills));
-        assertTrue(chara1ResultsAreDifferentAfterSkills());
+        assertTrue(chara1And2HaveNAmountOfSkills(13));
+        assertTrue(chara1ResultsAreDifferentAfterChanges());
+        assertTrue(acceptableResult(35811 + 2904, chara1ResultAfterChanges));
         // Result is affected by character's weak element bonus
     }
 
     @Test
-    public void calculatedMaxDamage_elementMultiplier_isAffectedBy_enemys_resistanceToCharactersElement_AND_charactersWeakElementBonus() {
-        assertTrue(charasHaveOnlyTotteoki());
+    public void calculatedMaxDamageCaused_elementMultiplier_isAffectedBy_enemys_resistanceToCharactersElement_AND_charactersWeakElementBonus() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
         chara1.getSkills().add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 14.97));
@@ -425,19 +491,19 @@ class CalculatorTest {
 
         assertEquals(2, chara1.getSkills().size());
         assertTrue(acceptableResult(36674 + 2974, chara1ResultAfterResistDown));
-        assertTrue(chara1ResultAfterResistDown > chara1ResultBeforeSkills);
+        assertTrue(chara1ResultAfterResistDown > chara1ResultBeforeChanges);
 
         chara1.getSkills().add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.SELF, 24.53));
         long chara1ResultAfterWeakElementBonus = Calculator.calculateMaxDamageCaused(chara1);
 
         assertEquals(3, chara1.getSkills().size());
-        assertTrue(acceptableResult(40586 + 3291, chara1ResultAfterWeakElementBonus));
         assertTrue(chara1ResultAfterWeakElementBonus > chara1ResultAfterResistDown);
+        assertTrue(acceptableResult(40586 + 3291, chara1ResultAfterWeakElementBonus));
     }
 
     @Test
-    public void calculateMaxDamage_elementMultiplier_isNotAffecteBy_characters_elementResistance() {
-        assertTrue(charasHaveOnlyTotteoki());
+    public void calculateMaxDamageCaused_elementMultiplier_isNotAffecteBy_characters_elementResistance() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
         skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.SELF, 50.5));
@@ -455,14 +521,14 @@ class CalculatorTest {
         addSkillsToCharas(skills);
         calculateMaxDamage();
 
-        assertTrue(charasHaveXAmountOfSkills(12));
-        assertTrue(chara1ResultsAreSameAfterSkills());
+        assertTrue(chara1And2HaveNAmountOfSkills(12));
+        assertTrue(chara1ResultsAreSameAfterChanges());
         // Results should not be affected by characters element resistance
     }
 
     @Test
-    public void calculateMaxDamage_elementMultiplier_isNotAffectedBy_enemys_weakElementBonus() {
-        assertTrue(charasHaveOnlyTotteoki());
+    public void calculateMaxDamageCaused_elementMultiplier_isNotAffectedBy_enemys_weakElementBonus() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
         skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 11));
@@ -473,13 +539,13 @@ class CalculatorTest {
         addSkillsToCharas(skills);
         calculateMaxDamage();
 
-        assertTrue(charasHaveXAmountOfSkills(5));
-        assertTrue(chara1ResultsAreSameAfterSkills());
+        assertTrue(chara1And2HaveNAmountOfSkills(5));
+        assertTrue(chara1ResultsAreSameAfterChanges());
         // Results should not be affecte by enemys weak element bonus
     }
     
     @Test
-    public void calculateMaxDamage_elementMultiplier_maxValueTests() {
+    public void calculateMaxDamageCaused_elementMultiplier_maxValueTests() {
         chara1.getSkills().add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 19.9));
         assertTrue(acceptableResult(38246 + 3101, Calculator.calculateMaxDamageCaused(chara1)));
         // elemental multipliers initial max value should be 2.4 (before applying weak element bonus)
@@ -500,7 +566,7 @@ class CalculatorTest {
     }
 
     @Test
-    public void calculateMaxDamage_elementMultiplier_minValueTests() {
+    public void calculateMaxDamageCaused_elementMultiplier_minValueTests() {
         chara1.getSkills().add(new Skill(SkillType.EARTH_RESIST, SkillChange.UP, SkillTarget.ENEMY_ALL, 19.9));
         assertTrue(acceptableResult(25551 + 2072, Calculator.calculateMaxDamageCaused(chara1)));
         // elemental multipliers min value should be 1.6
@@ -521,8 +587,8 @@ class CalculatorTest {
     }
 
     @Test
-    public void calculateMaxDamage_criticalDamageMultiplier_isAffectedBy_characters_critDamageBonus() {
-        assertTrue(charasHaveOnlyTotteoki());
+    public void calculateMaxDamageCaused_criticalDamageMultiplier_isAffectedBy_characters_critDamageBonus() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
         skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.SELF, 30.67));
@@ -545,15 +611,15 @@ class CalculatorTest {
         addSkillsToCharas(skills);
         calculateMaxDamage();
 
-        assertTrue(charasHaveXAmountOfSkills(13));
-        assertTrue(acceptableResult(40575 + 3290, chara1ResultAfterSkills));
-        assertTrue(chara1ResultsAreDifferentAfterSkills());
+        assertTrue(chara1And2HaveNAmountOfSkills(13));
+        assertTrue(chara1ResultsAreDifferentAfterChanges());
+        assertTrue(acceptableResult(40575 + 3290, chara1ResultAfterChanges));
         // Result is affected by characters crit damage bonus (de)buffs
     }
 
     @Test
-    public void calculateMaxDamage_criticalDamageMultiplier_isNotAffectedBy_enemys_critDamageBonus() {
-        assertTrue(charasHaveOnlyTotteoki());
+    public void calculateMaxDamageCaused_criticalDamageMultiplier_isNotAffectedBy_enemys_critDamageBonus() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
         skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 11));
@@ -564,13 +630,13 @@ class CalculatorTest {
         addSkillsToCharas(skills);
         calculateMaxDamage();
 
-        assertTrue(charasHaveXAmountOfSkills(5));
-        assertTrue(chara1ResultsAreSameAfterSkills());
+        assertTrue(chara1And2HaveNAmountOfSkills(5));
+        assertTrue(chara1ResultsAreSameAfterChanges());
         // Enemys crit damage bonus (de)buffs should not affect the results
     }
 
     @Test
-    public void calculateMaxDamage_criticalDamageMultiplier_doesNotIncreaseBeyondMaxValue() {
+    public void calculateMaxDamageCaused_criticalDamageMultiplier_doesNotIncreaseBeyondMaxValue() {
         chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 99.9));
         assertTrue(acceptableResult(63765 + 5170, Calculator.calculateMaxDamageCaused(chara1)));
         // Critical damage multiplier's max value is 3.0 (1.5 * (1 + 1))
@@ -586,7 +652,7 @@ class CalculatorTest {
     }
 
     @Test
-    public void calculateMaxDamage_criticalDamageMultiplier_doesNotDecreaseBelowMinValue() {
+    public void calculateMaxDamageCaused_criticalDamageMultiplier_doesNotDecreaseBelowMinValue() {
         chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 33));
         assertTrue(acceptableResult(21372 + 1733, Calculator.calculateMaxDamageCaused(chara1)));
         // Critical damage multiplier's min value is 1.0 (1.5 * (1 - (1/3)))
@@ -602,8 +668,8 @@ class CalculatorTest {
     }
 
     @Test
-    public void calculateMaxDamage_defensiveBuffMultiplier_isAffectedBy_enemys_DEF_or_MDF() {
-        assertTrue(charasHaveOnlyTotteoki());
+    public void calculateMaxDamageCaused_defensiveBuffMultiplier_isAffectedBy_enemys_DEF_or_MDF() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
         skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 14.4));
@@ -634,25 +700,24 @@ class CalculatorTest {
 
         addSkillsToCharas(skills);
         calculateMaxDamage();
-        System.out.println(45450 + 3685);
-        System.out.println(chara2ResultAfterSkills);
-        assertTrue(charasHaveXAmountOfSkills(17));
-        assertTrue(acceptableResult(30672 + 2487, chara1ResultAfterSkills));
-        assertTrue(acceptableResult(45450 + 3685, chara2ResultAfterSkills));
+        assertTrue(chara1And2HaveNAmountOfSkills(17));
+        assertTrue(damageGivenResultsAreDifferentAfterChanges());
+        assertTrue(acceptableResult(30672 + 2487, chara1ResultAfterChanges));
+        assertTrue(acceptableResult(45450 + 3685, chara2ResultAfterChanges));
         // Alterations to the defensive multiplier seem to provide more different results from the kirafan.moe calculator
         // compared to the other multipliers (however it is still in a acceptable range, results vary only within 1% of the
         // kirafan.moe calculator results)
         // (This might be due to me misunderstanding the documentation or the kirafan.moe calculator rounding values more aggressively)
         // When chancing defence change value by a single per mille (1/10 of a percent) in the kirafan.moe calculator does
         // not always change the end result
-        assertTrue(resultsAreDifferentAfterSkills());
+
         // Results should be affected by the enemy's DEF/MAT de(buffs)
         // The influencing stat should be DEF for warriors and MDF for mages
     }
 
     @Test
-    public void calculateMaxDamage_defensiveBuffMultiplier_providesAcceptableResultsWithVariousDefenceBuffValues() {
-        assertTrue(charasHaveOnlyTotteoki());
+    public void calculateMaxDamageCaused_defensiveBuffMultiplier_providesAcceptableResultsWithVariousDefenceBuffValues() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
 
         chara1.getSkills().add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 66.99));
         assertTrue(acceptableResult(96662 + 7837, Calculator.calculateMaxDamageCaused(chara1)));
@@ -678,8 +743,8 @@ class CalculatorTest {
     }
 
     @Test
-    public void calculateMaxDamage_defensiveBuffMultiplier_isNotAffectedBy_characters_DEF_OR_MDF() {
-        assertTrue(charasHaveOnlyTotteoki());
+    public void calculateMaxDamageCaused_defensiveBuffMultiplier_isNotAffectedBy_characters_DEF_OR_MDF() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
         skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.SELF, 5.4));
@@ -699,13 +764,13 @@ class CalculatorTest {
         addSkillsToCharas(skills);
         calculateMaxDamage();
 
-        assertTrue(charasHaveXAmountOfSkills(13));
-        assertTrue(resultsAreSameAfterSkills());
+        assertTrue(chara1And2HaveNAmountOfSkills(13));
+        assertTrue(damageGivenResultsAreSameAfterChanges());
         // Result is not affected by characters DEF/MDF (de)buffs
     }
 
     @Test
-    public void calculateMaxDamage_defensiveBuffMultiplier_doesNotIncreaseBeyondMaxValue() {
+    public void calculateMaxDamageCaused_defensiveBuffMultiplier_doesNotIncreaseBeyondMaxValue() {
         chara1.getSkills().add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_ALL, 399));
         assertTrue(acceptableResult(6392 + 518, Calculator.calculateMaxDamageCaused(chara1), 5));
         // Max value is 5.0 (1 + 4)
@@ -723,7 +788,7 @@ class CalculatorTest {
     }
 
     @Test
-    public void calculateMaxDamage_defensiveBuffMultiplier_doesNotDecreaseBelowMinValue() {
+    public void calculateMaxDamageCaused_defensiveBuffMultiplier_doesNotDecreaseBelowMinValue() {
         chara1.getSkills().add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 66));
         assertTrue(acceptableResult(93819 + 7607, Calculator.calculateMaxDamageCaused(chara1)));
         // Min value is 0.33 (1 - 0.67)
@@ -739,10 +804,10 @@ class CalculatorTest {
     }
 
     @Test
-    public void calculateMaxDamage_modifyingAllMultipliersGivesAcceptableResult() {
-        assertTrue(charasHaveOnlyTotteoki());
+    public void calculateMaxDamageCaused_modifyingAllMultipliersGivesAcceptableResult() {
+        assertTrue(chara1And2HaveOnlyTotteoki());
 
-        chara1.setPreferredWeapon(weapon);
+        chara1.setPreferredWeapon(weapon1);
         List<Skill> skills = new ArrayList<>();
         skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.SELF, 30)); // plus 24 from the equipped weapon
         skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.SELF, 67));
@@ -754,11 +819,9 @@ class CalculatorTest {
 
         addSkillsToCharas(skills);
         calculateMaxDamage();
-        System.out.println(51137 + 4164);
-        System.out.println(chara1ResultAfterSkills);
-        assertTrue(charasHaveXAmountOfSkills(8));
-        assertTrue(chara1ResultsAreDifferentAfterSkills());
-        assertTrue(acceptableResult(51137 + 4164, chara1ResultAfterSkills));
+        assertTrue(chara1And2HaveNAmountOfSkills(8));
+        assertTrue(chara1ResultsAreDifferentAfterChanges());
+        assertTrue(acceptableResult(51137 + 4164, chara1ResultAfterChanges));
     }
 
     @Test
@@ -874,4 +937,287 @@ class CalculatorTest {
         // 33.33 + 66.66 + = 99.99
         assertEquals(99.99, Calculator.sumOtherEffectsToOpponent(SkillType.TIMID, skillPowerTotals));
     }
+
+    @Test
+    public void countAmountOfSpecificSkills_sumsAmountOfSpecificSkillsCorrectly() {
+        List<Skill> skills = new ArrayList<>();
+        // Skills that should be counted
+        skills.add(new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_ALL, 23.1));
+        skills.add(new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_ALL, 1.11));
+        skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 56.1));
+        skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 12.21));
+        skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 34.95));
+        skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 34.95));
+
+        // Filler skills which should NOT be counted
+        skills.add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLIES_ALL, 31.51));
+        skills.add(new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_SINGLE, 6.75));
+        skills.add(new Skill(SkillType.DAMAGE, null, SkillTarget.SELF, 61.5));
+        skills.add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLIES_SINGLE, 78.51));
+        skills.add(new Skill(SkillType.DAMAGE, SkillChange.UP, SkillTarget.ENEMY_ALL, 99.2));
+        skills.add(new Skill(SkillType.DAMAGE, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 5.87));
+        skills.add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ENEMY_ALL, 23.2));
+        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 1.18));
+
+        addSkillsToCharas(skills);
+        weapon1.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_ALL, 15.1));
+        chara1.setPreferredWeapon(weapon1);
+
+        Skill damageEnemyAll = new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_ALL, 0);
+        Skill defDownEnemySingle = new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 0);
+
+        assertEquals(2, Calculator.countAmountOfSpecificSkills(chara1, false, damageEnemyAll));
+        assertEquals(3, Calculator.countAmountOfSpecificSkills(chara1, true, damageEnemyAll));
+        assertEquals(4, Calculator.countAmountOfSpecificSkills(chara1, false, defDownEnemySingle));
+        assertEquals(4, Calculator.countAmountOfSpecificSkills(chara1, true, defDownEnemySingle));
+        assertEquals(6, Calculator.countAmountOfSpecificSkills(chara1, false, damageEnemyAll, defDownEnemySingle));
+        assertEquals(7, Calculator.countAmountOfSpecificSkills(chara1, true, damageEnemyAll, defDownEnemySingle));
+    }
+
+    /*
+     * The following tests are compared with values which have been calculated using kirafan.moe damage calculator at
+     * https://calc.kirafan.moe/#/damage#damage with the following default parameters for all tests:
+     *   Attack = 72000
+     *   Defence = 5196 for physical def tests, 3816 for magical def tests
+     *   Skill/% = 1000
+     *   Critical = Not Critical
+     *   Element = resist (meaning the character's element is strong against the enemy's element)
+     *   Kirara Jump = 1st (Referred to as totteoki chain in my comments in the function)
+     *
+     * and rest of the parameters change depending on the test.
+     *
+     * My CalculateMaxDamage function always assumes a max damage hit, while the kirafan.moe calculator gives the possible
+     * range of damage, e.g. as 23861 +- 1935, so the comparison is then made against 23861 + 1935.
+     * */
+
+    @Test
+    public void calculateDamageTaken_returnsZero_whenGivenSkillTypeIsWrong_or_charaIsNotKnight() {
+        assertNotEquals(0, Calculator.calculateDamageTaken(chara3, SkillType.DEF));
+        assertNotEquals(0, Calculator.calculateDamageTaken(chara3, SkillType.MDF));
+
+        assertEquals(0, Calculator.calculateDamageTaken(chara3, SkillType.ATK)); // Wrong skilltype
+        assertEquals(0, Calculator.calculateDamageTaken(chara1, SkillType.DEF)); // Wrong class (warrior)
+        assertEquals(0, Calculator.calculateDamageTaken(chara2, SkillType.DEF)); // Wrong class (mage)
+
+        chara1.setCharacterClass(CharacterClass.PRIEST);
+        chara2.setCharacterClass(CharacterClass.ALCHEMIST);
+
+        assertEquals(0, Calculator.calculateDamageTaken(chara1, SkillType.DEF)); // Wrong class (priest)
+        assertEquals(0, Calculator.calculateDamageTaken(chara2, SkillType.DEF)); // Wrong class (alchemist)
+    }
+
+    @Test
+    public void calculateDamageTaken_offensiveStatBuffModifier_isAffectedBy_enemy_ATK_or_MAT() {
+        assertTrue(chara3HasNoSkills());
+        // Chara 3 should have no skills at the start
+
+        List<Skill> skills = new ArrayList<>();
+        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ENEMY_ALL, 24.75));
+        skills.add(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 39.47));
+        skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 66.94));
+        skills.add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 26.72));
+        // ATK = -14.72, MAT = 40.22
+        addSkillsToCharas(skills);
+        calculateDamageTaken();
+
+        assertTrue(chara3HasNAmountOfSkills(4));
+        assertTrue(damageTakenResultsAreDifferentAfterChanges());
+        assertTrue(acceptableResult(455 + 37, defResultAfterChanges));
+        assertTrue(acceptableResult(1020 + 83, mdfResultAfterChanges));
+        // Changes to enemy's ATK or MAT should influence the results
+    }
+
+    @Test
+    public void calculateDamageTaken_offensiveStatBuffModifier_isNotAffectedBy_chara_ATK_or_MAT() {
+        assertTrue(chara3HasNoSkills());
+
+        List<Skill> skills = new ArrayList<>();
+        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.SELF, 24.75));
+        skills.add(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 39.47));
+        skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ALLIES_ALL, 66.94));
+        skills.add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.SELF, 26.72));
+
+        addSkillsToCharas(skills);
+        calculateDamageTaken();;
+
+        assertTrue(chara3HasNAmountOfSkills(4));
+        assertTrue(damageTakenResultsAreSameAfterChanges());
+        // Changes to characters ATK or MAT should NOT influence the results
+    }
+
+    @Test
+    public void calculateDamageTaken_nextAttackBuffMultiplier_isAlwaysOne() {
+        assertTrue(chara3HasNoSkills());
+
+        List<Skill> skills = new ArrayList<>();
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 25));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 25));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.SELF, 25));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 25));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.UP, SkillTarget.ENEMY_ALL, 25));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 25));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 25));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.SELF, 25));
+
+        addSkillsToCharas(skills);
+        calculateDamageTaken();
+
+        assertTrue(chara3HasNAmountOfSkills(8));
+        assertTrue(damageTakenResultsAreSameAfterChanges());
+        /* Any kind of NEXT ATK/MAT (de)buff should not affect the next attack buff multiplier
+         (This is because the function only takes the damage dealers own next ATK/MAT buffs, and the default damage dealer
+          used in the calculateDamageTaken function does not have any) */
+    }
+
+    @Test
+    public void calculateDamageTaken_elementalMultiplier_isAlwaysOne() {
+        assertTrue(chara3HasNoSkills());
+
+        List<Skill> skills = new ArrayList<>();
+        skills.add(new Skill(SkillType.MOON_RESIST, SkillChange.UP, SkillTarget.SELF, 15.91));
+        skills.add(new Skill(SkillType.MOON_RESIST, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 2.13));
+        skills.add(new Skill(SkillType.FIRE_RESIST, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 8.84));
+        skills.add(new Skill(SkillType.WIND_RESIST, SkillChange.UP, SkillTarget.SELF, 4.98));
+        skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 30.69));
+        skills.add(new Skill(SkillType.WATER_RESIST, SkillChange.UP, SkillTarget.ALLIES_ALL, 26.91));
+        skills.add(new Skill(SkillType.SUN_RESIST, SkillChange.DOWN, SkillTarget.SELF, 23.19));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 18.84));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 4.93));
+
+        skills.add(new Skill(SkillType.MOON_RESIST, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 15.91));
+        skills.add(new Skill(SkillType.MOON_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 2.13));
+        skills.add(new Skill(SkillType.FIRE_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 8.84));
+        skills.add(new Skill(SkillType.WIND_RESIST, SkillChange.UP, SkillTarget.ENEMY_ALL, 4.98));
+        skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 30.69));
+        skills.add(new Skill(SkillType.WATER_RESIST, SkillChange.UP, SkillTarget.ENEMY_ALL, 26.91));
+        skills.add(new Skill(SkillType.SUN_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 23.19));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ENEMY_ALL, 18.84));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 4.93));
+
+        addSkillsToCharas(skills);
+        calculateDamageTaken();
+
+        assertTrue(chara3HasNAmountOfSkills(18));
+        assertTrue(damageTakenResultsAreSameAfterChanges());
+        /*
+        * Any kind of elemental resistance and weak element bonus (de)buff to either chara or enemy should affect the
+        * function result (this is because calculateDamageTaken gives the enemy the same element as chara and does not
+        * take elemental resistance bonuses into account) (weak element bonus is also ignored, but it wouldnt apply in
+        * the first place if both chara and the enemy are the same element)
+        */
+    }
+
+    @Test
+    public void calculateDamageTaken_criticalHitModifier_isAlwaysOne() {
+        assertTrue(chara3HasNoSkills());
+
+        List<Skill> skills = new ArrayList<>();
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.SELF, 30));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 20));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 30));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 20));
+
+        addSkillsToCharas(skills);
+        calculateDamageTaken();
+
+        assertTrue(chara3HasNAmountOfSkills(4));
+        assertTrue(damageTakenResultsAreSameAfterChanges());
+        // The function assumes that the damage taken is not a critical hit, so crit damage (de)buffs should not affect the results
+    }
+
+    @Test
+    public void calculateDamageTaken_calculatesDamageTakenCorrectly_basedOnDefensiveStats() {
+        assertTrue(chara3HasNoSkills());
+
+        assertTrue(acceptableResult(534 + 43, Calculator.calculateDamageTaken(chara3, SkillType.DEF)));
+        assertTrue(acceptableResult(727 + 59, Calculator.calculateDamageTaken(chara3, SkillType.MDF)));
+
+        chara3.setDefense(4000);
+        chara3.setMagicDefense(6000);
+
+        assertTrue(acceptableResult(694 + 56, Calculator.calculateDamageTaken(chara3, SkillType.DEF)));
+        assertTrue(acceptableResult(463 + 38, Calculator.calculateDamageTaken(chara3, SkillType.MDF)));
+        // The base defensive stats should affect the function result
+    }
+
+    @Test
+    public void calculateDamageTaken_calculatesDamageTakenCorrectly_basedOnWeapon() {
+        assertTrue(chara3HasNoSkills());
+
+        chara3.setPreferredWeapon(weapon2);
+
+        calculateDamageTaken();
+
+        assertTrue(chara3HasNoSkills());
+        assertTrue(damageTakenResultsAreDifferentAfterChanges());
+        assertTrue(acceptableResult(391 + 32, Calculator.calculateDamageTaken(chara3, SkillType.DEF)));
+        assertTrue(acceptableResult(691 + 56, Calculator.calculateDamageTaken(chara3, SkillType.MDF)));
+        // Characters preferred weapon's stats and skills should affect the function results
+        // (The weapon gives +200 DEF and +200 MDF and has a -24% ATK down to single enemy)
+        // (The skill should not be taken account in the MDF damage taken calculation because ATK affects physical damage)
+    }
+
+    @Test
+    public void calculateDamageTaken_defensiveBuffMultiplier_isAffectedBy_charas_DEF_or_MDF() {
+        assertTrue(chara3HasNoSkills());
+
+        List<Skill> skills = new ArrayList<>();
+        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.SELF, 14.75));
+        skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 66.81));
+        skills.add(new Skill(SkillType.MDF, SkillChange.UP, SkillTarget.ALLIES_ALL, 98.64));
+        skills.add(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.SELF, 84.54));
+        // DEF = -52.06, MDF = 14.10
+
+        addSkillsToCharas(skills);
+        calculateDamageTaken();
+
+        assertTrue(chara3HasNAmountOfSkills(4));
+        assertTrue(damageTakenResultsAreDifferentAfterChanges());
+        assertTrue(acceptableResult(1114 + 90, defResultAfterChanges));
+        assertTrue(acceptableResult(637 + 52, mdfResultAfterChanges));
+        // Chara's DEF/MDF (de)buffs should affect the function result
+    }
+
+    @Test
+    public void calculateDamageTaken_defensiveBuffMultiplier_isNotAffectedBy_enemys_DEF_or_MDF() {
+        assertTrue(chara3HasNoSkills());
+
+        List<Skill> skills = new ArrayList<>();
+        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 73.08));
+        skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 1.9));
+        skills.add(new Skill(SkillType.MDF, SkillChange.UP, SkillTarget.ENEMY_ALL, 60.78));
+        skills.add(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 5.75));
+
+        addSkillsToCharas(skills);
+        calculateDamageTaken();
+
+        assertTrue(chara3HasNAmountOfSkills(4));
+        assertTrue(damageTakenResultsAreSameAfterChanges());
+        // Enemy's DEF/MDF (de)buffs should NOT affect the function result
+     }
+
+     @Test
+    public void calculateDamageTaken_modifyingMultipleMultipliersGivesAcceptableResult() {
+        assertTrue(chara3HasNoSkills());
+
+        List<Skill> skills = new ArrayList<>();
+        skills.add(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 12.17));
+        skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ENEMY_ALL, 90.43));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 50)); // should not affect the result
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 50)); // should not affect the result
+        skills.add(new Skill(SkillType.MOON_RESIST, SkillChange.UP, SkillTarget.SELF, 50)); // should not affect the result
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 50)); // should not affect the result
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ENEMY_ALL, 50)); // should not affect the result
+        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 44.53));
+        skills.add(new Skill(SkillType.MDF, SkillChange.UP, SkillTarget.ALLIES_ALL, 20.16));
+        chara3.setPreferredWeapon(weapon2); // total attack down = 36.17
+
+        addSkillsToCharas(skills);
+        calculateDamageTaken();
+
+        assertTrue(chara3HasNAmountOfSkills(9));
+        assertTrue(damageTakenResultsAreDifferentAfterChanges());
+        assertTrue(acceptableResult(227 + 18, defResultAfterChanges));
+        assertTrue(acceptableResult(1095 + 89, mdfResultAfterChanges));
+     }
 }

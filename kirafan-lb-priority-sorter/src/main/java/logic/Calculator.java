@@ -175,35 +175,7 @@ public final class Calculator {
                 .build();
 
         // Calculator assumes that the enemy has a weak element against chara and that the damage is a critical hit
-        return calculateDamage(chara, enemy, getTotteokiPower(chara), true);
-    }
-
-    public static long calculateDamageTaken(GameCharacter chara, SkillType typeOfDefense) {
-        if (typeOfDefense != SkillType.DEF && typeOfDefense != SkillType.MDF && chara.getCharacterClass() != CharacterClass.KNIGHT) {
-            return 0;
-        }
-
-        // The above function should filter out other skill types than DEF and MDF
-        CharacterClass enemyClass = typeOfDefense == SkillType.DEF ? CharacterClass.WARRIOR : CharacterClass.MAGE;
-        Series series = new Series("series", null);
-        GameCharacter enemy = new GameCharacter.Builder("enemy", series, chara.getCharacterElement(), enemyClass)
-                .offensiveStatIs(72000)
-                .build();
-
-        /* Calculator assumes that the enemy is of the same element as character and that the damage is not a critical hit
-        *
-        * We give the enemy the same element as the inputted character because:
-        *   1) if we gave the enemy an element which is weak against the characters element it would be unfair to sun and
-        *   moon because there are no element which they are strong against (i.e. take reduced damage from) (sun and moon
-        *   simultaneously weak against each other, which means that they take extra damage from each other, while also
-        *   dealing extra damage to each other.)
-        *
-        *   2) It doesn't make sense to use a knight which is weak against the enemy because they take a lot of extra damage
-        *
-        * NOTE: enemy is input as parameter chara, and chara is inputted as parameter enemy because this function returns
-        * how much damage character receives from an enemy
-        */
-        return calculateDamage(enemy, chara, 2.5, false);
+        return calculateDamage(chara, enemy, getTotteokiPower(chara), true, false);
     }
 
     private static double getTotteokiPower(GameCharacter chara) {
@@ -224,7 +196,46 @@ public final class Calculator {
         return convertPercentageToDecimal(totteoki.getPower());
     }
 
-    private static long calculateDamage(GameCharacter chara, GameCharacter enemy, double offensiveSkillPower, boolean criticalHit) {
+    public static long calculateDamageTaken(GameCharacter chara, SkillType typeOfDefense) {
+        /*
+            This function should only be used for Knights because there is no point in storing defensive stat values for
+            other classes (for the purpose of this application)
+         */
+        if ((typeOfDefense != SkillType.DEF && typeOfDefense != SkillType.MDF) || chara.getCharacterClass() != CharacterClass.KNIGHT) {
+            return 0;
+        }
+
+        // The above function should filter out other skill types than DEF and MDF
+        CharacterElement enemyElement = CharacterElement.getElementThatIsWeakTo(chara.getCharacterElement());
+        CharacterClass enemyClass = typeOfDefense == SkillType.DEF ? CharacterClass.WARRIOR : CharacterClass.MAGE;
+        Series series = new Series("series", null);
+        GameCharacter enemy = new GameCharacter.Builder("enemy", series, chara.getCharacterElement(), enemyClass)
+                .offensiveStatIs(72000)
+                .build();
+
+        /*
+        * The enemy's element is set to be the same as the characters element and elemental resist and weak element bonus
+        * (de)buffs are not taken into account (this is done because sun and moon elements are not strong against
+        * anything, and are weak to each other)
+        *
+        * The function assumes the damage dealt is NOT a critical hit
+        *
+        * We give the enemy the same element as the inputted character because:
+        *   1) if we gave the enemy an element which is weak against the characters element it would be unfair to sun and
+        *   moon because there are no element which they are strong against (i.e. take reduced damage from) (sun and moon
+        *   simultaneously weak against each other, which means that they take extra damage from each other, while also
+        *   dealing extra damage to each other.)
+        *
+        *   2) It doesn't make sense to use a knight which is weak against the enemy because they take a lot of extra damage
+        *
+        * NOTE: enemy is input as parameter chara, and chara is inputted as parameter enemy because this function returns
+        * how much damage character receives from an enemy
+        */
+        return calculateDamage(enemy, chara, 2.5, false, true);
+    }
+
+    private static long calculateDamage(GameCharacter chara, GameCharacter enemy, double offensiveSkillPower,
+                                        boolean criticalHit, boolean useDefaultElementMultiplier) {
         /*
          * Formula for damage calculation:
          * (character's base offensive stat * skill power * offensive stat buff multiplier * next attack buff multiplier *
@@ -250,10 +261,15 @@ public final class Calculator {
         int baseOffensiveStat = getBaseOffensiveStat(chara);
         double offensiveStatBuffMultiplier = getOffensiveStatBuffMultiplier(charaClass, charaSkillTotalPowers, enemySkillTotalPowers);
         double nextAttackBuffMultiplier = getNextAttackUpBuffMultiplier(charaClass, charaSkillTotalPowers);
-        double elementalMultiplier = getElementMultiplier(chara.getCharacterElement(), enemy.getCharacterElement(),
-                charaSkillTotalPowers, enemySkillTotalPowers);
 
-        double criticalDamageMultiplier = getCriticalDamageMultiplier(criticalHit, charaSkillTotalPowers, enemySkillTotalPowers);
+        double elementalMultiplier = useDefaultElementMultiplier ?
+                1.0:
+                getElementMultiplier(chara.getCharacterElement(), enemy.getCharacterElement(), charaSkillTotalPowers,
+                        enemySkillTotalPowers);
+
+        double criticalDamageMultiplier = criticalHit ?
+                getCriticalDamageMultiplier(charaSkillTotalPowers, enemySkillTotalPowers) :
+                1.0;
 
         // Defensive modifiers
         double baseDefensiveStat = getBaseDefensiveStat(charaClass, enemy);
@@ -425,8 +441,7 @@ public final class Calculator {
                 sumDebuffsToSelf(elementalResistance, enemySkillTotalAmounts));
     }
 
-    private static double getCriticalDamageMultiplier(boolean criticalHit, Map<Skill, Double> charaSkillTotalPowers,
-                                                      Map<Skill, Double> enemySkillTotalPowers) {
+    private static double getCriticalDamageMultiplier( Map<Skill, Double> charaSkillTotalPowers, Map<Skill, Double> enemySkillTotalPowers) {
         /*
         * Formula for the critical damage multiplier:
         * If critical hit:
@@ -439,20 +454,17 @@ public final class Calculator {
         * https://kirarafantasia.miraheze.org/wiki/Game_Mechanics#Damage_Calculation
         * */
 
-        if (criticalHit) {
-            double charaCritDamageBuffBySelf = sumBuffsToSelf(SkillType.CRIT_DAMAGE, charaSkillTotalPowers);
-            double charaCritDamageDebuffBySelf = negate(sumDebuffsToSelf(SkillType.CRIT_DAMAGE, charaSkillTotalPowers));
-            double charaCritDamageBuffByEnemy = sumBuffsToOpponent(SkillType.CRIT_DAMAGE, enemySkillTotalPowers);
-            double charaCritDamageDebuffByEnemy = negate(sumDebuffsToOpponent(SkillType.CRIT_DAMAGE, enemySkillTotalPowers));
 
-            double criticalDamageMultiplier = multiplyDoubles(1.5, sumDoubles(1, charaCritDamageBuffBySelf,
+        double charaCritDamageBuffBySelf = sumBuffsToSelf(SkillType.CRIT_DAMAGE, charaSkillTotalPowers);
+        double charaCritDamageDebuffBySelf = negate(sumDebuffsToSelf(SkillType.CRIT_DAMAGE, charaSkillTotalPowers));
+        double charaCritDamageBuffByEnemy = sumBuffsToOpponent(SkillType.CRIT_DAMAGE, enemySkillTotalPowers);
+        double charaCritDamageDebuffByEnemy = negate(sumDebuffsToOpponent(SkillType.CRIT_DAMAGE, enemySkillTotalPowers));
+
+        double criticalDamageMultiplier = multiplyDoubles(1.5, sumDoubles(1, charaCritDamageBuffBySelf,
                     charaCritDamageDebuffBySelf, charaCritDamageBuffByEnemy, charaCritDamageDebuffByEnemy));
 
 
-            return Math.min(Math.max(criticalDamageMultiplier, 1.0),  3.0);
-        } else {
-            return 1.0;
-        }
+        return Math.min(Math.max(criticalDamageMultiplier, 1.0),  3.0);
     }
 
     private static int getBaseDefensiveStat(CharacterClass charaClass, GameCharacter enemy) {
