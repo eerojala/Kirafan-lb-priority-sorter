@@ -17,10 +17,13 @@ public class SkillSetCheck extends Check {
 
     @Override
     public int compare(GameCharacter c1, GameCharacter c2) {
-        if (charaHasDesiredSkillset(c1) && !charaHasDesiredSkillset(c2)) {
+        boolean c1HasDesiredSkillset = charaHasDesiredSkillset(c1);
+        boolean c2hasDesiredSkillset = charaHasDesiredSkillset(c2);
+
+        if (c1HasDesiredSkillset && !c2hasDesiredSkillset) {
             // if c1 has a desired skillset but c2 doesn't
             return -1;
-        } else if (!charaHasDesiredSkillset(c1) && charaHasDesiredSkillset(c2)) {
+        } else if (!c1HasDesiredSkillset && c2hasDesiredSkillset) {
             // if c2 has a desired skillset but c1 doesn't
             return 1;
         } else {
@@ -163,12 +166,19 @@ public class SkillSetCheck extends Check {
 
         // Other characters of the same element and class as chara which the comparisons are done against
         List<GameCharacter> otherCharacters =
-                getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass());
+                getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass())
+                        .stream()
+                        .filter(c -> !c.equals(chara))
+                        .collect(Collectors.toList());
 
         // Weapons should be taken into account when counting skill power totals
         Map<Skill, Double> charasSkillPowerTotals = Mapper.getSkillTotalPowers(chara);
         double charasDesiredSkillsTotalPower = getAppropriateSkillPowerSum(charasSkillPowerTotals, skillType,
                 skillChange, targetEnemy);
+
+        if (charasDesiredSkillsTotalPower <= 0) {
+            return false;
+        }
 
         for (GameCharacter other : otherCharacters) {
             Map<Skill, Double> othersTotalSkillPowers = Mapper.getSkillTotalPowers(other);
@@ -176,7 +186,7 @@ public class SkillSetCheck extends Check {
                     skillChange, targetEnemy);
 
             if ((other.isLimitBroken() && othersDesiredSkillsTotalPower >= charasDesiredSkillsTotalPower)
-                    || (other.isLimitBroken() || othersDesiredSkillsTotalPower > charasDesiredSkillsTotalPower)) {
+                    || (!other.isLimitBroken() && othersDesiredSkillsTotalPower > charasDesiredSkillsTotalPower)) {
 
                 return false;
             }
