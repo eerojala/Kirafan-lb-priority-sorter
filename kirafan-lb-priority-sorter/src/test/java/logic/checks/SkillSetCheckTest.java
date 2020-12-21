@@ -49,7 +49,6 @@ class SkillSetCheckTest {
         // Alchemist 1 has 25 skillpower in DEF DOWN
         // Alchemist 2 has a DEF UP skill that has more skillpower than alchemist 1, but it is the wrong skill (DEF UP instead of DEF DOWN)
         // Alchemist 3 has also 25 skillpower in DEF DOWN, but alchemist 1 is limit broken so alchemist 3 gets false from the skillpower check
-
         assertEquals(-1, check.compare(alchemist1, alchemist2));
         assertEquals(1, check.compare(alchemist3, alchemist1));
         assertEquals(0, check.compare(alchemist3, alchemist2));
@@ -59,8 +58,26 @@ class SkillSetCheckTest {
         assertEquals(0, check.compare(alchemist1, alchemist3));
         assertEquals(-1, check.compare(alchemist3, alchemist2));
         assertEquals(1, check.compare(alchemist2, alchemist3));
+        
+    }
 
-        // testaa MDF down testissä että sen sijaan että muuttaa alchemist 1 epä-limitbroken. alchemist3 on 0.01 enemmän skill power
+    @Test
+    public void compare_alchemistSkillSet_MDF_down() {
+        alchemist1.setSkills(new ArrayList<>(Arrays.asList(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 25))));
+        alchemist2.setSkills(new ArrayList<>(Arrays.asList(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 25))));
+        alchemist3.setSkills(new ArrayList<>(Arrays.asList(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 35))));
+
+        // alchemist 1 and 2 both have mdf down 25
+        // alchemist 3 has 35 mdf down (but the target is all allies, so it should not be taken into account)
+        assertEquals(0, check.compare(alchemist1, alchemist2));
+        assertEquals(-1, check.compare(alchemist1, alchemist3));
+        assertEquals(1, check.compare(alchemist3, alchemist2));
+
+        alchemist2.getSkills().add(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 0.01));
+        // alchemist 2 now has the most MDF down skillpower
+        assertEquals(0, check.compare(alchemist1, alchemist3));
+        assertEquals(-1, check.compare(alchemist2, alchemist1));
+        assertEquals(1, check.compare(alchemist3, alchemist2));
     }
 
 
