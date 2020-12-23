@@ -245,7 +245,7 @@ public class SkillSetCheck extends Check {
         *   same element (ties are allowed with other characters if they are no timit broken)
         *
         * Returns false when
-        *   -An other already limit broken character of the same element and class takes equal os less damage than chara OR
+        *   -An other already limit broken character of the same element and class takes equal or less damage than chara OR
         *   -An other non-limit broken character of the same element and class takes less damage than chara
         * */
 
@@ -272,10 +272,6 @@ public class SkillSetCheck extends Check {
         }
 
         return true;
-    }
-
-    private boolean mostSkillAmountCheck(GameCharacter chara, boolean includeWeapon, int minAmount, Skill skill) {
-        return mostSkillAmountCheck(chara, includeWeapon, minAmount, skill);
     }
 
     private boolean mostSkillAmountCheck(GameCharacter chara, boolean includeWeapon, int minAmount, Skill... skills) {
