@@ -121,12 +121,12 @@ public class SkillSetCheck extends Check {
          * A priest's desired skillsets (compared with priests of the same element)
          *   1) Most heal card skills
          *   2) Most abnormal effect disable skills (abnormal disable skills which only target self not counted)
-         *   3) Most abnormal effect recover skills (abnormal recover skills which only target allies not counted)
+         *   3) Most abnormal effect recover skills (abnormal recover skills which only target self not counted)
          *   4) Most ally all 1x barrier skills
          *   5) Most SPD UP buffs skillpower
          */
 
-        Skill healCard = new Skill(SkillType.HEAL_CARD, null, null, 0);
+        Skill healCard = new Skill(SkillType.HEAL_CARD, null, SkillTarget.ALLIES_ALL, 0);
         Skill abnormalDisableAllySingle = new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_SINGLE, 0);
         Skill abnormalDisableAllyAll = new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_ALL, 0);
         Skill abnormalRecoverAllySingle = new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLIES_SINGLE, 0);
