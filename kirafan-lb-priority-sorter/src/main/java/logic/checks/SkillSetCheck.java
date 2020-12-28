@@ -166,8 +166,7 @@ public class SkillSetCheck extends Check {
 
         // Other characters of the same element and class as chara which the comparisons are done against
         List<GameCharacter> otherCharacters =
-                getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass())
-                        .stream()
+                getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass()).stream()
                         .filter(c -> !c.equals(chara))
                         .collect(Collectors.toList());
 
@@ -257,8 +256,7 @@ public class SkillSetCheck extends Check {
 
         // Other characters of the same element and class as chara which the comparisons are done against
         List<GameCharacter> otherCharacters =
-                getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass())
-                .stream()
+                getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass()).stream()
                 .filter(c -> !c.equals(chara))
                 .collect(Collectors.toList());
 
@@ -295,8 +293,7 @@ public class SkillSetCheck extends Check {
 
         // Other characters of the same element and class as chara which the comparisons are done against
         List<GameCharacter> otherCharacters =
-                getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass())
-                .stream()
+                getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass()).stream()
                 .filter(c -> !c.equals(chara))
                 .collect(Collectors.toList());
 
@@ -336,8 +333,7 @@ public class SkillSetCheck extends Check {
 
         // Other characters of the same element and class as chara which the comparisons are done against
         List<GameCharacter> otherCharacters =
-                getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass())
-                .stream()
+                getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass()).stream()
                 .filter(c -> !c.equals(chara))
                 .collect(Collectors.toList());
 

@@ -1,13 +1,13 @@
 package logic;
 
+import domain.CharacterClass;
+import domain.CharacterElement;
 import domain.CreaStatus;
 import domain.model.GameCharacter;
 import domain.model.GameEvent;
 import logic.checks.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class GameCharacterComparator implements Comparator<GameCharacter> {
     private final List<Check> checks;
@@ -18,12 +18,16 @@ public class GameCharacterComparator implements Comparator<GameCharacter> {
         this.currentEvent = currentEvent;
         this.characters = characters;
         checks = new ArrayList<>();
+        Map<AbstractMap.SimpleEntry<CharacterElement, CharacterClass>, List<GameCharacter>> charactersByElementAndClass
+                = Mapper.getCharactersByElementAndClass(this.characters);
 
         checks.add(new EventBonusCheck(currentEvent));
         checks.add(new PersonalPreferenceCheck(9));
-        checks.add(new MissingElementClassCombinationCheck(Mapper.getCharactersByElementAndClass(characters)));
+        checks.add(new MissingElementClassCombinationCheck(charactersByElementAndClass));
         checks.add(new CreaCheck(CreaStatus.INCOMPLETE));
         checks.add(new PersonalPreferenceCheck(7));
+        checks.add(new SkillSetCheck(charactersByElementAndClass));
+        checks.add(new HighestWokeCheck(Mapper.getCharactersBySeries(this.characters)));
     }
 
     public GameEvent getCurrentEvent() {
