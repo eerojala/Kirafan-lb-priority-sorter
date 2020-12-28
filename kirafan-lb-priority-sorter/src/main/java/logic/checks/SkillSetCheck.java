@@ -167,7 +167,7 @@ public class SkillSetCheck extends Check {
         // Other characters of the same element and class as chara which the comparisons are done against
         List<GameCharacter> otherCharacters =
                 getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass()).stream()
-                        .filter(c -> !c.equals(chara))
+                        .filter(c -> !chara.equals(c))
                         .collect(Collectors.toList());
 
         // Weapons should be taken into account when counting skill power totals
@@ -257,7 +257,7 @@ public class SkillSetCheck extends Check {
         // Other characters of the same element and class as chara which the comparisons are done against
         List<GameCharacter> otherCharacters =
                 getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass()).stream()
-                .filter(c -> !c.equals(chara))
+                .filter(c -> !chara.equals(c))
                 .collect(Collectors.toList());
 
         for (GameCharacter other : otherCharacters) {
@@ -294,7 +294,7 @@ public class SkillSetCheck extends Check {
         // Other characters of the same element and class as chara which the comparisons are done against
         List<GameCharacter> otherCharacters =
                 getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass()).stream()
-                .filter(c -> !c.equals(chara))
+                .filter(c -> !chara.equals(c))
                 .collect(Collectors.toList());
 
         for (GameCharacter other : otherCharacters) {
@@ -334,7 +334,7 @@ public class SkillSetCheck extends Check {
         // Other characters of the same element and class as chara which the comparisons are done against
         List<GameCharacter> otherCharacters =
                 getCharactersOfSpecificElementAndClass(chara.getCharacterElement(), chara.getCharacterClass()).stream()
-                .filter(c -> !c.equals(chara))
+                .filter(c -> !chara.equals(c))
                 .collect(Collectors.toList());
 
         for (GameCharacter other : otherCharacters) {

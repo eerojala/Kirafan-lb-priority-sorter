@@ -24,17 +24,21 @@ class SkillSetCheckTest {
     private GameCharacter knight5;
     private GameCharacter knight6;
     private GameCharacter knight7;
+    private GameCharacter knight8;
     private GameCharacter mage1;
     private GameCharacter mage2;
     private GameCharacter mage3;
     private GameCharacter mage4;
     private GameCharacter mage5;
+    private GameCharacter mage6;
     private GameCharacter priest1;
     private GameCharacter priest2;
     private GameCharacter priest3;
+    private GameCharacter priest4;
     private GameCharacter warrior1;
     private GameCharacter warrior2;
     private GameCharacter warrior3;
+    private GameCharacter warrior4;
 
     @BeforeEach
     void setUp() {
@@ -90,6 +94,11 @@ class SkillSetCheckTest {
                 .magicDefenseIs(1000)
                 .build();
 
+        knight8 = new GameCharacter.Builder("knight 8", series, CharacterElement.SUN, CharacterClass.KNIGHT)
+                .defenseIs(4000)
+                .magicDefenseIs(4000)
+                .build();
+
         List<GameCharacter> moonKnights = new ArrayList<>(Arrays.asList(knight1, knight2, knight3, knight4));
         List<GameCharacter> waterKnights = new ArrayList<>(Arrays.asList(knight5, knight6, knight7));
 
@@ -118,17 +127,23 @@ class SkillSetCheckTest {
                 .withSkill(totteoki)
                 .build();
 
-        GameCharacter mage6 = new GameCharacter.Builder("mage 6", series, CharacterElement.SUN, CharacterClass.MAGE)
+        mage6 = new GameCharacter.Builder("mage 6", series, CharacterElement.MOON, CharacterClass.MAGE)
+                .offensiveStatIs(5000)
+                .withSkill(totteoki)
+                .build();
+
+        GameCharacter mage7 = new GameCharacter.Builder("mage 7", series, CharacterElement.SUN, CharacterClass.MAGE)
                 .offensiveStatIs(4500)
                 .withSkill(totteoki)
                 .build();
 
-        List<GameCharacter> sunMages = new ArrayList<>(Arrays.asList(mage1, mage2, mage3, mage6));
+        List<GameCharacter> sunMages = new ArrayList<>(Arrays.asList(mage1, mage2, mage3, mage7));
         List<GameCharacter> earthMages = new ArrayList<>(Arrays.asList(mage4, mage5));
 
         priest1 = new GameCharacter.Builder("priest 1", series, CharacterElement.WIND, CharacterClass.PRIEST).build();
         priest2 = new GameCharacter.Builder("priest 2", series, CharacterElement.WIND, CharacterClass.PRIEST).build();
         priest3 = new GameCharacter.Builder("priest 3", series, CharacterElement.WIND, CharacterClass.PRIEST).build();
+        priest4 = new GameCharacter.Builder("priest 4", series, CharacterElement.WATER, CharacterClass.PRIEST).build();
 
         List<GameCharacter> windPriests = new ArrayList<>(Arrays.asList(priest1, priest2, priest3));
 
@@ -147,22 +162,31 @@ class SkillSetCheckTest {
                 .withSkill(totteoki)
                 .build();
 
-        GameCharacter warrior4 = new GameCharacter.Builder("warrior 4", series, CharacterElement.WATER, CharacterClass.WARRIOR)
+        warrior4 = new GameCharacter.Builder("warrior 4", series, CharacterElement.WIND, CharacterClass.WARRIOR)
                 .offensiveStatIs(4000)
                 .withSkill(totteoki)
                 .build();
 
-        List<GameCharacter> waterWarriors = new ArrayList<>(Arrays.asList(warrior1, warrior2, warrior3, warrior4));
+        GameCharacter warrior5 = new GameCharacter.Builder("warrior 5", series, CharacterElement.WATER, CharacterClass.WARRIOR)
+                .offensiveStatIs(4000)
+                .withSkill(totteoki)
+                .build();
+
+        List<GameCharacter> waterWarriors = new ArrayList<>(Arrays.asList(warrior1, warrior2, warrior3, warrior5));
 
         Map<AbstractMap.SimpleEntry<CharacterElement, CharacterClass>, List<GameCharacter>> map = new HashMap<>();
         map.put(new AbstractMap.SimpleEntry<>(CharacterElement.FIRE, CharacterClass.ALCHEMIST), fireAlchemists);
         map.put(new AbstractMap.SimpleEntry<>(CharacterElement.WIND, CharacterClass.ALCHEMIST), new ArrayList<>(Collections.singletonList(alchemist4)));
         map.put(new AbstractMap.SimpleEntry<>(CharacterElement.MOON, CharacterClass.KNIGHT),moonKnights);
         map.put(new AbstractMap.SimpleEntry<>(CharacterElement.WATER, CharacterClass.KNIGHT), waterKnights);
+        map.put(new AbstractMap.SimpleEntry<>(CharacterElement.SUN, CharacterClass.KNIGHT), new ArrayList<>(Collections.singletonList(knight8)));
         map.put(new AbstractMap.SimpleEntry<>(CharacterElement.SUN, CharacterClass.MAGE), sunMages);
         map.put(new AbstractMap.SimpleEntry<>(CharacterElement.EARTH, CharacterClass.MAGE), earthMages);
+        map.put(new AbstractMap.SimpleEntry<>(CharacterElement.MOON, CharacterClass.MAGE), new ArrayList<>(Collections.singletonList(mage6)));
         map.put(new AbstractMap.SimpleEntry<>(CharacterElement.WIND, CharacterClass.PRIEST), windPriests);
+        map.put(new AbstractMap.SimpleEntry<>(CharacterElement.WATER, CharacterClass.PRIEST), new ArrayList<>(Collections.singletonList(priest4)));
         map.put(new AbstractMap.SimpleEntry<>(CharacterElement.WATER, CharacterClass.WARRIOR), waterWarriors);
+        map.put(new AbstractMap.SimpleEntry<>(CharacterElement.WIND, CharacterClass.WARRIOR), new ArrayList<>(Collections.singletonList(warrior4)));
 
         check = new SkillSetCheck(map);
     }
@@ -1156,5 +1180,21 @@ class SkillSetCheckTest {
         assertEquals(0, check.compare(priest1, mage1));
         assertEquals(0, check.compare(mage1, warrior1));
         assertEquals(0, check.compare(warrior1, priest1));
+    }
+
+    @Test
+    public void compare_worksProperly_whenComparing_characters_whoAreTheSoleMembersOfTheirElementClassCombination() {
+        // alchemist4 has none of the desired skills
+        // knight8 takes the least physical and magical damage out of all sun knights (because she is the only one)
+        assertEquals(1, check.compare(alchemist4, knight8));
+
+        // mage6 has the biggest max damage out all moon mages (because she is the only one)
+        assertEquals(0, check.compare(knight8, mage6));
+
+        // priest4 has none of the desired skills
+        assertEquals(-1, check.compare(mage6, priest4));
+
+        // warrior has the biggest max damage out of all wind warrior (because she is the only one)
+        assertEquals(1, check.compare(priest4, warrior4));
     }
 }
