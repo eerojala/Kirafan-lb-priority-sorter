@@ -5,6 +5,7 @@ import domain.CharacterElement;
 import domain.CreaStatus;
 import domain.model.GameCharacter;
 import domain.model.GameEvent;
+import domain.model.Weapon;
 import logic.checks.*;
 
 import java.util.*;
@@ -12,11 +13,13 @@ import java.util.*;
 public class GameCharacterComparator implements Comparator<GameCharacter> {
     private final List<Check> checks;
     private List<GameCharacter> characters;
+    private List<Weapon> weapons;
     private GameEvent currentEvent;
 
-    public GameCharacterComparator(List<GameCharacter> characters, GameEvent currentEvent) {
-        this.currentEvent = currentEvent;
+    public GameCharacterComparator(List<GameCharacter> characters, List<Weapon> weapons, GameEvent currentEvent) {
         this.characters = characters;
+        this.weapons = weapons;
+        this.currentEvent = currentEvent;
         checks = new ArrayList<>();
         Map<AbstractMap.SimpleEntry<CharacterElement, CharacterClass>, List<GameCharacter>> charactersByElementAndClass
                 = Mapper.getCharactersByElementAndClass(this.characters);
@@ -28,6 +31,7 @@ public class GameCharacterComparator implements Comparator<GameCharacter> {
         checks.add(new PersonalPreferenceCheck(7));
         checks.add(new SkillSetCheck(charactersByElementAndClass));
         checks.add(new HighestWokeCheck(Mapper.getCharactersBySeries(this.characters)));
+        checks.add(new NoWeaponCheck(weapons));
     }
 
     public GameEvent getCurrentEvent() {
