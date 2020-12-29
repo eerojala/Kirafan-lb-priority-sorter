@@ -191,7 +191,6 @@ class SkillSetCheckTest {
         check = new SkillSetCheck(map);
     }
 
-
     @Test
     public void compare_alchemistSkillSet_most_DEF_down_toEnemies_skillpower_isTakenIntoAccount() {
         alchemist1.setLimitBroken(true);

@@ -65,6 +65,18 @@ class EventBonusCheckTest {
     }
 
     @Test
+    public void compare_returnsZero_whenEventBonusCharacterListIsNull() {
+        EventBonusCheck anotherCheck = new EventBonusCheck(new GameEvent("asdffffffff"));
+        assertEquals(0, anotherCheck.compare(cA, cB));
+        assertEquals(0, anotherCheck.compare(cA, cC));
+        assertEquals(0, anotherCheck.compare(cA, cD));
+        assertEquals(0, anotherCheck.compare(cB, cC));
+        assertEquals(0, anotherCheck.compare(cB, cD));
+        assertEquals(0, anotherCheck.compare(cC, cD));
+    }
+
+
+    @Test
     public void compare_returnsZero_whenBothCharactersAreBonus() {
         assertEquals(0, check.compare(cA, cB));
         assertEquals(0, check.compare(cB, cA));
