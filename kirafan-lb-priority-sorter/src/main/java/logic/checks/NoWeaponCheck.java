@@ -15,7 +15,7 @@ public class NoWeaponCheck extends Check {
 
     // This check prefers (perhaps a bit counter-intuitively) that a character does NOT have an unique weapon
     // (This is because I prefer limit breaking characters who do not have an unique weapon yet first so they can slowly
-    // get to max level before receiving their unique weapon (if they ever do))
+    // get to max level before the developers create an unique weapon for them (if they ever do))
     @Override
     public int compare(GameCharacter c1, GameCharacter c2) {
         boolean c1HasUniqueWeapon = characterHasUniqueWeapon(c1);

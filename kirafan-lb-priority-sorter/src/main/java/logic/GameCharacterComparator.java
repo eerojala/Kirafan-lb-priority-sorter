@@ -47,12 +47,20 @@ public class GameCharacterComparator implements Comparator<GameCharacter> {
     * 05: Has a medium personal preference (>=7)
     * 06: Has a set of skills which is better than other characters of the same element and class (See SkillSetCheck for details)
     * 07: Highest woke level of all characters in their series (See HighestWokeCheck for details)
-    * 08: Character has no unique weapon
-    * 09: Character belongs to a series with complete crea
+    * 08: Has no unique weapon
+    * 09: Belongs to a series with complete crea
     * 10: Has a low personal preference (>=0)
     */
     @Override
     public int compare(GameCharacter c1, GameCharacter c2) {
+        if (c1 == null && c2 == null) {
+            return 0;
+        } else if (c2 == null) {
+            return -1;
+        } else if (c1 == null) {
+            return 1;
+        }
+
         for (Check check : checks) {
             int checkResult = check.compare(c1, c2);
 

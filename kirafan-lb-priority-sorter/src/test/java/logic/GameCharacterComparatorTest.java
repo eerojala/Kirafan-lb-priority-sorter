@@ -5,6 +5,7 @@ import domain.model.GameCharacter;
 import domain.model.GameEvent;
 import domain.model.Series;
 import domain.model.Weapon;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Array;
@@ -17,6 +18,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameCharacterComparatorTest {
     public GameCharacterComparatorTest() {}
+
+    @BeforeEach
+    public void setUp() {
+
+    }
 
     @Test
     public void compare_sortsCharactersCorrectly() {
@@ -38,6 +44,12 @@ class GameCharacterComparatorTest {
         assertEquals(chara1, nonLimitBrokenCharas.get(0));
         assertEquals(chara2, nonLimitBrokenCharas.get(1));
         assertEquals(chara3, nonLimitBrokenCharas.get(2));
+
+
+        // GameCharacterComparator returns appropriate values when comparing with null charas
+        assertEquals(-1, comparator.compare(chara1, null));
+        assertEquals(1, comparator.compare(null, chara1));
+        assertEquals(0, comparator.compare(null, null));
 
         //
         // TESTING EventBonusCheck
