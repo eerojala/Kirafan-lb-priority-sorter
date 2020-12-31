@@ -4,13 +4,14 @@ import domain.model.GameCharacter;
 import domain.model.Weapon;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class NoWeaponCheck extends Check {
-    private List<Weapon> weapons;
+    private Map<GameCharacter, Weapon> weaponsByCharacter;
 
-    public NoWeaponCheck(List<Weapon> weapons) {
-        this.weapons = weapons;
+    public NoWeaponCheck(Map<GameCharacter, Weapon> weaponsByCharacter) {
+        this.weaponsByCharacter = weaponsByCharacter;
     }
 
     // This check prefers (perhaps a bit counter-intuitively) that a character does NOT have an unique weapon
@@ -34,10 +35,6 @@ public class NoWeaponCheck extends Check {
     }
 
     private boolean characterHasUniqueWeapon(GameCharacter chara) {
-        List<Weapon> charasUniqueWeapons = weapons.stream()
-                .filter(w -> chara.equals(w.getExclusiveCharacter()))
-                .collect(Collectors.toList());
-
-        return !charasUniqueWeapons.isEmpty();
+        return weaponsByCharacter.get(chara) != null;
     }
 }

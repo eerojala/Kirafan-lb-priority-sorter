@@ -8,9 +8,7 @@ import domain.model.Weapon;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,11 +36,11 @@ class NoWeaponCheckTest {
                 .isExclusiveTo(chara2)
                 .build();
 
-        Weapon weapon3 = new Weapon.Builder("Weapon3")
-                .build();
+        Map<GameCharacter, Weapon> weaponsByChara = new HashMap<>();
+        weaponsByChara.put(chara1, weapon1);
+        weaponsByChara.put(chara2, weapon2);
 
-
-        NoWeaponCheck check = new NoWeaponCheck(new ArrayList<>(Arrays.asList(weapon1, weapon2, weapon3)));
+        NoWeaponCheck check = new NoWeaponCheck(weaponsByChara);
 
         // Characters who DON'T have an unique weapons should be preferred
         assertEquals(-1, check.compare(chara3, chara1));

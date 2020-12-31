@@ -5,6 +5,7 @@ import domain.CharacterElement;
 import domain.CreaStatus;
 import domain.model.GameCharacter;
 import domain.model.GameEvent;
+import domain.model.Series;
 import domain.model.Weapon;
 import logic.checks.*;
 
@@ -12,29 +13,25 @@ import java.util.*;
 
 public class GameCharacterComparator implements Comparator<GameCharacter> {
     private final List<Check> checks;
-    private List<GameCharacter> characters;
-    private List<Weapon> weapons;
-    private GameEvent currentEvent;
 
-    /* NOTE: MAKE SURE TO CREATE A NEW GameCharacterComparator OBJECT EVERY TIME AFTER CREATING/EDITING/DELETING
+    /*
+    * NOTE: MAKE SURE TO CREATE A NEW GameCharacterComparator OBJECT EVERY TIME AFTER CREATING/EDITING/DELETING
     * A CHARACTER/SERIES/WEAPON/EVENT
     */
-    public GameCharacterComparator(List<GameCharacter> allCharacters, List<Weapon> weapons, GameEvent currentEvent) {
-        this.characters = allCharacters;
-        this.weapons = weapons;
-        this.currentEvent = currentEvent;
+    public GameCharacterComparator(
+            Map<AbstractMap.SimpleEntry<CharacterElement, CharacterClass>, List<GameCharacter>> charasByElementAndClass,
+            Map<Series, List<GameCharacter>> charasBySeries,
+            Map<GameCharacter, Weapon> weaponsByCharas,
+            GameEvent currentEvent) {
         checks = new ArrayList<>();
-        Map<AbstractMap.SimpleEntry<CharacterElement, CharacterClass>, List<GameCharacter>> charactersByElementAndClass
-                = Mapper.getCharactersByElementAndClass(this.characters);
-
         checks.add(new EventBonusCheck(currentEvent));
         checks.add(new PersonalPreferenceCheck(9));
-        checks.add(new MissingElementClassCombinationCheck(charactersByElementAndClass));
+        checks.add(new MissingElementClassCombinationCheck(charasByElementAndClass));
         checks.add(new CreaCheck(CreaStatus.INCOMPLETE));
         checks.add(new PersonalPreferenceCheck(7));
-        checks.add(new SkillSetCheck(charactersByElementAndClass));
-        checks.add(new HighestWokeCheck(Mapper.getCharactersBySeries(this.characters)));
-        checks.add(new NoWeaponCheck(weapons));
+        checks.add(new SkillSetCheck(charasByElementAndClass));
+        checks.add(new HighestWokeCheck(charasBySeries));
+        checks.add(new NoWeaponCheck(weaponsByCharas));
         checks.add(new CreaCheck(CreaStatus.COMPLETE));
         checks.add(new PersonalPreferenceCheck(0));
     }
