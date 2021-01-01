@@ -26,10 +26,9 @@ public final class Mapper {
         return charactersByElementAndClass;
     }
 
-    public static void addCharacterToCharactersByElementAndClass(
+    private static void addCharacterToCharactersByElementAndClass(
             GameCharacter chara,
-            Map<AbstractMap.SimpleEntry<CharacterElement, CharacterClass>, List<GameCharacter>> charactersByElementAndClass
-    ) {
+            Map<AbstractMap.SimpleEntry<CharacterElement, CharacterClass>, List<GameCharacter>> charactersByElementAndClass) {
         if (chara == null || charactersByElementAndClass == null) {
             return;
         }
@@ -58,7 +57,7 @@ public final class Mapper {
         return charactersBySeries;
     }
 
-    public static void addCharacterToCharactersBySeries(GameCharacter chara, Map<Series, List<GameCharacter>> charactersBySeries) {
+    private static void addCharacterToCharactersBySeries(GameCharacter chara, Map<Series, List<GameCharacter>> charactersBySeries) {
         if (chara == null || charactersBySeries == null) {
             return;
         }
@@ -72,6 +71,22 @@ public final class Mapper {
 
         charactersOfSameSeries.add(chara);
         charactersBySeries.put(series, charactersOfSameSeries);
+    }
+
+    public static Map<GameCharacter, Weapon> getWeaponsByCharacter(List<Weapon> weapons) {
+        Map<GameCharacter, Weapon> weaponsByCharacter = new HashMap<>();
+
+        if (weapons != null) {
+            for (Weapon weapon : weapons) {
+                GameCharacter exclusiveCharacter = weapon.getExclusiveCharacter();
+
+                if (exclusiveCharacter != null) {
+                    weaponsByCharacter.put(exclusiveCharacter, weapon);
+                }
+            }
+        }
+
+        return weaponsByCharacter;
     }
 
     public static Map<Skill,Double> getSkillTotalPowers(GameCharacter chara) {
