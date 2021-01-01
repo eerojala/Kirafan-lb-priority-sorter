@@ -173,10 +173,10 @@ class GameCharacterComparatorTest {
         //
         chara1.setSkills(new ArrayList<>()); // chara1 has no skills anymore
         chara1.setPersonalPreference(0);
-        chara2.getSkills().add(new Skill(SkillType.SPD, SkillChange.UP, SkillTarget.ALLIES_ALL, 10));
+        chara2.getSkills().add(new Skill(SkillType.SPD, SkillChange.UP, SkillTarget.ALLY_ALL, 10));
         chara2.setWokeLevel(1);
         chara2.setPersonalPreference(0);
-        chara3.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ALLIES_ALL, 0));
+        chara3.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ALLY_ALL, 0));
         chara3.setPersonalPreference(0);
         Collections.sort(nonLimitBrokenCharas, comparator);
         // chara2 should be first because she has a desired skill set and is the highest woke in her series

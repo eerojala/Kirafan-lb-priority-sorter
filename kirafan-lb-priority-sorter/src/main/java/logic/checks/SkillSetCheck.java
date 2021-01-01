@@ -87,14 +87,14 @@ public class SkillSetCheck extends Check {
          *   7) Most damage all enemies skills
          */
 
-        Skill abnormalDisableSelf = new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.SELF, 0);
-        Skill abnormalDisableAllySingle = new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_SINGLE, 0);
-        Skill abnormalDisableAllyAll = new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_ALL, 0);
-        Skill abnormalRecoverSelf = new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.SELF, 0);
-        Skill abnormalRecoverAllySingle = new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLIES_SINGLE, 0);
-        Skill abnormalRecoverAllyAll = new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLIES_ALL, 0);
-        Skill singleBarrierAllyAll = new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLIES_ALL, 0);
-        Skill tripleBarrierSelfAll = new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.SELF, 0);
+        Skill abnormalDisableSelf = new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SELF, 0);
+        Skill abnormalDisableAllySingle = new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SINGLE, 0);
+        Skill abnormalDisableAllyAll = new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_ALL, 0);
+        Skill abnormalRecoverSelf = new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLY_SELF, 0);
+        Skill abnormalRecoverAllySingle = new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLY_SINGLE, 0);
+        Skill abnormalRecoverAllyAll = new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLY_ALL, 0);
+        Skill singleBarrierAllyAll = new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLY_ALL, 0);
+        Skill tripleBarrierSelfAll = new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.ALLY_SELF, 0);
         Skill damageAllEnemies = new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_ALL, 0);
 
         return takesLeastDamage(chara, SkillType.DEF) || takesLeastDamage(chara, SkillType.MDF)
@@ -126,12 +126,12 @@ public class SkillSetCheck extends Check {
          *   5) Most SPD UP buffs skillpower
          */
 
-        Skill healCard = new Skill(SkillType.HEAL_CARD, null, SkillTarget.ALLIES_ALL, 0);
-        Skill abnormalDisableAllySingle = new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_SINGLE, 0);
-        Skill abnormalDisableAllyAll = new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_ALL, 0);
-        Skill abnormalRecoverAllySingle = new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLIES_SINGLE, 0);
-        Skill abnormalRecoverAllyAll = new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLIES_ALL, 0);
-        Skill singleBarrierAllyAll = new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLIES_ALL, 0);
+        Skill healCard = new Skill(SkillType.HEAL_CARD, null, SkillTarget.ALLY_ALL, 0);
+        Skill abnormalDisableAllySingle = new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SINGLE, 0);
+        Skill abnormalDisableAllyAll = new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_ALL, 0);
+        Skill abnormalRecoverAllySingle = new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLY_SINGLE, 0);
+        Skill abnormalRecoverAllyAll = new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLY_ALL, 0);
+        Skill singleBarrierAllyAll = new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLY_ALL, 0);
 
         return mostSkillAmountCheck(chara, true,1, healCard)
                 || mostSkillAmountCheck(chara, true, 1, abnormalDisableAllySingle, abnormalDisableAllyAll)

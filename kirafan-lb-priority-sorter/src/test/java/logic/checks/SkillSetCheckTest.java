@@ -192,7 +192,7 @@ class SkillSetCheckTest {
     }
 
     @Test
-    public void compare_alchemistSkillSet_most_DEF_down_toEnemies_skillpower_isTakenIntoAccount() {
+    public void compare_alchemistSkillSet_most_DEF_down_toEnemies_skillPower_isTakenIntoAccount() {
         alchemist1.setLimitBroken(true);
         alchemist1.setSkills(new ArrayList<>(Collections.singletonList(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 25))));
         alchemist2.setSkills(new ArrayList<>(Collections.singletonList(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_ALL, 35))));
@@ -222,10 +222,10 @@ class SkillSetCheckTest {
     }
 
     @Test
-    public void compare_alchemistSkillSet_most_MDF_down_toEnemies_skillpower_isTakenIntoAccount() {
+    public void compare_alchemistSkillSet_most_MDF_down_toEnemies_skillPower_isTakenIntoAccount() {
         alchemist1.setSkills(new ArrayList<>(Collections.singletonList(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 25))));
         alchemist2.setSkills(new ArrayList<>(Collections.singletonList(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 25))));
-        alchemist3.setSkills(new ArrayList<>(Collections.singletonList(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 35))));
+        alchemist3.setSkills(new ArrayList<>(Collections.singletonList(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.ALLY_ALL, 35))));
 
         // alchemist 1 and 2 both have mdf down 25 to enemies and both are not limit broken
         // alchemist 3 has 35 mdf down (but the target is all allies, so it should not be taken into account)
@@ -243,7 +243,7 @@ class SkillSetCheckTest {
     }
 
     @Test
-    public void compare_alchemistSkillSet_most_elementResistance_down_toEnemies_skillpower_isTakenIntoAccount() {
+    public void compare_alchemistSkillSet_most_elementResistance_down_toEnemies_skillPower_isTakenIntoAccount() {
         alchemist1.setSkills(new ArrayList<>(Collections.singletonList(new Skill(SkillType.WIND_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 50))));
         alchemist2.setSkills(new ArrayList<>(Collections.singletonList(new Skill(SkillType.FIRE_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 25))));
         alchemist3.setSkills(new ArrayList<>(Collections.singletonList(new Skill(SkillType.FIRE_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 25))));
@@ -288,10 +288,10 @@ class SkillSetCheckTest {
     }
 
     @Test
-    public void compare_alchemistSkillSet_most_speed_down_toEnemies_skillpower_isTakenIntoAccount() {
+    public void compare_alchemistSkillSet_most_speed_down_toEnemies_skillPower_isTakenIntoAccount() {
         alchemist1.setSkills(new ArrayList<>(Collections.singletonList(new Skill(SkillType.SPD, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 25))));
         alchemist2.setSkills(new ArrayList<>(Collections.singletonList(new Skill(SkillType.SPD, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 25))));
-        alchemist3.setSkills(new ArrayList<>(Collections.singletonList(new Skill(SkillType.SPD, SkillChange.UP, SkillTarget.ALLIES_ALL, 50))));
+        alchemist3.setSkills(new ArrayList<>(Collections.singletonList(new Skill(SkillType.SPD, SkillChange.UP, SkillTarget.ALLY_ALL, 50))));
         alchemist2.setLimitBroken(true);
         /*
         * alchemist 1 and 2 both have 25 power spd down to enemies skillpower, but alchemist 2 is limit broken so alchemist 1
@@ -312,7 +312,7 @@ class SkillSetCheckTest {
     @Test
     public void compare_alchemistSkillSet_most_statusEffect_toEnemies_skillPowers_areTakenIntoAccount() {
         alchemist1.setSkills(new ArrayList<>(Collections.singletonList(new Skill(SkillType.CONFUSION, null, SkillTarget.ENEMY_SINGLE, 25))));
-        alchemist2.setSkills(new ArrayList<>(Collections.singletonList(new Skill(SkillType.CONFUSION, null, SkillTarget.ALLIES_ALL, 50))));
+        alchemist2.setSkills(new ArrayList<>(Collections.singletonList(new Skill(SkillType.CONFUSION, null, SkillTarget.ALLY_ALL, 50))));
         alchemist3.setSkills(new ArrayList<>(Collections.singletonList(new Skill(SkillType.CONFUSION, null, SkillTarget.ENEMY_SINGLE, 25.01))));
 
         // Alchemist 3 has most confusion to enemy skill power
@@ -511,18 +511,18 @@ class SkillSetCheckTest {
     public void compare_knightSkillSet_most_amountOf_abnormalEffectDisable_toAllies_skills_isTakenIntoAccount() {
         // knight 1 and 2 both should get true because they have the most amount of abnormal disable to allies skills
         // knight 3's skills should not be taken into account because her skills have the wrong change or wrong target
-        knight1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_SINGLE, 0));
-        knight1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.SELF, 0));
-        knight1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.SELF, 0));
+        knight1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SINGLE, 0));
+        knight1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SELF, 0));
+        knight1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SELF, 0));
 
-        knight2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_SINGLE, 0));
-        knight2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_ALL, 0));
-        knight2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_SINGLE, 0));
+        knight2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SINGLE, 0));
+        knight2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_ALL, 0));
+        knight2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SINGLE, 0));
 
-        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0));
-        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 0));
-        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0));
-        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 0));
+        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLY_SINGLE, 0));
+        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 0));
+        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLY_SINGLE, 0));
+        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 0));
         knight3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ENEMY_ALL, 0));
         knight3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ENEMY_ALL, 0));
         knight3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ENEMY_ALL, 0));
@@ -541,7 +541,7 @@ class SkillSetCheckTest {
         assertEquals(1, check.compare(knight2, knight1));
 
         // After knight 2 gets another abnormal disable to allies skill only knight 2 should get true
-        knight2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.SELF, 0));
+        knight2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SELF, 0));
         assertEquals(0, check.compare(knight1, knight3));
         assertEquals(1, check.compare(knight3, knight2));
         assertEquals(-1, check.compare(knight2, knight1));
@@ -551,19 +551,19 @@ class SkillSetCheckTest {
     public void compare_knightSkillSet_most_amountOf_abnormalEffectRecover_toAllies_skills_isTakenIntoAccount() {
         // only knight 2 should get true because she has  the most abnormal recover to allies skills
         // knight 3 should return false because her skill have the wrong change (not null) or wrong target (enemies)
-        knight1.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLIES_SINGLE, 0));
-        knight1.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLIES_SINGLE, 0));
+        knight1.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLY_SINGLE, 0));
+        knight1.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLY_SINGLE, 0));
 
-        knight2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.SELF, 0));
-        knight2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLIES_ALL, 0));
-        knight2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLIES_SINGLE, 0));
+        knight2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLY_SELF, 0));
+        knight2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLY_ALL, 0));
+        knight2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLY_SINGLE, 0));
 
-        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.UP, SkillTarget.SELF, 0));
-        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.UP, SkillTarget.SELF, 0));
-        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.UP, SkillTarget.SELF, 0));
-        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.DOWN, SkillTarget.SELF, 0));
-        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.DOWN, SkillTarget.SELF, 0));
-        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.DOWN, SkillTarget.SELF, 0));
+        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.UP, SkillTarget.ALLY_SELF, 0));
+        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.UP, SkillTarget.ALLY_SELF, 0));
+        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.UP, SkillTarget.ALLY_SELF, 0));
+        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.DOWN, SkillTarget.ALLY_SELF, 0));
+        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.DOWN, SkillTarget.ALLY_SELF, 0));
+        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.DOWN, SkillTarget.ALLY_SELF, 0));
         knight3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ENEMY_SINGLE, 0));
         knight3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ENEMY_SINGLE, 0));
         knight3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ENEMY_SINGLE, 0));
@@ -579,28 +579,28 @@ class SkillSetCheckTest {
     @Test
     public void compare_knightSkillSet_most_amountOf_singleBarrier_toAllAllies_skills_isTakenIntoAccount() {
         // Only knight 3 should get true because the others have the wrong targets (not allies all) or the wrong change (not null)
-        knight1.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLIES_SINGLE, 0));
-        knight1.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLIES_SINGLE, 0));
-        knight1.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLIES_SINGLE, 0));
+        knight1.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLY_SINGLE, 0));
+        knight1.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLY_SINGLE, 0));
+        knight1.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLY_SINGLE, 0));
         knight1.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ENEMY_ALL, 0));
         knight1.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ENEMY_ALL, 0));
         knight1.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ENEMY_ALL, 0));
-        knight1.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.UP, SkillTarget.ALLIES_ALL, 0));
-        knight1.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.UP, SkillTarget.ALLIES_ALL, 0));
-        knight1.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.UP, SkillTarget.ALLIES_ALL, 0));
+        knight1.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.UP, SkillTarget.ALLY_ALL, 0));
+        knight1.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.UP, SkillTarget.ALLY_ALL, 0));
+        knight1.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.UP, SkillTarget.ALLY_ALL, 0));
 
-        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.SELF, 0));
-        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.SELF, 0));
-        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.SELF, 0));
+        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLY_SELF, 0));
+        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLY_SELF, 0));
+        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLY_SELF, 0));
         knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ENEMY_SINGLE, 0));
         knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ENEMY_SINGLE, 0));
         knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ENEMY_SINGLE, 0));
-        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.DOWN,SkillTarget.ALLIES_ALL, 0));
-        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.DOWN,SkillTarget.ALLIES_ALL, 0));
-        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.DOWN,SkillTarget.ALLIES_ALL, 0));
+        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.DOWN,SkillTarget.ALLY_ALL, 0));
+        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.DOWN,SkillTarget.ALLY_ALL, 0));
+        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.DOWN,SkillTarget.ALLY_ALL, 0));
 
-        knight3.getSkills().add(new Skill(SkillType.BARRIER_FULL, null,SkillTarget.ALLIES_ALL, 0));
-        knight3.getSkills().add(new Skill(SkillType.BARRIER_FULL, null,SkillTarget.ALLIES_ALL, 0));
+        knight3.getSkills().add(new Skill(SkillType.BARRIER_FULL, null,SkillTarget.ALLY_ALL, 0));
+        knight3.getSkills().add(new Skill(SkillType.BARRIER_FULL, null,SkillTarget.ALLY_ALL, 0));
 
         assertEquals(-1, check.compare(knight3, knight1));
         assertEquals(1, check.compare(knight2, knight3));
@@ -611,19 +611,19 @@ class SkillSetCheckTest {
     public void compare_knightSkillSet_most_amountOf_tripleBarrier_toSelf_skills_isTakenIntoAccount() {
         // only knight 1 should get true because she has the most triple barrier to self skills
         // others have wrong skills (wrong change or target)
-        knight1.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.SELF, 0));
+        knight1.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.ALLY_SELF, 0));
 
-        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, SkillChange.UP, SkillTarget.SELF, 0));
-        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, SkillChange.UP, SkillTarget.SELF, 0));
-        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.ALLIES_ALL, 0));
-        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.ALLIES_ALL, 0));
+        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, SkillChange.UP, SkillTarget.ALLY_SELF, 0));
+        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, SkillChange.UP, SkillTarget.ALLY_SELF, 0));
+        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.ALLY_ALL, 0));
+        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.ALLY_ALL, 0));
         knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.ENEMY_ALL, 0));
         knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.ENEMY_ALL, 0));
 
-        knight3.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, SkillChange.DOWN, SkillTarget.SELF, 0));
-        knight3.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, SkillChange.DOWN, SkillTarget.SELF, 0));
-        knight3.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.ALLIES_SINGLE, 0));
-        knight3.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.ALLIES_SINGLE, 0));
+        knight3.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, SkillChange.DOWN, SkillTarget.ALLY_SELF, 0));
+        knight3.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, SkillChange.DOWN, SkillTarget.ALLY_SELF, 0));
+        knight3.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.ALLY_SINGLE, 0));
+        knight3.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.ALLY_SINGLE, 0));
         knight3.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.ENEMY_SINGLE, 0));
         knight3.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.ENEMY_SINGLE, 0));
 
@@ -639,17 +639,17 @@ class SkillSetCheckTest {
 
         knight1.getSkills().add(new Skill(SkillType.DAMAGE, SkillChange.UP, SkillTarget.ENEMY_ALL, 0));
         knight1.getSkills().add(new Skill(SkillType.DAMAGE, SkillChange.UP, SkillTarget.ENEMY_ALL, 0));
-        knight1.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.SELF, 0));
-        knight1.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.SELF, 0));
-        knight1.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLIES_ALL, 0));
-        knight1.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLIES_ALL, 0));
+        knight1.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLY_SELF, 0));
+        knight1.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLY_SELF, 0));
+        knight1.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLY_ALL, 0));
+        knight1.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLY_ALL, 0));
 
         knight2.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_ALL, 0));
 
         knight3.getSkills().add(new Skill(SkillType.DAMAGE, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 0));
         knight3.getSkills().add(new Skill(SkillType.DAMAGE, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 0));
-        knight3.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLIES_SINGLE, 0));
-        knight3.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLIES_SINGLE, 0));
+        knight3.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLY_SINGLE, 0));
+        knight3.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLY_SINGLE, 0));
         knight3.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_SINGLE, 0));
         knight3.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_SINGLE, 0));
 
@@ -687,7 +687,7 @@ class SkillSetCheckTest {
         assertEquals(0, check.compare(knight7, knight3));
 
         // After adding an abnormal effect disable allies skill to knight 3, she should get true as well
-        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_ALL, 0));
+        knight3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_ALL, 0));
         assertEquals(0, check.compare(knight1, knight2));
         assertEquals(0, check.compare(knight3, knight1));
         assertEquals(0, check.compare(knight2, knight3));
@@ -701,7 +701,7 @@ class SkillSetCheckTest {
         knight3.setSkills(new ArrayList<>());
 
         // After adding an abnormal effect recover skill allies to knight 1, she should get true
-        knight1.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLIES_SINGLE, 0));
+        knight1.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLY_SINGLE, 0));
         assertEquals(-1, check.compare(knight1, knight2));
         assertEquals(1, check.compare(knight3, knight1));
         assertEquals(0, check.compare(knight2, knight3));
@@ -710,7 +710,7 @@ class SkillSetCheckTest {
         assertEquals(0, check.compare(knight7, knight3));
 
         // After adding an all allies 1x barrier skill to knight 2, she should get true
-        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLIES_ALL, 0));
+        knight2.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLY_ALL, 0));
         assertEquals(0, check.compare(knight1, knight2));
         assertEquals(1, check.compare(knight3, knight1));
         assertEquals(-1, check.compare(knight2, knight3));
@@ -719,7 +719,7 @@ class SkillSetCheckTest {
         assertEquals(0, check.compare(knight7, knight3));
 
         // After adding an self triple barrier skill to knight 3, she should get true
-        knight3.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.SELF, 0));
+        knight3.getSkills().add(new Skill(SkillType.BARRIER_FULL_TRIPLE, null, SkillTarget.ALLY_SELF, 0));
         assertEquals(0, check.compare(knight1, knight2));
         assertEquals(0, check.compare(knight3, knight1));
         assertEquals(0, check.compare(knight2, knight3));
@@ -851,19 +851,19 @@ class SkillSetCheckTest {
     public void compare_priestSkillSet_mostAmountOf_healCard_skills_isTakenIntoAccount() {
         // Priest 1 should get true because she has the most amount of heal card skills
         // Priest 2 and 3 should get false because they don't have the correct skill (wrong target or change)
-        priest1.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ALLIES_ALL, 0));
+        priest1.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ALLY_ALL, 0));
 
-        priest2.getSkills().add(new Skill(SkillType.HEAL_CARD, SkillChange.UP, SkillTarget.ALLIES_ALL, 0));
-        priest2.getSkills().add(new Skill(SkillType.HEAL_CARD, SkillChange.UP, SkillTarget.ALLIES_ALL, 0));
-        priest2.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.SELF, 0));
-        priest2.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.SELF, 0));
+        priest2.getSkills().add(new Skill(SkillType.HEAL_CARD, SkillChange.UP, SkillTarget.ALLY_ALL, 0));
+        priest2.getSkills().add(new Skill(SkillType.HEAL_CARD, SkillChange.UP, SkillTarget.ALLY_ALL, 0));
+        priest2.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ALLY_SELF, 0));
+        priest2.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ALLY_SELF, 0));
         priest2.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ENEMY_ALL, 0));
         priest2.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ENEMY_ALL, 0));
 
-        priest3.getSkills().add(new Skill(SkillType.HEAL_CARD, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0));
-        priest3.getSkills().add(new Skill(SkillType.HEAL_CARD, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0));
-        priest3.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ALLIES_SINGLE, 0));
-        priest3.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ALLIES_SINGLE, 0));
+        priest3.getSkills().add(new Skill(SkillType.HEAL_CARD, SkillChange.DOWN, SkillTarget.ALLY_ALL, 0));
+        priest3.getSkills().add(new Skill(SkillType.HEAL_CARD, SkillChange.DOWN, SkillTarget.ALLY_ALL, 0));
+        priest3.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ALLY_SINGLE, 0));
+        priest3.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ALLY_SINGLE, 0));
         priest3.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ENEMY_SINGLE, 0));
         priest3.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ENEMY_SINGLE, 0));
     }
@@ -872,31 +872,31 @@ class SkillSetCheckTest {
     public void compare_priestSkillSet_mostAmountOf_abnormalEffectClear_toAllAndSingleAlly_skills_isTakenIntoAccount() {
         // Priest 1 should get false because she does not have the correct abnormal disable skills (wrong change or target)
         // Priest 2 and 3 should both get true because they both have the most abnormal disable to a single ally/all allies skills
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLIES_ALL, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLIES_ALL, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLIES_ALL, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLIES_ALL, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLIES_ALL, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.SELF, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.SELF, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.SELF, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.SELF, 0));
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.SELF, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLY_SINGLE, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLY_SINGLE, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLY_SINGLE, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLY_SINGLE, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLY_SINGLE, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLY_ALL, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLY_ALL, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLY_ALL, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLY_ALL, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.UP, SkillTarget.ALLY_ALL, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLY_ALL, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLY_ALL, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLY_ALL, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLY_ALL, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, SkillChange.DOWN, SkillTarget.ALLY_ALL, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SELF, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SELF, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SELF, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SELF, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SELF, 0));
         priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ENEMY_SINGLE, 0));
         priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ENEMY_SINGLE, 0));
         priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ENEMY_SINGLE, 0));
@@ -909,15 +909,15 @@ class SkillSetCheckTest {
         priest1.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ENEMY_ALL, 0));
 
 
-        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_SINGLE, 0));
-        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_SINGLE, 0));
-        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_ALL, 0));
-        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_ALL, 0));
+        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SINGLE, 0));
+        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SINGLE, 0));
+        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_ALL, 0));
+        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_ALL, 0));
 
-        priest3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_SINGLE, 0));
-        priest3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_SINGLE, 0));
-        priest3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_SINGLE, 0));
-        priest3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_ALL, 0));
+        priest3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SINGLE, 0));
+        priest3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SINGLE, 0));
+        priest3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SINGLE, 0));
+        priest3.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_ALL, 0));
 
         assertEquals(-1, check.compare(priest2, priest1));
         assertEquals(1, check.compare(priest1, priest3));
@@ -928,23 +928,23 @@ class SkillSetCheckTest {
     public void compare_priestSkillSet_mostAmountOf_abnormalEffectDisable_toAllAndSingleAlly_skills_isTakenIntoAccount() {
         // Priest 1 and 3 have the most abnormal recover skills, and should get true
         // Priest 2 should get false because she has the wrong skills (wrong change and target)
-        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLIES_SINGLE, 0));
+        priest1.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLY_SINGLE, 0));
 
-        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.UP, SkillTarget.ALLIES_ALL, 0));
-        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.UP, SkillTarget.ALLIES_ALL, 0));
-        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0));
-        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0));
-        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 0));
-        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 0));
-        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0));
-        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0));
-        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.SELF, 0));
+        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.UP, SkillTarget.ALLY_ALL, 0));
+        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.UP, SkillTarget.ALLY_ALL, 0));
+        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.UP, SkillTarget.ALLY_SINGLE, 0));
+        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.UP, SkillTarget.ALLY_SINGLE, 0));
+        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 0));
+        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 0));
+        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.DOWN, SkillTarget.ALLY_ALL, 0));
+        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, SkillChange.DOWN, SkillTarget.ALLY_ALL, 0));
+        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLY_SELF, 0));
         priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ENEMY_SINGLE, 0));
         priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ENEMY_SINGLE, 0));
         priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ENEMY_ALL, 0));
         priest2.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ENEMY_ALL, 0));
 
-        priest3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLIES_ALL, 0));
+        priest3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLY_ALL, 0));
 
         assertEquals(-1, check.compare(priest1, priest2));
         assertEquals(1, check.compare(priest2, priest3));
@@ -955,19 +955,19 @@ class SkillSetCheckTest {
     public void compare_priestSkillSet_mostAmountOf_singleFullBarrier_toAllAllies_skills_isTakenIntoAccount() {
         // Priest 1 and 3 should get false because they have the wrong skills (wrong change or target)
         // Priest 2 should get true because she has the most single full barrier to all allies skills
-        priest1.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.UP, SkillTarget.ALLIES_ALL, 0));
-        priest1.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.UP, SkillTarget.ALLIES_ALL, 0));
-        priest1.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.SELF, 0));
-        priest1.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.SELF, 0));
+        priest1.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.UP, SkillTarget.ALLY_ALL, 0));
+        priest1.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.UP, SkillTarget.ALLY_ALL, 0));
+        priest1.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLY_SELF, 0));
+        priest1.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLY_SELF, 0));
         priest1.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ENEMY_ALL, 0));
         priest1.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ENEMY_ALL, 0));
 
-        priest2.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLIES_ALL, 0));
+        priest2.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLY_ALL, 0));
 
-        priest3.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0));
-        priest3.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0));
-        priest3.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLIES_SINGLE, 0));
-        priest3.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLIES_SINGLE, 0));
+        priest3.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.DOWN, SkillTarget.ALLY_ALL, 0));
+        priest3.getSkills().add(new Skill(SkillType.BARRIER_FULL, SkillChange.DOWN, SkillTarget.ALLY_ALL, 0));
+        priest3.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLY_SINGLE, 0));
+        priest3.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLY_SINGLE, 0));
         priest3.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ENEMY_SINGLE, 0));
         priest3.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ENEMY_SINGLE, 0));
 
@@ -977,20 +977,20 @@ class SkillSetCheckTest {
     }
 
     @Test
-    public void compare_priestSkillSet_most_SPD_UP_toAllies_skillpower_isTakenIntoAccount() {
+    public void compare_priestSkillSet_most_SPD_UP_toAllies_skillPower_isTakenIntoAccount() {
         // priest 2 should get false because she has the wrong skill (wrong change)
         // priest 3 should get false because her spd UP allies skill power is 0
-        priest2.getSkills().add(new Skill(SkillType.SPD, null, SkillTarget.ALLIES_SINGLE, 100));
-        priest3.getSkills().add(new Skill(SkillType.SPD, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0));
+        priest2.getSkills().add(new Skill(SkillType.SPD, null, SkillTarget.ALLY_SINGLE, 100));
+        priest3.getSkills().add(new Skill(SkillType.SPD, SkillChange.UP, SkillTarget.ALLY_SINGLE, 0));
 
         // After adding the skill, priest 1 should get true because she has the most SPD up allies skill power
-        priest1.getSkills().add(new Skill(SkillType.SPD, SkillChange.UP, SkillTarget.ALLIES_ALL, 25));
+        priest1.getSkills().add(new Skill(SkillType.SPD, SkillChange.UP, SkillTarget.ALLY_ALL, 25));
         assertEquals(-1, check.compare(priest1, priest2));
         assertEquals(1, check.compare(priest3, priest1));
         assertEquals(0, check.compare(priest2, priest3));
 
         // After adding the skill, priest 3 should also get true because she is tied with priest 1 for most SPD up to allies skill power
-        priest3.getSkills().add(new Skill(SkillType.SPD, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 25));
+        priest3.getSkills().add(new Skill(SkillType.SPD, SkillChange.UP, SkillTarget.ALLY_SINGLE, 25));
         assertEquals(-1, check.compare(priest1, priest2));
         assertEquals(0, check.compare(priest3, priest1));
         assertEquals(1, check.compare(priest2, priest3));
@@ -1004,19 +1004,19 @@ class SkillSetCheckTest {
         assertEquals(0, check.compare(priest2, priest3));
 
         // After adding the skill priest 1 has the most skill card to all allies skills and should get true
-        priest1.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ALLIES_ALL, 0));
+        priest1.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ALLY_ALL, 0));
         assertEquals(-1, check.compare(priest1, priest2));
         assertEquals(1, check.compare(priest3, priest1));
         assertEquals(0, check.compare(priest2, priest3));
 
         // After adding the skill priest 2 has the most abnormal effect disable to allies skills and should get true
-        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLIES_SINGLE, 0));
+        priest2.getSkills().add(new Skill(SkillType.ABNORMAL_DISABLE, null, SkillTarget.ALLY_SINGLE, 0));
         assertEquals(0, check.compare(priest1, priest2));
         assertEquals(1, check.compare(priest3, priest1));
         assertEquals(-1, check.compare(priest2, priest3));
 
         // After adding the skill priest 3 has the most abnormal effect recover to allies skills and should get true
-        priest3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLIES_ALL, 0));
+        priest3.getSkills().add(new Skill(SkillType.ABNORMAL_RECOVER, null, SkillTarget.ALLY_ALL, 0));
         assertEquals(0, check.compare(priest1, priest2));
         assertEquals(0, check.compare(priest3, priest1));
         assertEquals(0, check.compare(priest2, priest3));
@@ -1027,13 +1027,13 @@ class SkillSetCheckTest {
         priest3.setSkills(new ArrayList<>());
 
         // After adding the skill priest 3 has the most ally 1x barrier skills and should get true
-        priest3.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLIES_ALL, 0));
+        priest3.getSkills().add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ALLY_ALL, 0));
         assertEquals(0, check.compare(priest1, priest2));
         assertEquals(-1, check.compare(priest3, priest1));
         assertEquals(1, check.compare(priest2, priest3));
 
         // After adding the skill priest 2 has the most SPD UP to allies skillpower and should get true
-        priest2.getSkills().add(new Skill(SkillType.SPD, SkillChange.UP, SkillTarget.SELF, 0.01));
+        priest2.getSkills().add(new Skill(SkillType.SPD, SkillChange.UP, SkillTarget.ALLY_SELF, 0.01));
         assertEquals(1, check.compare(priest1, priest2));
         assertEquals(-1, check.compare(priest3, priest1));
         assertEquals(0, check.compare(priest2, priest3));
@@ -1059,17 +1059,17 @@ class SkillSetCheckTest {
         // Warrior 2 gets false because she has under 2 damage single enemy skills
         warrior1.getSkills().add(new Skill(SkillType.DAMAGE, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 0));
         warrior1.getSkills().add(new Skill(SkillType.DAMAGE, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 0));
-        warrior1.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.SELF, 0));
-        warrior1.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.SELF, 0));
-        warrior1.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLIES_SINGLE, 0));
-        warrior1.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLIES_SINGLE, 0));
+        warrior1.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLY_SELF, 0));
+        warrior1.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLY_SELF, 0));
+        warrior1.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLY_SINGLE, 0));
+        warrior1.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLY_SINGLE, 0));
 
         warrior2.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_SINGLE, 0));
 
         warrior3.getSkills().add(new Skill(SkillType.DAMAGE, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 0));
         warrior3.getSkills().add(new Skill(SkillType.DAMAGE, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 0));
-        warrior3.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLIES_ALL, 0));
-        warrior3.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLIES_ALL, 0));
+        warrior3.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLY_ALL, 0));
+        warrior3.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLY_ALL, 0));
         warrior3.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_ALL, 0));
         warrior3.getSkills().add(new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_ALL, 0));
 
@@ -1087,7 +1087,7 @@ class SkillSetCheckTest {
     @Test
     public void compare_warriorSkillSet_all_areTakenIntoAccount() {
         // After adding the skill, warrior 3 should have the highest max damage and therefore get true
-        warrior3.getSkills().add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.SELF, 100));
+        warrior3.getSkills().add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ALLY_SELF, 100));
         assertEquals(-1, check.compare(warrior3, warrior1));
         assertEquals(1, check.compare(warrior2, warrior3));
         assertEquals(0, check.compare(warrior1, warrior2));
@@ -1154,7 +1154,7 @@ class SkillSetCheckTest {
         assertEquals(0, check.compare(warrior1, priest1));
 
         // After adding a new skill priest 1 should get true
-        priest1.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ALLIES_ALL, 0));
+        priest1.getSkills().add(new Skill(SkillType.HEAL_CARD, null, SkillTarget.ALLY_ALL, 0));
         assertEquals(0, check.compare(alchemist1, knight1));
         assertEquals(0, check.compare(mage1, alchemist1));
         assertEquals(0, check.compare(alchemist1, priest1));

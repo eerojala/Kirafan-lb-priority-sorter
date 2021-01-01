@@ -48,7 +48,7 @@ class CalculatorTest {
 
         weapon1 = new Weapon.Builder("weapon 1")
                 .offensiveStatIs(90)
-                .withSkill(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.SELF, 24.0))
+                .withSkill(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLY_SELF, 24.0))
                 .build();
 
         weapon2 = new Weapon.Builder("weapon 2")
@@ -232,35 +232,35 @@ class CalculatorTest {
         assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
-        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.SELF, 10.4));
-        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.SELF, 2.0));
-        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 3.2));
-        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0.5));
-        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLIES_ALL, 36.3));
-        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLIES_ALL, 1.3));
+        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLY_SELF, 10.4));
+        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLY_SELF, 2.0));
+        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLY_SINGLE, 3.2));
+        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLY_SINGLE, 0.5));
+        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLY_ALL, 36.3));
+        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLY_ALL, 1.3));
         // Total ATK UP: 53.7
-        skills.add(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.SELF, 15.6));
-        skills.add(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.SELF, 2.4));
-        skills.add(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 10.75));
-        skills.add(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 1));
-        skills.add(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 1.5));
-        skills.add(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 2.6));
+        skills.add(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.ALLY_SELF, 15.6));
+        skills.add(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.ALLY_SELF, 2.4));
+        skills.add(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 10.75));
+        skills.add(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 1));
+        skills.add(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.ALLY_ALL, 1.5));
+        skills.add(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.ALLY_ALL, 2.6));
         // Total ATK DOWN: 33.85
         // Total ATK: 53.7 - 33.85 = 19.85 (UP)
 
-        skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.SELF, 13.79));
-        skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.SELF, 5.32));
-        skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 40.2));
-        skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 1.7));
-        skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ALLIES_ALL, 15.1));
-        skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ALLIES_ALL, 6.77));
+        skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ALLY_SELF, 13.79));
+        skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ALLY_SELF, 5.32));
+        skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ALLY_SINGLE, 40.2));
+        skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ALLY_SINGLE, 1.7));
+        skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ALLY_ALL, 15.1));
+        skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ALLY_ALL, 6.77));
         // Total MAT UP: 82.88
-        skills.add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.SELF, 11.0));
-        skills.add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.SELF, 5.56));
-        skills.add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 10.31));
-        skills.add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 3.5));
-        skills.add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 3.6));
-        skills.add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 8.9));
+        skills.add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLY_SELF, 11.0));
+        skills.add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLY_SELF, 5.56));
+        skills.add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 10.31));
+        skills.add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 3.5));
+        skills.add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLY_ALL, 3.6));
+        skills.add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLY_ALL, 8.9));
         // Total MAT DOWN: 42.87
         // Total MAT: 82.88 - 42.87 = 40.01 (UP)
 
@@ -299,33 +299,33 @@ class CalculatorTest {
 
     @Test
     public void calculateMaxDamageCaused_offensiveBuffMultiplier_doesNotIncreasBeyondMaxValue() {
-        chara1.getSkills().add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 149.9));
+        chara1.getSkills().add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLY_SINGLE, 149.9));
         assertTrue(acceptableResult(79713 + 6463, Calculator.calculateMaxDamageCaused(chara1)));
         // Multiplier's max value is 2.5 (1 + 1.5)
 
-        chara1.getSkills().add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.SELF, 0.1));
+        chara1.getSkills().add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLY_SELF, 0.1));
         assertTrue(acceptableResult(79746 + 6466, Calculator.calculateMaxDamageCaused(chara1)));
 
-        chara1.getSkills().add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.SELF, 0.1));
+        chara1.getSkills().add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLY_SELF, 0.1));
         assertTrue(acceptableResult(79746 + 6466, Calculator.calculateMaxDamageCaused(chara1)));
 
-        chara1.getSkills().add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 10));
+        chara1.getSkills().add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLY_SINGLE, 10));
         assertTrue(acceptableResult(79746 + 6466, Calculator.calculateMaxDamageCaused(chara1)));
     }
 
     @Test
     public void calculateMaxDamageCaused_offensiveBuffMultiplier_doesNotDecreaseBelowMinValue() {
-        chara2.getSkills().add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 49.9));
+        chara2.getSkills().add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLY_ALL, 49.9));
         assertTrue(acceptableResult(11952 + 969, Calculator.calculateMaxDamageCaused(chara2)));
         // Multiplier's min value is 0.5 (1 - 0.5)
 
-        chara2.getSkills().add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.SELF, 0.1));
+        chara2.getSkills().add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLY_SELF, 0.1));
         assertTrue(acceptableResult(11926 + 967, Calculator.calculateMaxDamageCaused(chara2)));
 
-        chara2.getSkills().add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.SELF, 001));
+        chara2.getSkills().add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLY_SELF, 001));
         assertTrue(acceptableResult(11926 + 967, Calculator.calculateMaxDamageCaused(chara2)));
 
-        chara2.getSkills().add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.SELF, 10));
+        chara2.getSkills().add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLY_SELF, 10));
         assertTrue(acceptableResult(11926 + 967, Calculator.calculateMaxDamageCaused(chara2)));
     }
 
@@ -334,20 +334,20 @@ class CalculatorTest {
         assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
-        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.SELF, 50.13));
-        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.SELF, 200.36));
-        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 160));
-        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 170));
-        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ALLIES_ALL, 150));
-        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ALLIES_ALL, 150));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ALLY_SELF, 50.13));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ALLY_SELF, 200.36));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ALLY_SINGLE, 160));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ALLY_SINGLE, 170));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ALLY_ALL, 150));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ALLY_ALL, 150));
         // The chosen NEXT ATK UP should be 200.36
 
-        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.UP, SkillTarget.SELF, 15.13));
-        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.UP, SkillTarget.SELF, 350.32));
-        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 10));
-        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 350.33));
-        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 10));
-        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 250.11));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.UP, SkillTarget.ALLY_SELF, 15.13));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.UP, SkillTarget.ALLY_SELF, 350.32));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.UP, SkillTarget.ALLY_SINGLE, 10));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.UP, SkillTarget.ALLY_SINGLE, 350.33));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.UP, SkillTarget.ALLY_SINGLE, 10));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.UP, SkillTarget.ALLY_SINGLE, 250.11));
         // The chosen NEXT MAT UP should be 350.33
 
         addSkillsToCharas(skills);
@@ -366,13 +366,13 @@ class CalculatorTest {
         assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
-        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.DOWN, SkillTarget.SELF, 100));
-        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 110));
-        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 120));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.DOWN, SkillTarget.ALLY_SELF, 100));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 110));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.DOWN, SkillTarget.ALLY_ALL, 120));
 
-        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.SELF, 130));
-        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 140));
-        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 150));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.ALLY_SELF, 130));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 140));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.ALLY_ALL, 150));
 
         addSkillsToCharas(skills);
         calculateMaxDamage();
@@ -455,20 +455,20 @@ class CalculatorTest {
         assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
-        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.SELF, 11.5));
-        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.SELF, 12.13));
-        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 9.15));
-        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 50.9));
-        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLIES_ALL, 1.4));
-        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLIES_ALL, 23.53));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLY_SELF, 11.5));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLY_SELF, 12.13));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLY_SINGLE, 9.15));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLY_SINGLE, 50.9));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLY_ALL, 1.4));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLY_ALL, 23.53));
         // Total weak element bonus UP: 108.61
 
-        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN,SkillTarget.SELF, 49.81));
-        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN,SkillTarget.SELF, 1.4));
-        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN,SkillTarget.ALLIES_SINGLE, 9));
-        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN,SkillTarget.ALLIES_SINGLE, 13.5));
-        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN,SkillTarget.ALLIES_ALL, 5.9));
-        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN,SkillTarget.ALLIES_ALL, 4.47));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN,SkillTarget.ALLY_SELF, 49.81));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN,SkillTarget.ALLY_SELF, 1.4));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN,SkillTarget.ALLY_SINGLE, 9));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN,SkillTarget.ALLY_SINGLE, 13.5));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN,SkillTarget.ALLY_ALL, 5.9));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN,SkillTarget.ALLY_ALL, 4.47));
         // Total weak element bonus DOWN: 84.08
         // Total weak element bonus: 108.61 - 84.08 = 24.53
 
@@ -493,7 +493,7 @@ class CalculatorTest {
         assertTrue(acceptableResult(36674 + 2974, chara1ResultAfterResistDown));
         assertTrue(chara1ResultAfterResistDown > chara1ResultBeforeChanges);
 
-        chara1.getSkills().add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.SELF, 24.53));
+        chara1.getSkills().add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLY_SELF, 24.53));
         long chara1ResultAfterWeakElementBonus = Calculator.calculateMaxDamageCaused(chara1);
 
         assertEquals(3, chara1.getSkills().size());
@@ -506,17 +506,17 @@ class CalculatorTest {
         assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
-        skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.SELF, 50.5));
-        skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 10.93));
-        skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 1.93));
-        skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.UP, SkillTarget.SELF, 1.34));
-        skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 6.34));
-        skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.UP, SkillTarget.ALLIES_ALL, 40.12));
-        skills.add(new Skill(SkillType.WIND_RESIST, SkillChange.DOWN, SkillTarget.SELF, 7.44));
-        skills.add(new Skill(SkillType.FIRE_RESIST, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 15.1));
-        skills.add(new Skill(SkillType.WATER_RESIST, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 12.2));
-        skills.add(new Skill(SkillType.MOON_RESIST, SkillChange.DOWN, SkillTarget.SELF, 9.81));
-        skills.add(new Skill(SkillType.SUN_RESIST, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 16.0));
+        skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ALLY_SELF, 50.5));
+        skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 10.93));
+        skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ALLY_ALL, 1.93));
+        skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.UP, SkillTarget.ALLY_SELF, 1.34));
+        skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.UP, SkillTarget.ALLY_SINGLE, 6.34));
+        skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.UP, SkillTarget.ALLY_ALL, 40.12));
+        skills.add(new Skill(SkillType.WIND_RESIST, SkillChange.DOWN, SkillTarget.ALLY_SELF, 7.44));
+        skills.add(new Skill(SkillType.FIRE_RESIST, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 15.1));
+        skills.add(new Skill(SkillType.WATER_RESIST, SkillChange.DOWN, SkillTarget.ALLY_ALL, 12.2));
+        skills.add(new Skill(SkillType.MOON_RESIST, SkillChange.DOWN, SkillTarget.ALLY_SELF, 9.81));
+        skills.add(new Skill(SkillType.SUN_RESIST, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 16.0));
 
         addSkillsToCharas(skills);
         calculateMaxDamage();
@@ -560,7 +560,7 @@ class CalculatorTest {
         chara1.getSkills().add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 10.0));
         assertTrue(acceptableResult(38278 + 3104, Calculator.calculateMaxDamageCaused(chara1)));
 
-        chara1.getSkills().add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 200));
+        chara1.getSkills().add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLY_SINGLE, 200));
         assertTrue(acceptableResult(70177 + 5690, Calculator.calculateMaxDamageCaused(chara1)));
         // weak element bonus should be applied after the initial value is set to 2.4
     }
@@ -581,7 +581,7 @@ class CalculatorTest {
         chara1.getSkills().add(new Skill(SkillType.EARTH_RESIST, SkillChange.UP, SkillTarget.ENEMY_ALL, 5.7));
         assertTrue(acceptableResult(25519 + 2069, Calculator.calculateMaxDamageCaused(chara1)));
 
-        chara1.getSkills().add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.SELF, 10));
+        chara1.getSkills().add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLY_SELF, 10));
         assertTrue(acceptableResult(27114 + 2198, Calculator.calculateMaxDamageCaused(chara1)));
         // weak element should bonus be applied after the initial value is set to 1.6
     }
@@ -591,20 +591,20 @@ class CalculatorTest {
         assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
-        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.SELF, 30.67));
-        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.SELF, 1.7));
-        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 25.89));
-        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 5.33));
-        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLIES_ALL, 1.56));
-        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLIES_ALL, 31.22));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLY_SELF, 30.67));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLY_SELF, 1.7));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLY_SINGLE, 25.89));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLY_SINGLE, 5.33));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLY_ALL, 1.56));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLY_ALL, 31.22));
         // Total crit damage UP: 96.37
 
-        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.SELF, 17));
-        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.SELF, 2.6));
-        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 15.12));
-        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 2.79));
-        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 6));
-        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 25.66));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLY_SELF, 17));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLY_SELF, 2.6));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 15.12));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 2.79));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLY_ALL, 6));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLY_ALL, 25.66));
         // Total crit damage DOWN: 69.17
         // Total crit damage: 96.37 - 69.17 = 27.2 (UP)
 
@@ -637,33 +637,33 @@ class CalculatorTest {
 
     @Test
     public void calculateMaxDamageCaused_criticalDamageMultiplier_doesNotIncreaseBeyondMaxValue() {
-        chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 99.9));
+        chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLY_SINGLE, 99.9));
         assertTrue(acceptableResult(63765 + 5170, Calculator.calculateMaxDamageCaused(chara1)));
         // Critical damage multiplier's max value is 3.0 (1.5 * (1 + 1))
 
-        chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0.1));
+        chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLY_SINGLE, 0.1));
         assertTrue(acceptableResult(63797 + 5173, Calculator.calculateMaxDamageCaused(chara1)));
 
-        chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.SELF, 0.1));
+        chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLY_SELF, 0.1));
         assertTrue(acceptableResult(63797 + 5173, Calculator.calculateMaxDamageCaused(chara1)));
 
-        chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.SELF, 10.5));
+        chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLY_SELF, 10.5));
         assertTrue(acceptableResult(63797 + 5173, Calculator.calculateMaxDamageCaused(chara1)));
     }
 
     @Test
     public void calculateMaxDamageCaused_criticalDamageMultiplier_doesNotDecreaseBelowMinValue() {
-        chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 33));
+        chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLY_ALL, 33));
         assertTrue(acceptableResult(21372 + 1733, Calculator.calculateMaxDamageCaused(chara1)));
         // Critical damage multiplier's min value is 1.0 (1.5 * (1 - (1/3)))
 
-        chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.SELF, 1));
+        chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLY_SELF, 1));
         assertTrue(acceptableResult(21266 + 1724, Calculator.calculateMaxDamageCaused(chara1)));
 
-        chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.SELF, 1));
+        chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLY_SELF, 1));
         assertTrue(acceptableResult(21266 + 1724, Calculator.calculateMaxDamageCaused(chara1)));
 
-        chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 10.0));
+        chara1.getSkills().add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 10.0));
         assertTrue(acceptableResult(21266 + 1724, Calculator.calculateMaxDamageCaused(chara1)));
     }
 
@@ -747,19 +747,19 @@ class CalculatorTest {
         assertTrue(chara1And2HaveOnlyTotteoki());
 
         List<Skill> skills = new ArrayList<>();
-        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.SELF, 5.4));
-        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 6.4));
-        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_ALL, 7.4));
-        skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 19.3));
-        skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 20.3));
-        skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 21.3));
+        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLY_SELF, 5.4));
+        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLY_SINGLE, 6.4));
+        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLY_ALL, 7.4));
+        skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLY_ALL, 19.3));
+        skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLY_ALL, 20.3));
+        skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLY_ALL, 21.3));
 
-        skills.add(new Skill(SkillType.MDF, SkillChange.UP, SkillTarget.SELF, 22.14));
-        skills.add(new Skill(SkillType.MDF, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 23.14));
-        skills.add(new Skill(SkillType.MDF, SkillChange.UP, SkillTarget.ALLIES_ALL, 24.14));
-        skills.add(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.SELF, 2.4));
-        skills.add(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 3.4));
-        skills.add(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 4.4));
+        skills.add(new Skill(SkillType.MDF, SkillChange.UP, SkillTarget.ALLY_SELF, 22.14));
+        skills.add(new Skill(SkillType.MDF, SkillChange.UP, SkillTarget.ALLY_SINGLE, 23.14));
+        skills.add(new Skill(SkillType.MDF, SkillChange.UP, SkillTarget.ALLY_ALL, 24.14));
+        skills.add(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.ALLY_SELF, 2.4));
+        skills.add(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 3.4));
+        skills.add(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.ALLY_ALL, 4.4));
 
         addSkillsToCharas(skills);
         calculateMaxDamage();
@@ -809,11 +809,11 @@ class CalculatorTest {
 
         chara1.setPreferredWeapon(weapon1);
         List<Skill> skills = new ArrayList<>();
-        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.SELF, 30)); // plus 24 from the equipped weapon
-        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.SELF, 67));
+        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLY_SELF, 30)); // plus 24 from the equipped weapon
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ALLY_SELF, 67));
         skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 15));
-        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN, SkillTarget.SELF, 20));
-        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.SELF, 25));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN, SkillTarget.ALLY_SELF, 20));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLY_SELF, 25));
         skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 34.84));
         skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 41.53));
 
@@ -827,15 +827,15 @@ class CalculatorTest {
     @Test
     public void sumBuffsToSelf_sumsSkillPowers_and_convertsTheTotalPercentage_toDecimalCorrectly() {
         // These should be summed:
-        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.SELF, 0), 15.3);
-        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0), 2.22);
-        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_ALL, 0), 43.87);
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLY_SELF, 0), 15.3);
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLY_SINGLE, 0), 2.22);
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLY_ALL, 0), 43.87);
 
         // The should NOT be summed:
-        skillPowerTotals.put(new Skill(SkillType.MDF, SkillChange.UP, SkillTarget.SELF, 0), 12.55); // Wrong type
-        skillPowerTotals.put(new Skill(null, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0), 12.55); // Type is null
-        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0), 12.55); // Wrong change
-        skillPowerTotals.put(new Skill(SkillType.DEF, null, SkillTarget.SELF, 0), 12.55); // Change is null
+        skillPowerTotals.put(new Skill(SkillType.MDF, SkillChange.UP, SkillTarget.ALLY_SELF, 0), 12.55); // Wrong type
+        skillPowerTotals.put(new Skill(null, SkillChange.UP, SkillTarget.ALLY_SINGLE, 0), 12.55); // Type is null
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLY_ALL, 0), 12.55); // Wrong change
+        skillPowerTotals.put(new Skill(SkillType.DEF, null, SkillTarget.ALLY_SELF, 0), 12.55); // Change is null
         skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 0), 12.55); // Wrong target
         skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_ALL, 0), 12.55); // Wrong target
 
@@ -846,15 +846,15 @@ class CalculatorTest {
     @Test
     public void sumDebuffsToSelf_sumsSkillPowers_and_convertsTheTotalPercantage_toDecimalCorrectly() {
         // These should be summed:
-        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.SELF, 0), 4.44);
-        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 0), 61.12);
-        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0), 21.73);
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLY_SELF, 0), 4.44);
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 0), 61.12);
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLY_ALL, 0), 21.73);
 
         // These should NOT be summed:
-        skillPowerTotals.put(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.SELF, 0), 12.55); // Wrong type
-        skillPowerTotals.put(new Skill(null, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 0), 12.55); // Type is null
-        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_ALL, 0), 12.55); // Wrong change
-        skillPowerTotals.put(new Skill(SkillType.DEF, null, SkillTarget.SELF, 0), 12.55); // Change is null
+        skillPowerTotals.put(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.ALLY_SELF, 0), 12.55); // Wrong type
+        skillPowerTotals.put(new Skill(null, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 0), 12.55); // Type is null
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLY_ALL, 0), 12.55); // Wrong change
+        skillPowerTotals.put(new Skill(SkillType.DEF, null, SkillTarget.ALLY_SELF, 0), 12.55); // Change is null
         skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 0), 12.55); // Wrong target
         skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 0), 12.55); // Wrong target
 
@@ -865,15 +865,15 @@ class CalculatorTest {
     @Test
     public void sumOtherEffectsToSelf_sumsSkillPowersCorrectly() {
         // These should be summed:
-        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.SELF, 0), 29.12);
-        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ALLIES_SINGLE, 0), 1.14);
-        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ALLIES_ALL, 0), 47.50);
+        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ALLY_SELF, 0), 29.12);
+        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ALLY_SINGLE, 0), 1.14);
+        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ALLY_ALL, 0), 47.50);
 
         // These should NOT be summed:
-        skillPowerTotals.put(new Skill(SkillType.ISOLATION, null, SkillTarget.SELF, 0), 12.55); // Wrong type
-        skillPowerTotals.put(new Skill(null, null, SkillTarget.ALLIES_SINGLE, 0), 12.55); // Type is null
-        skillPowerTotals.put(new Skill(SkillType.TIMID, SkillChange.UP, SkillTarget.ALLIES_ALL, 0), 12.55); // Wrong change
-        skillPowerTotals.put(new Skill(SkillType.TIMID, SkillChange.DOWN, SkillTarget.SELF, 0), 12.55); // Wrong change
+        skillPowerTotals.put(new Skill(SkillType.ISOLATION, null, SkillTarget.ALLY_SELF, 0), 12.55); // Wrong type
+        skillPowerTotals.put(new Skill(null, null, SkillTarget.ALLY_SINGLE, 0), 12.55); // Type is null
+        skillPowerTotals.put(new Skill(SkillType.TIMID, SkillChange.UP, SkillTarget.ALLY_ALL, 0), 12.55); // Wrong change
+        skillPowerTotals.put(new Skill(SkillType.TIMID, SkillChange.DOWN, SkillTarget.ALLY_SELF, 0), 12.55); // Wrong change
         skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ENEMY_SINGLE, 0), 12.55); // Wrong target
         skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ENEMY_ALL, 0), 12.55); // Wrong target
 
@@ -892,9 +892,9 @@ class CalculatorTest {
         skillPowerTotals.put(new Skill(null, SkillChange.UP, SkillTarget.ENEMY_ALL, 0), 12.55); // Type is null
         skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 0), 12.55); // Wrong change
         skillPowerTotals.put(new Skill(SkillType.DEF, null, SkillTarget.ENEMY_ALL, 0), 12.55); // Change is null
-        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.SELF, 0), 12.55); // Wrong target
-        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0), 12.55); // Wrong target
-        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_ALL, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLY_SELF, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLY_SINGLE, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLY_ALL, 0), 12.55); // Wrong target
 
         // (5.41 + 35.67) / 100 = 0.4108
         assertEquals(0.4108, Calculator.sumBuffsToOpponent(SkillType.DEF, skillPowerTotals));
@@ -911,9 +911,9 @@ class CalculatorTest {
         skillPowerTotals.put(new Skill(null, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 0), 12.55); // Type is null
         skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 0), 12.55); // Wrong change
         skillPowerTotals.put(new Skill(SkillType.DEF, null, SkillTarget.ENEMY_ALL, 0), 12.55); // Change is null
-        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.SELF, 0), 12.55); // Wrong target
-        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 0), 12.55); // Wrong target
-        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLY_SELF, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLY_ALL, 0), 12.55); // Wrong target
 
         // (67.14 + 34.61) / 100 = 1.0175
         assertEquals(1.0175, Calculator.sumDebuffsToOpponent(SkillType.DEF, skillPowerTotals));
@@ -930,9 +930,9 @@ class CalculatorTest {
         skillPowerTotals.put(new Skill(null, null, SkillTarget.ENEMY_ALL, 0), 12.55); // Type is null
         skillPowerTotals.put(new Skill(SkillType.TIMID, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 0), 12.55); // Wrong change
         skillPowerTotals.put(new Skill(SkillType.TIMID, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 0), 12.55); // Wrong change
-        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.SELF, 0), 12.55); // Wrong target
-        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ALLIES_SINGLE, 0), 12.55); // Wrong target
-        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ALLIES_ALL, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ALLY_SELF, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ALLY_SINGLE, 0), 12.55); // Wrong target
+        skillPowerTotals.put(new Skill(SkillType.TIMID, null, SkillTarget.ALLY_ALL, 0), 12.55); // Wrong target
 
         // 33.33 + 66.66 + = 99.99
         assertEquals(99.99, Calculator.sumOtherEffectsToOpponent(SkillType.TIMID, skillPowerTotals));
@@ -950,10 +950,10 @@ class CalculatorTest {
         skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 34.95));
 
         // Filler skills which should NOT be counted
-        skills.add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLIES_ALL, 31.51));
+        skills.add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLY_ALL, 31.51));
         skills.add(new Skill(SkillType.DAMAGE, null, SkillTarget.ENEMY_SINGLE, 6.75));
-        skills.add(new Skill(SkillType.DAMAGE, null, SkillTarget.SELF, 61.5));
-        skills.add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLIES_SINGLE, 78.51));
+        skills.add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLY_SELF, 61.5));
+        skills.add(new Skill(SkillType.DAMAGE, null, SkillTarget.ALLY_SINGLE, 78.51));
         skills.add(new Skill(SkillType.DAMAGE, SkillChange.UP, SkillTarget.ENEMY_ALL, 99.2));
         skills.add(new Skill(SkillType.DAMAGE, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 5.87));
         skills.add(new Skill(SkillType.BARRIER_FULL, null, SkillTarget.ENEMY_ALL, 23.2));
@@ -1032,10 +1032,10 @@ class CalculatorTest {
         assertTrue(chara3HasNoSkills());
 
         List<Skill> skills = new ArrayList<>();
-        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.SELF, 24.75));
-        skills.add(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 39.47));
-        skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ALLIES_ALL, 66.94));
-        skills.add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.SELF, 26.72));
+        skills.add(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLY_SELF, 24.75));
+        skills.add(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 39.47));
+        skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ALLY_ALL, 66.94));
+        skills.add(new Skill(SkillType.MAT, SkillChange.DOWN, SkillTarget.ALLY_SELF, 26.72));
 
         addSkillsToCharas(skills);
         calculateDamageTaken();;
@@ -1052,12 +1052,12 @@ class CalculatorTest {
         List<Skill> skills = new ArrayList<>();
         skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 25));
         skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 25));
-        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.SELF, 25));
-        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 25));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ALLY_SELF, 25));
+        skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.DOWN, SkillTarget.ALLY_ALL, 25));
         skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.UP, SkillTarget.ENEMY_ALL, 25));
         skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 25));
-        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 25));
-        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.SELF, 25));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.UP, SkillTarget.ALLY_SINGLE, 25));
+        skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.ALLY_SELF, 25));
 
         addSkillsToCharas(skills);
         calculateDamageTaken();
@@ -1074,15 +1074,15 @@ class CalculatorTest {
         assertTrue(chara3HasNoSkills());
 
         List<Skill> skills = new ArrayList<>();
-        skills.add(new Skill(SkillType.MOON_RESIST, SkillChange.UP, SkillTarget.SELF, 15.91));
-        skills.add(new Skill(SkillType.MOON_RESIST, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 2.13));
-        skills.add(new Skill(SkillType.FIRE_RESIST, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 8.84));
-        skills.add(new Skill(SkillType.WIND_RESIST, SkillChange.UP, SkillTarget.SELF, 4.98));
-        skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 30.69));
-        skills.add(new Skill(SkillType.WATER_RESIST, SkillChange.UP, SkillTarget.ALLIES_ALL, 26.91));
-        skills.add(new Skill(SkillType.SUN_RESIST, SkillChange.DOWN, SkillTarget.SELF, 23.19));
-        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 18.84));
-        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 4.93));
+        skills.add(new Skill(SkillType.MOON_RESIST, SkillChange.UP, SkillTarget.ALLY_SELF, 15.91));
+        skills.add(new Skill(SkillType.MOON_RESIST, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 2.13));
+        skills.add(new Skill(SkillType.FIRE_RESIST, SkillChange.DOWN, SkillTarget.ALLY_ALL, 8.84));
+        skills.add(new Skill(SkillType.WIND_RESIST, SkillChange.UP, SkillTarget.ALLY_SELF, 4.98));
+        skills.add(new Skill(SkillType.EARTH_RESIST, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 30.69));
+        skills.add(new Skill(SkillType.WATER_RESIST, SkillChange.UP, SkillTarget.ALLY_ALL, 26.91));
+        skills.add(new Skill(SkillType.SUN_RESIST, SkillChange.DOWN, SkillTarget.ALLY_SELF, 23.19));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ALLY_SINGLE, 18.84));
+        skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.DOWN, SkillTarget.ALLY_ALL, 4.93));
 
         skills.add(new Skill(SkillType.MOON_RESIST, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 15.91));
         skills.add(new Skill(SkillType.MOON_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 2.13));
@@ -1112,8 +1112,8 @@ class CalculatorTest {
         assertTrue(chara3HasNoSkills());
 
         List<Skill> skills = new ArrayList<>();
-        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.SELF, 30));
-        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 20));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ALLY_SELF, 30));
+        skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 20));
         skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 30));
         skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 20));
 
@@ -1162,10 +1162,10 @@ class CalculatorTest {
         assertTrue(chara3HasNoSkills());
 
         List<Skill> skills = new ArrayList<>();
-        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.SELF, 14.75));
-        skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 66.81));
-        skills.add(new Skill(SkillType.MDF, SkillChange.UP, SkillTarget.ALLIES_ALL, 98.64));
-        skills.add(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.SELF, 84.54));
+        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLY_SELF, 14.75));
+        skills.add(new Skill(SkillType.DEF, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 66.81));
+        skills.add(new Skill(SkillType.MDF, SkillChange.UP, SkillTarget.ALLY_ALL, 98.64));
+        skills.add(new Skill(SkillType.MDF, SkillChange.DOWN, SkillTarget.ALLY_SELF, 84.54));
         // DEF = -52.06, MDF = 14.10
 
         addSkillsToCharas(skills);
@@ -1205,11 +1205,11 @@ class CalculatorTest {
         skills.add(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ENEMY_ALL, 90.43));
         skills.add(new Skill(SkillType.NEXT_ATK, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 50)); // should not affect the result
         skills.add(new Skill(SkillType.NEXT_MAT, SkillChange.DOWN, SkillTarget.ENEMY_ALL, 50)); // should not affect the result
-        skills.add(new Skill(SkillType.MOON_RESIST, SkillChange.UP, SkillTarget.SELF, 50)); // should not affect the result
+        skills.add(new Skill(SkillType.MOON_RESIST, SkillChange.UP, SkillTarget.ALLY_SELF, 50)); // should not affect the result
         skills.add(new Skill(SkillType.WEAK_ELEMENT_BONUS, SkillChange.UP, SkillTarget.ENEMY_SINGLE, 50)); // should not affect the result
         skills.add(new Skill(SkillType.CRIT_DAMAGE, SkillChange.UP, SkillTarget.ENEMY_ALL, 50)); // should not affect the result
-        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 44.53));
-        skills.add(new Skill(SkillType.MDF, SkillChange.UP, SkillTarget.ALLIES_ALL, 20.16));
+        skills.add(new Skill(SkillType.DEF, SkillChange.UP, SkillTarget.ALLY_SINGLE, 44.53));
+        skills.add(new Skill(SkillType.MDF, SkillChange.UP, SkillTarget.ALLY_ALL, 20.16));
         chara3.setPreferredWeapon(weapon2); // total attack down = 36.17
 
         addSkillsToCharas(skills);

@@ -62,13 +62,13 @@ public final class Calculator {
     }
 
     public static double sumBuffsToSelf(SkillType type, Map<Skill, Double> skillTotalPowers) {
-        Double selfBuffs = skillTotalPowers.get(new Skill(type, SkillChange.UP, SkillTarget.SELF, 0));
+        Double selfBuffs = skillTotalPowers.get(new Skill(type, SkillChange.UP, SkillTarget.ALLY_SELF, 0));
         selfBuffs = selfBuffs == null ? 0 : selfBuffs;
 
-        Double singleTargetBuffs = skillTotalPowers.get(new Skill(type, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0));
+        Double singleTargetBuffs = skillTotalPowers.get(new Skill(type, SkillChange.UP, SkillTarget.ALLY_SINGLE, 0));
         singleTargetBuffs = singleTargetBuffs == null ? 0 : singleTargetBuffs;
 
-        Double allyWideBuffs = skillTotalPowers.get(new Skill(type, SkillChange.UP, SkillTarget.ALLIES_ALL, 0));
+        Double allyWideBuffs = skillTotalPowers.get(new Skill(type, SkillChange.UP, SkillTarget.ALLY_ALL, 0));
         allyWideBuffs = allyWideBuffs == null ? 0 : allyWideBuffs;
 
         // ALLIES_SINGLE can be targeted to self, and ALLIES_ALL also affect self
@@ -76,13 +76,13 @@ public final class Calculator {
     }
 
     public static double sumDebuffsToSelf(SkillType type, Map<Skill, Double> skillTotalPowers) {
-        Double selfDebuffs = skillTotalPowers.get(new Skill(type, SkillChange.DOWN, SkillTarget.SELF, 0));
+        Double selfDebuffs = skillTotalPowers.get(new Skill(type, SkillChange.DOWN, SkillTarget.ALLY_SELF, 0));
         selfDebuffs = selfDebuffs == null ? 0 : selfDebuffs;
 
-        Double singleTargetDebuffs = skillTotalPowers.get(new Skill(type, SkillChange.DOWN, SkillTarget.ALLIES_SINGLE, 0));
+        Double singleTargetDebuffs = skillTotalPowers.get(new Skill(type, SkillChange.DOWN, SkillTarget.ALLY_SINGLE, 0));
         singleTargetDebuffs = singleTargetDebuffs == null ? 0 : singleTargetDebuffs;
 
-        Double allyWideDebuffs = skillTotalPowers.get(new Skill(type, SkillChange.DOWN, SkillTarget.ALLIES_ALL, 0));
+        Double allyWideDebuffs = skillTotalPowers.get(new Skill(type, SkillChange.DOWN, SkillTarget.ALLY_ALL, 0));
         allyWideDebuffs = allyWideDebuffs == null ? 0 : allyWideDebuffs;
 
         // ALLIES_SINGLE can be targeted to self, and ALLIES_ALL also affect self
@@ -90,13 +90,13 @@ public final class Calculator {
     }
 
     public static double sumOtherEffectsToSelf(SkillType type, Map<Skill, Double> skillTotalPowers) {
-        Double selfStatusEffects = skillTotalPowers.get(new Skill(type, null, SkillTarget.SELF, 0));
+        Double selfStatusEffects = skillTotalPowers.get(new Skill(type, null, SkillTarget.ALLY_SELF, 0));
         selfStatusEffects = selfStatusEffects == null ? 0 : selfStatusEffects;
 
-        Double singleTargetStatusEffects = skillTotalPowers.get(new Skill(type, null, SkillTarget.ALLIES_SINGLE, 0));
+        Double singleTargetStatusEffects = skillTotalPowers.get(new Skill(type, null, SkillTarget.ALLY_SINGLE, 0));
         singleTargetStatusEffects = singleTargetStatusEffects == null ? 0 : singleTargetStatusEffects;
 
-        Double allyWideStatusEffects = skillTotalPowers.get(new Skill(type, null, SkillTarget.ALLIES_ALL, 0));
+        Double allyWideStatusEffects = skillTotalPowers.get(new Skill(type, null, SkillTarget.ALLY_ALL, 0));
         allyWideStatusEffects = allyWideStatusEffects == null ? 0 : allyWideStatusEffects;
 
         // Other effect powers don't need to be converted to decimals because they are not used in the damage calculation function
@@ -161,6 +161,10 @@ public final class Calculator {
     }
 
     public static long calculateMaxDamageCaused(GameCharacter chara) {
+        /*
+        * The function should only be used for mages and warriors since I do not plan on adding offensive stats for any
+        * other class (plus it does not make sense to use other classes for high burst damage)
+        */
         CharacterClass charaClass = chara.getCharacterClass();
 
         if (!(charaClass == CharacterClass.MAGE || charaClass == CharacterClass.WARRIOR)) {
@@ -174,7 +178,8 @@ public final class Calculator {
                 .magicDefenseIs(200)
                 .build();
 
-        // Calculator assumes that the enemy has a weak element against chara and that the damage is a critical hit
+        // Calculator assumes that the enemy has a weak element against chara, has a base DEF/MDF stat of 200
+        // and that the damage is a critical hit
         return calculateDamage(chara, enemy, getTotteokiPower(chara), true, false);
     }
 
@@ -198,8 +203,8 @@ public final class Calculator {
 
     public static long calculateDamageTaken(GameCharacter chara, SkillType typeOfDefense) {
         /*
-            This function should only be used for Knights because there is no point in storing defensive stat values for
-            other classes (for the purpose of this application)
+            This function should only be used for Knights because I'm not going to store defense stat values for other
+            classes (since it does not make any sense to other classes for tanking damage)
          */
         if ((typeOfDefense != SkillType.DEF && typeOfDefense != SkillType.MDF) || chara.getCharacterClass() != CharacterClass.KNIGHT) {
             return 0;
@@ -345,13 +350,13 @@ public final class Calculator {
 
     private static double getStrongestBuff(SkillType type, Map<Skill, Double> skillTotalAmounts) {
         // Used to determine the strongest next ATK/MAT buff, since unlike other buffs they do not stack and instead overwrite
-        Double selfBuffs = skillTotalAmounts.get(new Skill(type, SkillChange.UP, SkillTarget.SELF, 0));
+        Double selfBuffs = skillTotalAmounts.get(new Skill(type, SkillChange.UP, SkillTarget.ALLY_SELF, 0));
         selfBuffs = selfBuffs == null ? 0 : selfBuffs;
 
-        Double singleTargetBuffs = skillTotalAmounts.get(new Skill(type, SkillChange.UP, SkillTarget.ALLIES_SINGLE, 0));
+        Double singleTargetBuffs = skillTotalAmounts.get(new Skill(type, SkillChange.UP, SkillTarget.ALLY_SINGLE, 0));
         singleTargetBuffs = singleTargetBuffs == null ? 0 : singleTargetBuffs;
 
-        Double allyWideBuffs = skillTotalAmounts.get(new Skill(type, SkillChange.UP, SkillTarget.ALLIES_ALL, 0));
+        Double allyWideBuffs = skillTotalAmounts.get(new Skill(type, SkillChange.UP, SkillTarget.ALLY_ALL, 0));
         allyWideBuffs = allyWideBuffs == null ? 0 : allyWideBuffs;
 
         // Buffs and debuffs are stored as percentages, and need to be converted to decimal numbers for calculation
