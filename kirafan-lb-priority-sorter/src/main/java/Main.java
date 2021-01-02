@@ -1,31 +1,26 @@
-import domain.*;
+import domain.CreaStatus;
 import domain.model.Series;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import logic.Database;
 
-public class Main {
+public class Main extends Application {
+    @Override
+    public void start(Stage window) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("layout.fxml"));
+        window.setTitle("Hello world");
+        window.setScene(new Scene(root, 300, 275));
+        window.show();
+    }
+
     public static void main(String[] args) {
-//        SeriesDatabase seriesDatabase = new SeriesDatabase("src/main/resources");
-//        Database characterDatabase = new CharacterDatabase("src/main/resources");
-//
-
-//        Character character = new Character.Builder("Naru",series, CharacterElement.SUN, CharacterClass.PRIEST)
-//                .withSkill(new Skill(SkillType.MAT, SkillChange.UP, SkillTarget.ALLIES_ALL, 36.6))
-//                .withWeapon()
-//                .limitBroken()
-//                .withPersonalPreference(9)
-//                .build();
-//
+//        Database<Series> seriesDatabase = new Database("kirafan-lb-priority-sorter/src/main/resources", "domain.model", "series");
+//        Series series = new Series("Hanayamata","ハナヤマタ", CreaStatus.INCOMPLETE);
+//        seriesDatabase.createCollection();
 //        seriesDatabase.insert(series);
-//        characterDatabase.insert(character);
-//
-//        Series fetchedSeries = seriesDatabase.get
-//
-//
-//        database.insertSeries(series);
-
-        Database seriesDatabase = new Database("kirafan-lb-priority-sorter/src/main/resources", "domain.model", "series");
-        Series series = new Series("Hanayamata","ハナヤマタ", CreaStatus.INCOMPLETE);
-        seriesDatabase.createCollection();
-        seriesDatabase.insert(series);
+        launch(args);
     }
 }
