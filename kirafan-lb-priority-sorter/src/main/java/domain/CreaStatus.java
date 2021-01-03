@@ -2,7 +2,7 @@ package domain;
 
 public enum CreaStatus {
     COMPLETE("Complete", "完成"),
-    INCOMPLETE("Incomplete", "未完全"),
+    INCOMPLETE("Incomplete", "未完成"),
     NONE("None", "無し");
 
     private final String nameEN;

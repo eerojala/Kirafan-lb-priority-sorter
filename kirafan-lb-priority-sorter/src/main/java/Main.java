@@ -10,7 +10,7 @@ import logic.Database;
 public class Main extends Application {
     @Override
     public void start(Stage window) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("layout.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/layout.fxml"));
         window.setTitle("Hello world");
         window.setScene(new Scene(root, 300, 275));
         window.show();

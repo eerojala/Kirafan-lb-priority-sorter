@@ -55,9 +55,9 @@ public class Database<T> {
         }
     }
 
-    public boolean insert(T type) {
+    public boolean insert(T t) {
         try {
-            database.insert(type);
+            database.insert(t);
 
             return true;
         } catch (Exception e) {
