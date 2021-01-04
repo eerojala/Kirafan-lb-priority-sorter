@@ -30,6 +30,14 @@ public class SeriesWindowController implements Initializable {
 
     private Database<Series> seriesDatabase;
 
+    public Database<Series> getSeriesDatabase() {
+        return seriesDatabase;
+    }
+
+    public void setSeriesDatabase(Database<Series> seriesDatabase) {
+        this.seriesDatabase = seriesDatabase;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ObservableList<CreaStatus> list = FXCollections.observableArrayList(CreaStatus.COMPLETE, CreaStatus.INCOMPLETE, CreaStatus.NONE);
@@ -64,11 +72,4 @@ public class SeriesWindowController implements Initializable {
         seriesDatabase.insert(series);
     }
 
-    public Database<Series> getSeriesDatabase() {
-        return seriesDatabase;
-    }
-
-    public void setSeriesDatabase(Database<Series> seriesDatabase) {
-        this.seriesDatabase = seriesDatabase;
-    }
 }

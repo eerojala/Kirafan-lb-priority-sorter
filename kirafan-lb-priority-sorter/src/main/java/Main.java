@@ -6,13 +6,22 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import logic.Database;
+import logic.controllers.MainWindowController;
 
 public class Main extends Application {
     @Override
     public void start(Stage window) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/layout.fxml"));
-        window.setTitle("Hello world");
-        window.setScene(new Scene(root, 300, 275));
+        Database<Series> seriesDatabase = new Database<>("kirafan-lb-priority-sorter/src/main/resources/json",
+                "domain.model", "series");
+
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/main.fxml"));
+        MainWindowController controller = new MainWindowController();
+        controller.setSeriesDatabase(seriesDatabase);
+        loader.setController(controller);
+
+        Parent root = (Parent)loader.load();
+        window.setTitle("Kirafan limit break priority sorter");
+        window.setScene(new Scene(root));
         window.show();
     }
 
