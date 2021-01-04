@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
 import logic.Database;
 
 import java.net.URL;

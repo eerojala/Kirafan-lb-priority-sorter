@@ -1,6 +1,8 @@
 package logic.controllers;
 
 import domain.model.Series;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,9 +11,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import logic.Database;
 
 import java.net.URL;
@@ -26,7 +30,7 @@ public class MainWindowController implements Initializable {
     private Button buttonCreateCharacter;
 
     @FXML
-    private ListView<?> listViewSeriesAll;
+    private ListView<Series> listViewSeriesAll;
 
     @FXML
     private Button buttonCreateSeries;
@@ -77,7 +81,25 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initializeAllSeriesList();
+    }
 
+    private void initializeAllSeriesList() {
+        ObservableList<Series> allSeries = FXCollections.observableArrayList(seriesDatabase.findAll());
+        listViewSeriesAll.setItems(allSeries);
+
+        listViewSeriesAll.setCellFactory(param -> new ListCell<Series>() {
+            @Override
+            protected void updateItem(Series item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getNameEN() + ", Crea status: " + item.getCreaStatus().getNameEN());
+                }
+            }
+        });
     }
 
     @FXML
