@@ -13,12 +13,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import logic.Database;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
-
 
 public class MainWindowController implements Initializable {
 
@@ -71,6 +70,7 @@ public class MainWindowController implements Initializable {
     private CheckBox checkBoxFilter;
 
     private Database<Series> seriesDatabase;
+    private ObservableList<Series> seriesAll;
 
     public Database<Series> getSeriesDatabase() {
         return seriesDatabase;
@@ -82,12 +82,12 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initializeAllSeriesList();
+        initializeAllSeriesListView();
     }
 
-    private void initializeAllSeriesList() {
-        ObservableList<Series> allSeries = FXCollections.observableArrayList(seriesDatabase.findAll());
-        listViewSeriesAll.setItems(allSeries);
+    private void initializeAllSeriesListView() {
+        seriesAll = FXCollections.observableArrayList(seriesDatabase.findAll());
+        listViewSeriesAll.setItems(seriesAll);
 
         listViewSeriesAll.setCellFactory(param -> new ListCell<Series>() {
             @Override
@@ -109,6 +109,7 @@ public class MainWindowController implements Initializable {
     }
 
     private void openSeriesWindow(Mode mode) {
+        System.out.println(seriesAll);
         //        Node node = (Node) event.getSource(); // Grab the node representing the button from the event object
         //        Stage stage = (Stage) node.getScene().getWindow(); // Get the instance of the stage from the node
         //        stage.close(); // close the instance
@@ -117,6 +118,7 @@ public class MainWindowController implements Initializable {
             SeriesWindowController controller = new SeriesWindowController();
             controller.setMode(mode);
             controller.setSeriesDatabase(seriesDatabase);
+            controller.setSeriesAll(seriesAll);
             String windowTitle = "";
 
             if (mode == Mode.CREATE) {

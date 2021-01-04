@@ -8,11 +8,15 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import logic.Database;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class SeriesWindowController implements Initializable {
@@ -30,6 +34,7 @@ public class SeriesWindowController implements Initializable {
 
     private Database<Series> seriesDatabase;
     private Mode mode;
+    private ObservableList<Series> seriesAll;
     private Series series;
 
     public Database<Series> getSeriesDatabase() {
@@ -46,6 +51,14 @@ public class SeriesWindowController implements Initializable {
 
     public void setMode(Mode mode) {
         this.mode = mode;
+    }
+
+    public ObservableList<Series> getSeriesAll() {
+        return seriesAll;
+    }
+
+    public void setSeriesAll(ObservableList<Series> seriesAll) {
+        this.seriesAll = seriesAll;
     }
 
     public Series getSeries() {
@@ -104,19 +117,26 @@ public class SeriesWindowController implements Initializable {
         } else if (mode == Mode.EDIT){
             editSeries();
         }
+
+        // Close the series window:
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        stage.close(); // close the instance
     }
 
     private void createSeries() {
         Series newSeries = new Series(fieldNameEN.getText(), fieldNameJP.getText(), cmbBoxCrea.getValue());
         seriesDatabase.createCollection();
         seriesDatabase.insert(newSeries);
+        seriesAll.add(newSeries);
     }
 
     private void editSeries() {
-        // tarkista että jos edittaa fieldNameEN niin luoko kokonaan uuden olion
+        seriesAll.remove(series);
         series.setNameEN(fieldNameEN.getText());
         series.setNameJP(fieldNameJP.getText());
         series.setCreaStatus(cmbBoxCrea.getValue());
         seriesDatabase.update(series);
+        seriesAll.add(series);
     }
 }
