@@ -4,6 +4,7 @@ import domain.CreaStatus;
 import io.jsondb.annotation.Document;
 import io.jsondb.annotation.Id;
 
+import java.util.Date;
 import java.util.Objects;
 
 @Document(collection = "series", schemaVersion = "1.0")
@@ -21,7 +22,9 @@ public class Series {
         this.nameEN = nameEN;
         this.nameJP = nameJP;
         this.creaStatus = creaStatus;
-        this.id = this.nameEN;
+
+        Date date = new Date();
+        this.id = date.toString();
     }
 
     public Series(String nameEn, CreaStatus creaStatus) {

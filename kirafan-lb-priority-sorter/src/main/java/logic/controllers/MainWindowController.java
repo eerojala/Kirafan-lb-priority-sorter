@@ -1,5 +1,6 @@
 package logic.controllers;
 
+import domain.Mode;
 import domain.model.Series;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,10 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -23,6 +21,7 @@ import java.util.ResourceBundle;
 
 
 public class MainWindowController implements Initializable {
+
     @FXML
     private ListView<?> listViewCharactersAll;
 
@@ -31,6 +30,9 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private ListView<Series> listViewSeriesAll;
+
+    @FXML
+    private MenuItem menuItemSeriesEdit;
 
     @FXML
     private Button buttonCreateSeries;
@@ -68,7 +70,6 @@ public class MainWindowController implements Initializable {
     @FXML
     private CheckBox checkBoxFilter;
 
-
     private Database<Series> seriesDatabase;
 
     public Database<Series> getSeriesDatabase() {
@@ -104,23 +105,41 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void handleButtonCreateSeriesPressed(ActionEvent event) {
-//        Node node = (Node) event.getSource(); // Grab the node representing the button from the event object
-//        Stage stage = (Stage) node.getScene().getWindow(); // Get the instance of the stage from the node
-//        stage.close(); // close the instance
+        openSeriesWindow(Mode.CREATE);
+    }
+
+    private void openSeriesWindow(Mode mode) {
+        //        Node node = (Node) event.getSource(); // Grab the node representing the button from the event object
+        //        Stage stage = (Stage) node.getScene().getWindow(); // Get the instance of the stage from the node
+        //        stage.close(); // close the instance
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/series.fxml"));
             SeriesWindowController controller = new SeriesWindowController();
+            controller.setMode(mode);
             controller.setSeriesDatabase(seriesDatabase);
+            String windowTitle = "";
+
+            if (mode == Mode.CREATE) {
+               windowTitle = "Add a new series";
+            } else if (mode == Mode.EDIT) {
+                controller.setSeries(listViewSeriesAll.getSelectionModel().getSelectedItem());
+                windowTitle = "Edit a series";
+            }
+
             loader.setController(controller);
 
             Parent root = (Parent) loader.load();
             Stage stage = new Stage();
-            stage.setTitle("Add a new series");
+            stage.setTitle(windowTitle);
             stage.setScene(new Scene(root));
             stage.show();
-            //  ((Node)(event.getSource())).getScene().getWindow().hide(); // hides the current window
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    @FXML
+    public void handleMenuItemSeriesEditClicked(ActionEvent event) {
+        openSeriesWindow(Mode.EDIT);
     }
 }
