@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="224.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ComboBox fx:id="cmbBoxType" layoutX="126.0" layoutY="20.0" onAction="#handleTypeComboBox" prefWidth="150.0" AnchorPane.rightAnchor="24.0" />
+      <Label layoutX="24.0" layoutY="24.0" text="Skill type" AnchorPane.leftAnchor="24.0" />
+      <ComboBox fx:id="cmbBoxChange" layoutX="126.0" layoutY="61.0" onAction="#handleChangeComboBox" prefWidth="150.0" AnchorPane.rightAnchor="24.0" />
+      <Label layoutX="24.0" layoutY="65.0" text="Change" />
+      <ComboBox fx:id="cmbBoxTarget" layoutX="126.0" layoutY="101.0" onAction="#handleTargetComboBox" prefWidth="150.0" />
+      <Label layoutX="24.0" layoutY="105.0" text="Target" />
+      <TextField fx:id="textFieldPower" layoutX="126.0" layoutY="140.0" prefHeight="25.0" prefWidth="150.0" />
+      <Label layoutX="24.0" layoutY="144.0" text="Power" />
+      <Button fx:id="buttonSubmit" layoutX="123.0" layoutY="188.0" mnemonicParsing="false" onAction="#handleSubmitButtonPressed" text="Submit" />
+   </children>
+</AnchorPane>
