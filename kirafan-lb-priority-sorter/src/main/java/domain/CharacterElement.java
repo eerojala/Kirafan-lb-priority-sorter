@@ -53,4 +53,9 @@ public enum CharacterElement {
                  return MOON;
         }
     }
+
+    @Override
+    public String toString() {
+        return nameEN;
+    }
 }

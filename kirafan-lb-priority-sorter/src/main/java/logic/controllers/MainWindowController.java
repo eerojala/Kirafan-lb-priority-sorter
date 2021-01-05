@@ -1,28 +1,25 @@
 package logic.controllers;
 
 import domain.Mode;
+import domain.model.GameCharacter;
 import domain.model.Series;
+import domain.model.Weapon;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import logic.Database;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
-public class MainWindowController implements Initializable {
+public class MainWindowController implements Controller, Initializable {
 
     @FXML
-    private ListView<?> listViewCharactersAll;
+    private ListView<GameCharacter> listViewCharactersAll;
 
     @FXML
     private Button buttonCreateCharacter;
@@ -72,8 +69,20 @@ public class MainWindowController implements Initializable {
     @FXML
     private CheckBox checkBoxFilter;
 
+    private Database<GameCharacter> characterDatabase;
     private Database<Series> seriesDatabase;
+    private Database<Weapon> weaponDatabase;
+    private ObservableList<GameCharacter> charactersAll;
     private ObservableList<Series> seriesAll;
+    private ObservableList<Weapon> weaponsAll;
+
+    public Database<GameCharacter> getCharacterDatabase() {
+        return characterDatabase;
+    }
+
+    public void setCharacterDatabase(Database<GameCharacter> characterDatabase) {
+        this.characterDatabase = characterDatabase;
+    }
 
     public Database<Series> getSeriesDatabase() {
         return seriesDatabase;
@@ -83,30 +92,69 @@ public class MainWindowController implements Initializable {
         this.seriesDatabase = seriesDatabase;
     }
 
+    public Database<Weapon> getWeaponDatabase() {
+        return weaponDatabase;
+    }
+
+    public void setWeaponDatabase(Database<Weapon> weaponDatabase) {
+        this.weaponDatabase = weaponDatabase;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initializeObservableLists();
         initializeAllSeriesListView();
     }
 
-    private void initializeAllSeriesListView() {
+    private void initializeObservableLists() {
         seriesAll = FXCollections.observableArrayList(seriesDatabase.findAll());
+        // TODO: initialize other lists
+    }
+
+    private void initializeAllSeriesListView() {
+
         listViewSeriesAll.setItems(seriesAll);
 
-        listViewSeriesAll.setCellFactory(param -> new ListCell<Series>() {
-            @Override
-            protected void updateItem(Series item, boolean empty) {
-                super.updateItem(item, empty);
+//        listViewSeriesAll.setCellFactory(param -> new ListCell<Series>() {
+//            @Override
+//            protected void updateItem(Series item, boolean empty) {
+//                super.updateItem(item, empty);
+//
+//                if (empty || item == null) {
+//                    setText(null);
+//                } else {
+//                    String name = item.getName() != null ? item.getName() : "NULL";
+//                    String creaStatus = item.getCreaStatus() != null ? item.getCreaStatus().getNameEN() : "NULL";
+//
+//                    setText(name+ ", Crea status: " + creaStatus);
+//                }
+//            }
+//        });
+    }
 
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    String name = item.getNameEN() != null ? item.getNameEN() : "NULL";
-                    String creaStatus = item.getCreaStatus() != null ? item.getCreaStatus().getNameEN() : "NULL";
+    @FXML
+    public void handleCreateCharacterButtonPressed(ActionEvent event) {
+        openCharacterWindow(Mode.CREATE);
+    }
 
-                    setText(name+ ", Crea status: " + creaStatus);
-                }
-            }
-        });
+    private void openCharacterWindow(Mode mode) {
+        URL url = getClass().getClassLoader().getResource("fxml/character.fxml");
+        CharacterWindowController controller = new CharacterWindowController();
+        controller.setMode(mode);
+        controller.setCharacterDatabase(characterDatabase);
+        controller.setCharactersAll(charactersAll);
+        controller.setSeriesAll(seriesAll);
+        controller.setWeaponsAll(weaponsAll);
+        String windowTitle = "";
+
+        if (mode == Mode.CREATE) {
+            windowTitle = "Create a new character";
+        } else if (mode == Mode.EDIT) {
+            windowTitle = "Edit a character";
+            controller.setCharacter(listViewCharactersAll.getSelectionModel().getSelectedItem());
+        }
+
+        Controller.openWindow(url, controller, windowTitle);
     }
 
     @FXML
@@ -115,38 +163,25 @@ public class MainWindowController implements Initializable {
     }
 
     private void openSeriesWindow(Mode mode) {
-        //        Node node = (Node) event.getSource(); // Grab the node representing the button from the event object
-        //        Stage stage = (Stage) node.getScene().getWindow(); // Get the instance of the stage from the node
-        //        stage.close(); // close the instance
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/series.fxml"));
-            SeriesWindowController controller = new SeriesWindowController();
-            controller.setMode(mode);
-            controller.setSeriesDatabase(seriesDatabase);
-            controller.setSeriesAll(seriesAll);
-            String windowTitle = "";
+        URL url = getClass().getClassLoader().getResource("fxml/series.fxml");
+        SeriesWindowController controller = new SeriesWindowController();
+        controller.setMode(mode);
+        controller.setSeriesDatabase(seriesDatabase);
+        controller.setSeriesAll(seriesAll);
+        String windowTitle = "";
 
-            if (mode == Mode.CREATE) {
-               windowTitle = "Add a new series";
-            } else if (mode == Mode.EDIT) {
-                controller.setSeries(listViewSeriesAll.getSelectionModel().getSelectedItem());
-                windowTitle = "Edit a series";
-            }
-
-            loader.setController(controller);
-
-            Parent root = (Parent) loader.load();
-            Stage stage = new Stage();
-            stage.setTitle(windowTitle);
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        if (mode == Mode.CREATE) {
+            windowTitle = "Create a new series";
+        } else if (mode == Mode.EDIT) {
+            windowTitle = "Edit a series";
+            controller.setSeries(listViewSeriesAll.getSelectionModel().getSelectedItem());
         }
+
+        Controller.openWindow(url, controller, windowTitle);
     }
 
     @FXML
-    void handleMenuItemSeriesDeleteClicked(ActionEvent event) {
+    public void handleMenuItemSeriesDeleteClicked(ActionEvent event) {
         Series series = listViewSeriesAll.getSelectionModel().getSelectedItem();
         if (seriesDatabase.remove(series)) {
             seriesAll.remove(series);

@@ -25,8 +25,6 @@ public enum SkillType {
     NEXT_MAT("Next magical attack up", "次回の魔法攻撃"), // Affect damage for the next magical attack
     WEAK_ELEMENT_BONUS("Weak element bonus", "有利属性ボーナス"), // Increases damage done against an opponent with a element which is weak to the damage dealers element
 
-
-
     // *** END SKILL TYPES FOR BUFFS/DEBUFFS //
 
     // *** BEGIN SKILL TYPES FOR OTHER EFFECTS //
@@ -41,14 +39,17 @@ public enum SkillType {
     SLEEP("Sleep", "眠り"), // Causes the target to skip their turn until they take damage
     TIMID("Timid", "弱気"), // Causes all damage dealt to the target to be critical hits
 
+    // Skill types which cause damage
+    DAMAGE("Damage", "ダメージ"), // Deal physical or magical damage
+    TOTTEOKI("Totteoki", "とっておき"), // A special attack, totteoki means along the lines of  "ace in the hole" in english
+
     // Skill types for misc. effects
-    ABNORMAL_DISABLE("Disble abnormals", "状態異常無効"), // Gives character immunity from status effects
+    ABNORMAL_DISABLE("Disable abnormals", "状態異常無効"), // Gives character immunity from status effects
     ABNORMAL_RECOVER("Clear abnormals", "状態異常解除"), // Clears all abnormal effects from character
     BARRIER_FULL("Full barrier", "フルバリア"), // Blocks all of the received damage from the next attack
     BARRIER_FULL_TRIPLE("Full triple barrier", "三重フルバリア"), // Blocks all of the received damage from the 3 next attacks
-    DAMAGE("Damage", "ダメージ"), // Deal physical or magical damage
-    HEAL_CARD("Heal card", "回復カード"), // Places cards on the combat timeline which heal the party when activated
-    TOTTEOKI("Totteoki", "とっておき"); // A special attack, totteoki means along the lines of  "ace in the hole" in english
+    HEAL_CARD("Heal card", "回復カード"); // Places cards on the combat timeline which heal the party when activated
+
 
     // *** END SKILLTYPES FOR OTHER EFFECTS **
 
@@ -97,13 +98,12 @@ public enum SkillType {
         return isStat(skillType) || isElementalResist(skillType) || isOtherMultiplier(skillType);
     }
 
-    public static boolean isAbnormalOrMiscEffect(SkillType skillType) {
-        return isAbnormalEffect(skillType) || isMiscEffect(skillType);
+    public static boolean isOtherEffect(SkillType skillType) {
+        return isAbnormalEffect(skillType) || isDamageEffect(skillType) || isMiscEffect(skillType);
     }
 
     public static boolean isStat(SkillType skillType) {
-        return skillType == SkillType.ATK || skillType == SkillType.MAT || skillType == DEF || skillType == MDF
-                || skillType == LUK || skillType == SPD;
+        return skillType == ATK || skillType == MAT || skillType == DEF || skillType == MDF || skillType == LUK || skillType == SPD;
     }
 
     public static boolean isOtherMultiplier(SkillType skillType) {
@@ -111,19 +111,26 @@ public enum SkillType {
     }
 
     public static boolean isElementalResist(SkillType skilltype) {
-        return skilltype == SkillType.FIRE_RESIST || skilltype == SkillType.WIND_RESIST || skilltype == SkillType.EARTH_RESIST
-                || skilltype == SkillType.WATER_RESIST || skilltype == SkillType.MOON_RESIST || skilltype == SkillType.SUN_RESIST;
+        return skilltype == FIRE_RESIST || skilltype == WIND_RESIST || skilltype == EARTH_RESIST
+                || skilltype == WATER_RESIST || skilltype == MOON_RESIST || skilltype == SUN_RESIST;
     }
 
     public static boolean isAbnormalEffect(SkillType skilltype) {
-        return skilltype == SkillType.CONFUSION || skilltype == SkillType.ISOLATION || skilltype == SkillType.HUNGER
-                || skilltype == SkillType.MISFORTUNE || skilltype == SkillType.PARALYSIS || skilltype == SkillType.SILENCE
-                || skilltype == SkillType.SLEEP || skilltype == SkillType.TIMID;
+        return skilltype == CONFUSION || skilltype == ISOLATION || skilltype == HUNGER || skilltype == MISFORTUNE
+                || skilltype == PARALYSIS || skilltype == SILENCE || skilltype == SLEEP || skilltype == TIMID;
+    }
+
+    public static boolean isDamageEffect(SkillType skillType) {
+        return skillType == DAMAGE || skillType == TOTTEOKI;
     }
 
     public static boolean isMiscEffect(SkillType skillType) {
         return skillType == ABNORMAL_DISABLE || skillType == ABNORMAL_RECOVER || skillType == BARRIER_FULL
-                || skillType == BARRIER_FULL_TRIPLE || skillType == DAMAGE || skillType == HEAL_CARD || skillType == TOTTEOKI;
+                || skillType == BARRIER_FULL_TRIPLE || skillType == HEAL_CARD;
+    }
 
+    @Override
+    public String toString() {
+        return nameEN;
     }
 }

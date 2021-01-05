@@ -139,4 +139,9 @@ public class Weapon {
     public void setExclusiveCharacter(GameCharacter exclusiveCharacter) {
         this.exclusiveCharacter = exclusiveCharacter;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

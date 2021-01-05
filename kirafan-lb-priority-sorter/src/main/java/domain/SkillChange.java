@@ -19,4 +19,9 @@ public enum SkillChange {
     public String getNameJP() {
         return nameJP;
     }
+
+    @Override
+    public String toString() {
+        return nameEN;
+    }
 }

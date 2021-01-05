@@ -2,8 +2,6 @@ package domain;
 
 import java.util.Objects;
 
-
-
 public class Skill {
     private SkillType type;
     private SkillChange change;
@@ -12,7 +10,6 @@ public class Skill {
 
     // Jackson requires a public constructor with no parameters
     public Skill() {}
-
     /*
      * Skills that have their skilltype as buffs/debuffs should have all parameters as non-null
      * Skills that have their skilltype as other effects should have all parameters as non-null except change
@@ -73,5 +70,23 @@ public class Skill {
     @Override
     public int hashCode() {
         return Objects.hash(getType(), getChange(), getTarget());
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder(type.toString());
+        if (change != null) {
+            sb.append(" ").append(change);
+        }
+
+        if (target != null) {
+            sb.append(" ").append(target);
+        }
+
+        if (!SkillType.isMiscEffect(type)) {
+            sb.append(" ").append(power);
+        }
+
+        return sb.toString();
     }
 }

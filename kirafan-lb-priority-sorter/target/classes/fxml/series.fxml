@@ -6,14 +6,12 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="199.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="146.0" prefWidth="260.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="buttonSubmit" layoutX="112.0" layoutY="158.0" mnemonicParsing="false" onAction="#handleSubmitButtonPressed" prefHeight="26.0" prefWidth="70.0" text="Submit" AnchorPane.bottomAnchor="14.599999999999994" AnchorPane.leftAnchor="112.0" AnchorPane.rightAnchor="118.0" />
-      <TextField fx:id="fieldNameEN" layoutX="147.0" layoutY="21.0" prefHeight="26.0" prefWidth="135.0" AnchorPane.leftAnchor="147.0" AnchorPane.topAnchor="21.0" />
-      <Label layoutX="26.0" layoutY="26.0" text="Name (in english)" AnchorPane.leftAnchor="26.0" AnchorPane.topAnchor="26.0" />
-      <Label layoutX="26.0" layoutY="61.0" text="Name (in japanese)" AnchorPane.leftAnchor="26.0" AnchorPane.topAnchor="61.0" />
-      <Label layoutX="26.0" layoutY="98.0" text="Crea status" AnchorPane.leftAnchor="26.0" AnchorPane.topAnchor="98.0" />
-      <TextField fx:id="fieldNameJP" layoutX="147.0" layoutY="57.0" prefHeight="26.0" prefWidth="135.0" AnchorPane.leftAnchor="147.0" AnchorPane.topAnchor="57.0" />
-      <ComboBox fx:id="cmbBoxCrea" layoutX="147.0" layoutY="93.0" prefHeight="26.0" prefWidth="135.0" promptText="Select crea status" AnchorPane.leftAnchor="147.0" AnchorPane.topAnchor="93.0" />
+      <Button fx:id="buttonSubmit" layoutX="101.0" layoutY="106.0" mnemonicParsing="false" onAction="#handleSubmitButtonPressed" prefHeight="26.0" prefWidth="59.0" text="Submit" AnchorPane.leftAnchor="101.0" AnchorPane.rightAnchor="100.0" />
+      <TextField fx:id="textFieldName" layoutX="97.0" layoutY="22.0" prefHeight="26.0" prefWidth="138.0" AnchorPane.leftAnchor="98.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="22.0" />
+      <Label layoutX="26.0" layoutY="26.0" text="Name" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="26.0" />
+      <Label layoutX="26.0" layoutY="64.0" text="Crea status" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="64.0" />
+      <ComboBox fx:id="cmbBoxCrea" layoutX="97.0" layoutY="60.0" prefHeight="26.0" prefWidth="138.0" promptText="Select crea status" AnchorPane.leftAnchor="98.0" AnchorPane.rightAnchor="24.0" />
    </children>
 </AnchorPane>

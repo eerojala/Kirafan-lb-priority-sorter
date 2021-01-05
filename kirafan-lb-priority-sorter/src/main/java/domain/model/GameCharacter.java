@@ -32,7 +32,7 @@ public class GameCharacter {
             this.series = series;
             this.characterElement = characterElement;
             this.characterClass = characterClass;
-            id = name + series.getNameEN() +  characterElement.getNameEN() + characterClass.getNameEN();
+            id = name + series.getName() +  characterElement.getNameEN() + characterClass.getNameEN();
             skills = new ArrayList<>();
             preferredWeapon = null;
             limitBroken = false;
@@ -245,5 +245,13 @@ public class GameCharacter {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder(name);
+        sb.append(" (").append(characterElement).append(" ").append(characterClass).append(")");
+
+        return sb.toString();
     }
 }

@@ -1,28 +1,48 @@
 import domain.CreaStatus;
+import domain.model.GameCharacter;
 import domain.model.Series;
+import domain.model.Weapon;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import logic.Database;
+import logic.controllers.Controller;
 import logic.controllers.MainWindowController;
+
+import java.net.URL;
 
 public class Main extends Application {
     @Override
     public void start(Stage window) throws Exception {
-        Database<Series> seriesDatabase = new Database<>("kirafan-lb-priority-sorter/src/main/resources/json",
-                "domain.model", "series");
+        String dbFilesLocation = "kirafan-lb-priority-sorter/src/main/resources/json";
+        String modelPackageName = "domain.model";
 
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/main.fxml"));
+        Database<GameCharacter> characterDatabase = new Database<>(dbFilesLocation, modelPackageName, "characters");
+        Database<Series> seriesDatabase = new Database<>(dbFilesLocation, modelPackageName, "series");
+        Database<Weapon> weaponDatabase = new Database<>(dbFilesLocation, modelPackageName, "weapons");
+
+        characterDatabase.createCollection();
+        seriesDatabase.createCollection();
+        weaponDatabase.createCollection();
+
+        URL url = getClass().getClassLoader().getResource("fxml/main.fxml");
         MainWindowController controller = new MainWindowController();
+        controller.setCharacterDatabase(characterDatabase);
         controller.setSeriesDatabase(seriesDatabase);
-        loader.setController(controller);
+        controller.setWeaponDatabase(weaponDatabase);
+        String windowTitle = "Kirafan limit break priority sorter";
+        Controller.openWindow(url, controller, windowTitle);
 
-        Parent root = (Parent)loader.load();
-        window.setTitle("Kirafan limit break priority sorter");
-        window.setScene(new Scene(root));
-        window.show();
+
+//        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/main.fxml"));
+//        loader.setController(controller);
+//        Controller.openWindow(getClass().getClassLoader().getResource("fxml/main.fxml"), controller, "Kirafan limit");
+//        Parent root = (Parent)loader.load();
+//        window.setTitle("Kirafan limit break priority sorter");
+//        window.setScene(new Scene(root));
+//        window.show();
     }
 
     public static void main(String[] args) {

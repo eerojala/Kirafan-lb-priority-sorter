@@ -44,12 +44,13 @@ class SkillTypeTest {
         assertFalse(SkillType.isStat(SkillType.SLEEP));
         assertFalse(SkillType.isStat(SkillType.TIMID));
 
+        assertFalse(SkillType.isStat(SkillType.DAMAGE));
+        assertFalse(SkillType.isStat(SkillType.HEAL_CARD));
+
         assertFalse(SkillType.isStat(SkillType.ABNORMAL_DISABLE));
         assertFalse(SkillType.isStat(SkillType.ABNORMAL_RECOVER));
         assertFalse(SkillType.isStat(SkillType.BARRIER_FULL));
         assertFalse(SkillType.isStat(SkillType.BARRIER_FULL_TRIPLE));
-        assertFalse(SkillType.isStat(SkillType.DAMAGE));
-        assertFalse(SkillType.isStat(SkillType.HEAL_CARD));
         assertFalse(SkillType.isStat(SkillType.TOTTEOKI));
     }
 
@@ -83,13 +84,14 @@ class SkillTypeTest {
         assertFalse(SkillType.isElementalResist(SkillType.SLEEP));
         assertFalse(SkillType.isElementalResist(SkillType.TIMID));
 
+        assertFalse(SkillType.isElementalResist(SkillType.DAMAGE));
+        assertFalse(SkillType.isElementalResist(SkillType.TOTTEOKI));
+
         assertFalse(SkillType.isElementalResist(SkillType.ABNORMAL_DISABLE));
         assertFalse(SkillType.isElementalResist(SkillType.ABNORMAL_RECOVER));
         assertFalse(SkillType.isElementalResist(SkillType.BARRIER_FULL));
         assertFalse(SkillType.isElementalResist(SkillType.BARRIER_FULL_TRIPLE));
-        assertFalse(SkillType.isElementalResist(SkillType.DAMAGE));
         assertFalse(SkillType.isElementalResist(SkillType.HEAL_CARD));
-        assertFalse(SkillType.isElementalResist(SkillType.TOTTEOKI));
     }
 
     @Test
@@ -122,13 +124,15 @@ class SkillTypeTest {
         assertFalse(SkillType.isOtherMultiplier(SkillType.SLEEP));
         assertFalse(SkillType.isOtherMultiplier(SkillType.TIMID));
 
+        assertFalse(SkillType.isOtherMultiplier(SkillType.DAMAGE));
+        assertFalse(SkillType.isOtherMultiplier(SkillType.TOTTEOKI));
+
         assertFalse(SkillType.isOtherMultiplier(SkillType.ABNORMAL_DISABLE));
         assertFalse(SkillType.isOtherMultiplier(SkillType.ABNORMAL_RECOVER));
         assertFalse(SkillType.isOtherMultiplier(SkillType.BARRIER_FULL));
         assertFalse(SkillType.isOtherMultiplier(SkillType.BARRIER_FULL_TRIPLE));
-        assertFalse(SkillType.isOtherMultiplier(SkillType.DAMAGE));
         assertFalse(SkillType.isOtherMultiplier(SkillType.HEAL_CARD));
-        assertFalse(SkillType.isOtherMultiplier(SkillType.TOTTEOKI));
+
     }
 
     @Test
@@ -161,13 +165,54 @@ class SkillTypeTest {
         assertTrue(SkillType.isAbnormalEffect(SkillType.SLEEP));
         assertTrue(SkillType.isAbnormalEffect(SkillType.TIMID));
 
+        assertFalse(SkillType.isAbnormalEffect(SkillType.DAMAGE));
+        assertFalse(SkillType.isAbnormalEffect(SkillType.TOTTEOKI));
+
         assertFalse(SkillType.isAbnormalEffect(SkillType.ABNORMAL_DISABLE));
         assertFalse(SkillType.isAbnormalEffect(SkillType.ABNORMAL_RECOVER));
         assertFalse(SkillType.isAbnormalEffect(SkillType.BARRIER_FULL));
         assertFalse(SkillType.isAbnormalEffect(SkillType.BARRIER_FULL_TRIPLE));
-        assertFalse(SkillType.isAbnormalEffect(SkillType.DAMAGE));
         assertFalse(SkillType.isAbnormalEffect(SkillType.HEAL_CARD));
-        assertFalse(SkillType.isAbnormalEffect(SkillType.TOTTEOKI));
+    }
+
+    @Test
+    public void isDamageEffect_returnsAppropriateBoolean() {
+        assertFalse(SkillType.isDamageEffect(SkillType.ATK));
+        assertFalse(SkillType.isDamageEffect(SkillType.MAT));
+        assertFalse(SkillType.isDamageEffect(SkillType.DEF));
+        assertFalse(SkillType.isDamageEffect(SkillType.MDF));
+        assertFalse(SkillType.isDamageEffect(SkillType.LUK));
+        assertFalse(SkillType.isDamageEffect(SkillType.SPD));
+
+        assertFalse(SkillType.isDamageEffect(SkillType.CRIT_DAMAGE));
+        assertFalse(SkillType.isDamageEffect(SkillType.NEXT_ATK));
+        assertFalse(SkillType.isDamageEffect(SkillType.NEXT_MAT));
+        assertFalse(SkillType.isDamageEffect(SkillType.WEAK_ELEMENT_BONUS));
+
+        assertFalse(SkillType.isDamageEffect(SkillType.FIRE_RESIST));
+        assertFalse(SkillType.isDamageEffect(SkillType.WIND_RESIST));
+        assertFalse(SkillType.isDamageEffect(SkillType.EARTH_RESIST));
+        assertFalse(SkillType.isDamageEffect(SkillType.WATER_RESIST));
+        assertFalse(SkillType.isDamageEffect(SkillType.MOON_RESIST));
+        assertFalse(SkillType.isDamageEffect(SkillType.SUN_RESIST));
+
+        assertFalse(SkillType.isDamageEffect(SkillType.CONFUSION));
+        assertFalse(SkillType.isDamageEffect(SkillType.ISOLATION));
+        assertFalse(SkillType.isDamageEffect(SkillType.HUNGER));
+        assertFalse(SkillType.isDamageEffect(SkillType.MISFORTUNE));
+        assertFalse(SkillType.isDamageEffect(SkillType.PARALYSIS));
+        assertFalse(SkillType.isDamageEffect(SkillType.SILENCE));
+        assertFalse(SkillType.isDamageEffect(SkillType.SLEEP));
+        assertFalse(SkillType.isDamageEffect(SkillType.TIMID));
+
+        assertTrue(SkillType.isDamageEffect(SkillType.DAMAGE));
+        assertTrue(SkillType.isDamageEffect(SkillType.TOTTEOKI));
+
+        assertFalse(SkillType.isDamageEffect(SkillType.ABNORMAL_DISABLE));
+        assertFalse(SkillType.isDamageEffect(SkillType.ABNORMAL_RECOVER));
+        assertFalse(SkillType.isDamageEffect(SkillType.BARRIER_FULL));
+        assertFalse(SkillType.isDamageEffect(SkillType.BARRIER_FULL_TRIPLE));
+        assertFalse(SkillType.isDamageEffect(SkillType.HEAL_CARD));
     }
 
     @Test
@@ -200,13 +245,15 @@ class SkillTypeTest {
         assertFalse(SkillType.isMiscEffect(SkillType.SLEEP));
         assertFalse(SkillType.isMiscEffect(SkillType.TIMID));
 
+        assertFalse(SkillType.isMiscEffect(SkillType.DAMAGE));
+        assertFalse(SkillType.isMiscEffect(SkillType.TOTTEOKI));
+
         assertTrue(SkillType.isMiscEffect(SkillType.ABNORMAL_DISABLE));
         assertTrue(SkillType.isMiscEffect(SkillType.ABNORMAL_RECOVER));
         assertTrue(SkillType.isMiscEffect(SkillType.BARRIER_FULL));
         assertTrue(SkillType.isMiscEffect(SkillType.BARRIER_FULL_TRIPLE));
-        assertTrue(SkillType.isMiscEffect(SkillType.DAMAGE));
         assertTrue(SkillType.isMiscEffect(SkillType.HEAL_CARD));
-        assertTrue(SkillType.isMiscEffect(SkillType.TOTTEOKI));
+
     }
 
     @Test
@@ -239,53 +286,54 @@ class SkillTypeTest {
         assertFalse(SkillType.isBuffOrDebuff(SkillType.SLEEP));
         assertFalse(SkillType.isBuffOrDebuff(SkillType.TIMID));
 
+        assertFalse(SkillType.isBuffOrDebuff(SkillType.DAMAGE));
+        assertFalse(SkillType.isBuffOrDebuff(SkillType.TOTTEOKI));
+
         assertFalse(SkillType.isBuffOrDebuff(SkillType.ABNORMAL_DISABLE));
         assertFalse(SkillType.isBuffOrDebuff(SkillType.ABNORMAL_RECOVER));
         assertFalse(SkillType.isBuffOrDebuff(SkillType.BARRIER_FULL));
         assertFalse(SkillType.isBuffOrDebuff(SkillType.BARRIER_FULL_TRIPLE));
-        assertFalse(SkillType.isBuffOrDebuff(SkillType.DAMAGE));
         assertFalse(SkillType.isBuffOrDebuff(SkillType.HEAL_CARD));
-        assertFalse(SkillType.isBuffOrDebuff(SkillType.TOTTEOKI));
     }
 
     @Test
-    public void isAbnormalOrMiscEffect_returnsAppropriateBoolean() {
-        assertFalse(SkillType.isAbnormalOrMiscEffect(SkillType.ATK));
-        assertFalse(SkillType.isAbnormalOrMiscEffect(SkillType.MAT));
-        assertFalse(SkillType.isAbnormalOrMiscEffect(SkillType.DEF));
-        assertFalse(SkillType.isAbnormalOrMiscEffect(SkillType.MDF));
-        assertFalse(SkillType.isAbnormalOrMiscEffect(SkillType.LUK));
-        assertFalse(SkillType.isAbnormalOrMiscEffect(SkillType.SPD));
+    public void isOtherEffect_returnsAppropriateBoolean() {
+        assertFalse(SkillType.isOtherEffect(SkillType.ATK));
+        assertFalse(SkillType.isOtherEffect(SkillType.MAT));
+        assertFalse(SkillType.isOtherEffect(SkillType.DEF));
+        assertFalse(SkillType.isOtherEffect(SkillType.MDF));
+        assertFalse(SkillType.isOtherEffect(SkillType.LUK));
+        assertFalse(SkillType.isOtherEffect(SkillType.SPD));
 
-        assertFalse(SkillType.isAbnormalOrMiscEffect(SkillType.FIRE_RESIST));
-        assertFalse(SkillType.isAbnormalOrMiscEffect(SkillType.WIND_RESIST));
-        assertFalse(SkillType.isAbnormalOrMiscEffect(SkillType.EARTH_RESIST));
-        assertFalse(SkillType.isAbnormalOrMiscEffect(SkillType.WATER_RESIST));
-        assertFalse(SkillType.isAbnormalOrMiscEffect(SkillType.MOON_RESIST));
-        assertFalse(SkillType.isAbnormalOrMiscEffect(SkillType.SUN_RESIST));
+        assertFalse(SkillType.isOtherEffect(SkillType.FIRE_RESIST));
+        assertFalse(SkillType.isOtherEffect(SkillType.WIND_RESIST));
+        assertFalse(SkillType.isOtherEffect(SkillType.EARTH_RESIST));
+        assertFalse(SkillType.isOtherEffect(SkillType.WATER_RESIST));
+        assertFalse(SkillType.isOtherEffect(SkillType.MOON_RESIST));
+        assertFalse(SkillType.isOtherEffect(SkillType.SUN_RESIST));
 
-        assertFalse(SkillType.isAbnormalOrMiscEffect(SkillType.CRIT_DAMAGE));
-        assertFalse(SkillType.isAbnormalOrMiscEffect(SkillType.NEXT_ATK));
-        assertFalse(SkillType.isAbnormalOrMiscEffect(SkillType.NEXT_MAT));
-        assertFalse(SkillType.isAbnormalOrMiscEffect(SkillType.WEAK_ELEMENT_BONUS));
+        assertFalse(SkillType.isOtherEffect(SkillType.CRIT_DAMAGE));
+        assertFalse(SkillType.isOtherEffect(SkillType.NEXT_ATK));
+        assertFalse(SkillType.isOtherEffect(SkillType.NEXT_MAT));
+        assertFalse(SkillType.isOtherEffect(SkillType.WEAK_ELEMENT_BONUS));
 
-        assertTrue(SkillType.isAbnormalOrMiscEffect(SkillType.CONFUSION));
-        assertTrue(SkillType.isAbnormalOrMiscEffect(SkillType.ISOLATION));
-        assertTrue(SkillType.isAbnormalOrMiscEffect(SkillType.HUNGER));
-        assertTrue(SkillType.isAbnormalOrMiscEffect(SkillType.MISFORTUNE));
-        assertTrue(SkillType.isAbnormalOrMiscEffect(SkillType.PARALYSIS));
-        assertTrue(SkillType.isAbnormalOrMiscEffect(SkillType.SILENCE));
-        assertTrue(SkillType.isAbnormalOrMiscEffect(SkillType.SLEEP));
-        assertTrue(SkillType.isAbnormalOrMiscEffect(SkillType.TIMID));
+        assertTrue(SkillType.isOtherEffect(SkillType.CONFUSION));
+        assertTrue(SkillType.isOtherEffect(SkillType.ISOLATION));
+        assertTrue(SkillType.isOtherEffect(SkillType.HUNGER));
+        assertTrue(SkillType.isOtherEffect(SkillType.MISFORTUNE));
+        assertTrue(SkillType.isOtherEffect(SkillType.PARALYSIS));
+        assertTrue(SkillType.isOtherEffect(SkillType.SILENCE));
+        assertTrue(SkillType.isOtherEffect(SkillType.SLEEP));
+        assertTrue(SkillType.isOtherEffect(SkillType.TIMID));
 
-        assertTrue(SkillType.isAbnormalOrMiscEffect(SkillType.ABNORMAL_DISABLE));
-        assertTrue(SkillType.isAbnormalOrMiscEffect(SkillType.ABNORMAL_RECOVER));
-        assertTrue(SkillType.isAbnormalOrMiscEffect(SkillType.BARRIER_FULL));
-        assertTrue(SkillType.isAbnormalOrMiscEffect(SkillType.BARRIER_FULL_TRIPLE));
-        assertTrue(SkillType.isAbnormalOrMiscEffect(SkillType.DAMAGE));
-        assertTrue(SkillType.isAbnormalOrMiscEffect(SkillType.HEAL_CARD));
-        assertTrue(SkillType.isAbnormalOrMiscEffect(SkillType.TOTTEOKI));
+        assertTrue(SkillType.isOtherEffect(SkillType.DAMAGE));
+        assertTrue(SkillType.isOtherEffect(SkillType.TOTTEOKI));
 
+        assertTrue(SkillType.isOtherEffect(SkillType.ABNORMAL_DISABLE));
+        assertTrue(SkillType.isOtherEffect(SkillType.ABNORMAL_RECOVER));
+        assertTrue(SkillType.isOtherEffect(SkillType.BARRIER_FULL));
+        assertTrue(SkillType.isOtherEffect(SkillType.BARRIER_FULL_TRIPLE));
+        assertTrue(SkillType.isOtherEffect(SkillType.HEAL_CARD));
     }
 
 }

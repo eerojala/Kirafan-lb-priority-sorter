@@ -22,4 +22,9 @@ public enum SkillTarget {
     public String getNameJP() {
         return nameJP;
     }
+
+    @Override
+    public String toString() {
+        return nameEN;
+    }
 }

@@ -11,23 +11,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import logic.Database;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
-public class SeriesWindowController implements Initializable {
+public class SeriesWindowController implements Controller, Initializable {
     @FXML
     private Button buttonSubmit;
 
     @FXML
-    private TextField fieldNameEN;
-
-    @FXML
-    private TextField fieldNameJP;
+    private TextField textFieldName;
 
     @FXML
     private ComboBox<CreaStatus> cmbBoxCrea;
@@ -79,35 +74,34 @@ public class SeriesWindowController implements Initializable {
     }
 
     private void initializeComboBox() {
-        ObservableList<CreaStatus> list = FXCollections.observableArrayList(CreaStatus.COMPLETE, CreaStatus.INCOMPLETE, CreaStatus.NONE);
+        ObservableList<CreaStatus> list = FXCollections.observableArrayList(CreaStatus.values());
         cmbBoxCrea.setItems(list);
 
-        Callback<ListView<CreaStatus>, ListCell<CreaStatus>> cellFactory = new Callback<ListView<CreaStatus>, ListCell<CreaStatus>>() {
-            @Override
-            public ListCell<CreaStatus> call(ListView<CreaStatus> param) {
-                return new ListCell<CreaStatus>() {
-                    @Override
-                    protected void updateItem(CreaStatus item, boolean empty) {
-                        super.updateItem(item, empty);
-
-                        if (item == null || empty) {
-                            setGraphic(null);
-                        } else {
-                            setText(item.getNameEN());
-                        }
-                    }
-                };
-            }
-        };
-
-        cmbBoxCrea.setButtonCell(cellFactory.call(null));
-        cmbBoxCrea.setCellFactory(cellFactory);
+//        Callback<ListView<CreaStatus>, ListCell<CreaStatus>> cellFactory = new Callback<ListView<CreaStatus>, ListCell<CreaStatus>>() {
+//            @Override
+//            public ListCell<CreaStatus> call(ListView<CreaStatus> param) {
+//                return new ListCell<CreaStatus>() {
+//                    @Override
+//                    protected void updateItem(CreaStatus item, boolean empty) {
+//                        super.updateItem(item, empty);
+//
+//                        if (item == null || empty) {
+//                            setGraphic(null);
+//                        } else {
+//                            setText(item.getNameEN());
+//                        }
+//                    }
+//                };
+//            }
+//        };
+//
+//        cmbBoxCrea.setButtonCell(cellFactory.call(null));
+//        cmbBoxCrea.setCellFactory(cellFactory);
         cmbBoxCrea.setValue(CreaStatus.NONE);
     }
 
     private void fillInputFieldsWithCharacterData() {
-        fieldNameEN.setText(series.getNameEN());
-        fieldNameJP.setText(series.getNameJP());
+        textFieldName.setText(series.getName());
         cmbBoxCrea.setValue(series.getCreaStatus());
     }
 
@@ -126,16 +120,14 @@ public class SeriesWindowController implements Initializable {
     }
 
     private void createSeries() {
-        Series newSeries = new Series(fieldNameEN.getText(), fieldNameJP.getText(), cmbBoxCrea.getValue());
-        seriesDatabase.createCollection();
+        Series newSeries = new Series(textFieldName.getText(), cmbBoxCrea.getValue());
         seriesDatabase.insert(newSeries);
         seriesAll.add(newSeries);
     }
 
     private void editSeries() {
         seriesAll.remove(series);
-        series.setNameEN(fieldNameEN.getText());
-        series.setNameJP(fieldNameJP.getText());
+        series.setName(textFieldName.getText());
         series.setCreaStatus(cmbBoxCrea.getValue());
         seriesDatabase.update(series);
         seriesAll.add(series);

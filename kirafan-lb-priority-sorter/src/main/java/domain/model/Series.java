@@ -11,44 +11,30 @@ import java.util.Objects;
 public class Series {
     @Id
     private String id;
-    private String nameEN;
-    private String nameJP;
+    private String name;
     private CreaStatus creaStatus;
 
     // Jackson requires a public constructor with no parameters
     public Series() {}
 
-    public Series(String nameEN, String nameJP, CreaStatus creaStatus) {
-        this.nameEN = nameEN;
-        this.nameJP = nameJP;
+    public Series(String name, CreaStatus creaStatus) {
+        this.name = name;
         this.creaStatus = creaStatus;
 
         Date date = new Date();
         this.id = date.toString();
     }
 
-    public Series(String nameEn, CreaStatus creaStatus) {
-        this(nameEn, "", creaStatus);
-    }
-
     public String getId() {
         return this.id;
     }
 
-    public String getNameEN() {
-        return nameEN;
+    public String getName() {
+        return name;
     }
 
-    public void setNameEN(String nameEN) {
-        this.nameEN = nameEN;
-    }
-
-    public String getNameJP() {
-        return nameJP;
-    }
-
-    public void setNameJP(String nameJP) {
-        this.nameJP = nameJP;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public CreaStatus getCreaStatus() {
@@ -70,5 +56,13 @@ public class Series {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder(name);
+        sb.append(" (Crea status: ").append(creaStatus).append(")");
+
+        return sb.toString();
     }
 }
