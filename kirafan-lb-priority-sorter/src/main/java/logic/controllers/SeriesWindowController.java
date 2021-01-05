@@ -102,6 +102,7 @@ public class SeriesWindowController implements Initializable {
 
         cmbBoxCrea.setButtonCell(cellFactory.call(null));
         cmbBoxCrea.setCellFactory(cellFactory);
+        cmbBoxCrea.setValue(CreaStatus.NONE);
     }
 
     private void fillInputFieldsWithCharacterData() {

@@ -34,6 +34,9 @@ public class MainWindowController implements Initializable {
     private MenuItem menuItemSeriesEdit;
 
     @FXML
+    private MenuItem menuItemSeriesDelete;
+
+    @FXML
     private Button buttonCreateSeries;
 
     @FXML
@@ -97,7 +100,10 @@ public class MainWindowController implements Initializable {
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    setText(item.getNameEN() + ", Crea status: " + item.getCreaStatus().getNameEN());
+                    String name = item.getNameEN() != null ? item.getNameEN() : "NULL";
+                    String creaStatus = item.getCreaStatus() != null ? item.getCreaStatus().getNameEN() : "NULL";
+
+                    setText(name+ ", Crea status: " + creaStatus);
                 }
             }
         });
@@ -109,7 +115,6 @@ public class MainWindowController implements Initializable {
     }
 
     private void openSeriesWindow(Mode mode) {
-        System.out.println(seriesAll);
         //        Node node = (Node) event.getSource(); // Grab the node representing the button from the event object
         //        Stage stage = (Stage) node.getScene().getWindow(); // Get the instance of the stage from the node
         //        stage.close(); // close the instance
@@ -137,6 +142,14 @@ public class MainWindowController implements Initializable {
             stage.show();
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    @FXML
+    void handleMenuItemSeriesDeleteClicked(ActionEvent event) {
+        Series series = listViewSeriesAll.getSelectionModel().getSelectedItem();
+        if (seriesDatabase.remove(series)) {
+            seriesAll.remove(series);
         }
     }
 

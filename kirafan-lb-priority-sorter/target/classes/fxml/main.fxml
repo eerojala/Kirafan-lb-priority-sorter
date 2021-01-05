@@ -35,6 +35,7 @@
                                                 <ContextMenu>
                                                   <items>
                                                     <MenuItem fx:id="menuItemSeriesEdit" mnemonicParsing="false" onAction="#handleMenuItemSeriesEditClicked" text="Edit" />
+                                                      <MenuItem fx:id="menuItemSeriesDelete" mnemonicParsing="false" onAction="#handleMenuItemSeriesDeleteClicked" text="Delete" />
                                                   </items>
                                                 </ContextMenu>
                                              </contextMenu></ListView>
