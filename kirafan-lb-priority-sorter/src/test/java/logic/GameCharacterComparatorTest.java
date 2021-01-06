@@ -16,7 +16,7 @@ class GameCharacterComparatorTest {
 
     @Test
     public void compare_sortsCharactersCorrectly() {
-        Series series1 = new Series("Series 1", null);
+        Series series1 = new Series("Series 1", null, "1");
 
         GameCharacter chara1 = new GameCharacter.Builder("chara1", series1, CharacterElement.FIRE, CharacterClass.ALCHEMIST).build();
         GameCharacter chara2 = new GameCharacter.Builder("chara2", series1, CharacterElement.WIND, CharacterClass.PRIEST).build();
@@ -128,7 +128,7 @@ class GameCharacterComparatorTest {
 
         chara1.setPersonalPreference(0);
         chara2.setPersonalPreference(0);
-        Series series2 = new Series("series 2", CreaStatus.INCOMPLETE);
+        Series series2 = new Series("series 2", CreaStatus.INCOMPLETE, "2");
         chara2.setSeries(series2);
         charasBySeries.get(series1).remove(chara2);
         charasBySeries.put(series2, new ArrayList<>(Arrays.asList(chara2)));
@@ -218,8 +218,8 @@ class GameCharacterComparatorTest {
         weapon1.setExclusiveCharacter(chara3);
         weaponsByChara.remove(chara1);
         weaponsByChara.put(chara3, weapon1);
-        Series series3 = new Series("series3", CreaStatus.COMPLETE);
-        Series series4 = new Series("series4", CreaStatus.NONE);
+        Series series3 = new Series("series3", CreaStatus.COMPLETE, "3");
+        Series series4 = new Series("series4", CreaStatus.NONE, "4");
         chara1.setWokeLevel(0);
         chara1.setSeries(series3);
         chara2.setWokeLevel(0);

@@ -25,9 +25,9 @@ class HighestWokeCheckTest {
 
     @BeforeEach
     public void setUp() {
-        series1 = new Series("Series 1", null);
-        series2 = new Series("Series 2", null);
-        series3 = new Series("Series 3", null);
+        series1 = new Series("Series 1", null, "1");
+        series2 = new Series("Series 2", null, "2");
+        series3 = new Series("Series 3", null, "3");
 
         charasBySeries = new HashMap<>();
         charasBySeries.put(series1, new ArrayList<>());

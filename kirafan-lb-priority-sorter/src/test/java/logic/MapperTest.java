@@ -20,8 +20,8 @@ class MapperTest {
     private List<GameCharacter> charaList;
 
     public MapperTest() {
-        series1 = new Series("series1", CreaStatus.NONE);
-        series2 = new Series("series2", CreaStatus.COMPLETE);
+        series1 = new Series("series1", CreaStatus.NONE, "1");
+        series2 = new Series("series2", CreaStatus.COMPLETE, "2");
         chara1 = new GameCharacter.Builder("chara1", series1, CharacterElement.SUN, CharacterClass.ALCHEMIST).build();
         chara2 = new GameCharacter.Builder("chara2", series2, CharacterElement.SUN, CharacterClass.ALCHEMIST).build();
         chara3 = new GameCharacter.Builder("chara3", series1, CharacterElement.SUN, CharacterClass.WARRIOR).build();

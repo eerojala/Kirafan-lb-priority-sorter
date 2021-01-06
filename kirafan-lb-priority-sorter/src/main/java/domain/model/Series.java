@@ -17,16 +17,22 @@ public class Series {
     // Jackson requires a public constructor with no parameters
     public Series() {}
 
-    public Series(String name, CreaStatus creaStatus) {
+    public Series(String name, CreaStatus creaStatus, String id) {
+        this.id = id;
         this.name = name;
         this.creaStatus = creaStatus;
+    }
 
-        Date date = new Date();
-        this.id = date.toString();
+    public Series(String name, CreaStatus creaStatus) {
+        this(name, creaStatus, new Date().toString());
     }
 
     public String getId() {
         return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
