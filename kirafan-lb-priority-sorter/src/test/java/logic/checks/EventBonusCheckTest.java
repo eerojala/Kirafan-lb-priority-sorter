@@ -24,10 +24,21 @@ class EventBonusCheckTest {
 
     public EventBonusCheckTest() {
         Series series = new Series("series", CreaStatus.COMPLETE);
-        cA = new GameCharacter.Builder("c1", series, CharacterElement.SUN, CharacterClass.PRIEST).build();
-        cB = new GameCharacter.Builder("c2", series, CharacterElement.SUN, CharacterClass.PRIEST).build();
-        cC = new GameCharacter.Builder("c3", series, CharacterElement.SUN, CharacterClass.PRIEST).build();
-        cD = new GameCharacter.Builder("c4", series, CharacterElement.SUN, CharacterClass.PRIEST).build();
+        cA = new GameCharacter.Builder("c1", series, CharacterElement.SUN, CharacterClass.PRIEST)
+                .overwriteID("1")
+                .build();
+
+        cB = new GameCharacter.Builder("c2", series, CharacterElement.SUN, CharacterClass.PRIEST)
+                .overwriteID("2")
+                .build();
+
+        cC = new GameCharacter.Builder("c3", series, CharacterElement.SUN, CharacterClass.PRIEST)
+                .overwriteID("3")
+                .build();
+
+        cD = new GameCharacter.Builder("c4", series, CharacterElement.SUN, CharacterClass.PRIEST)
+                .overwriteID("4")
+                .build();
 
         event = new GameEvent();
         List<GameCharacter> bonusCharacters = new ArrayList<>(Arrays.asList(cA, cB));

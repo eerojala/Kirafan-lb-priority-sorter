@@ -16,6 +16,9 @@ import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// NOTE: Tests might not work if the folder src/test/resources doesn't exist. On old laptop they worked fine but on
+// a new laptop I had to create the folder manually first. (might be because of a different version of JDK/Windows)
+
 class DatabaseTest {
     private static final String dbFilesLocation = "src/test/resources/db test files";
     private static final String modelPackage = "logic.model";

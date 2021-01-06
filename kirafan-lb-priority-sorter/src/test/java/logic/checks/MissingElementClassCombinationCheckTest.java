@@ -54,50 +54,113 @@ class MissingElementClassCombinationCheckTest {
     private void initializeGameCharacterVariables() {
         // Characters with non-existing element/class combinations
         // Knights
-        cA = new GameCharacter.Builder("cA", series, CharacterElement.WIND, CharacterClass.KNIGHT).build();
-        cB = new GameCharacter.Builder("cB", series, CharacterElement.WIND, CharacterClass.KNIGHT).build();
-        cC = new GameCharacter.Builder("cC", series, CharacterElement.SUN, CharacterClass.KNIGHT).build();
+        cA = new GameCharacter.Builder("cA", series, CharacterElement.WIND, CharacterClass.KNIGHT)
+                .overwriteID("A")
+                .build();
+
+        cB = new GameCharacter.Builder("cB", series, CharacterElement.WIND, CharacterClass.KNIGHT)
+                .overwriteID("B")
+                .build();
+
+        cC = new GameCharacter.Builder("cC", series, CharacterElement.SUN, CharacterClass.KNIGHT)
+                .overwriteID("C")
+                .build();
 
         // Priests
-        cD = new GameCharacter.Builder("cD", series, CharacterElement.MOON, CharacterClass.PRIEST).build();
-        cE = new GameCharacter.Builder("cE", series, CharacterElement.MOON, CharacterClass.PRIEST).build();
-        cF = new GameCharacter.Builder("cF", series, CharacterElement.FIRE, CharacterClass.PRIEST).build();
+        cD = new GameCharacter.Builder("cD", series, CharacterElement.MOON, CharacterClass.PRIEST)
+                .overwriteID("D")
+                .build();
+
+        cE = new GameCharacter.Builder("cE", series, CharacterElement.MOON, CharacterClass.PRIEST)
+                .overwriteID("E")
+                .build();
+
+        cF = new GameCharacter.Builder("cF", series, CharacterElement.FIRE, CharacterClass.PRIEST)
+                .overwriteID("F")
+                .build();
 
         // Mages
-        cG = new GameCharacter.Builder("cG", series, CharacterElement.SUN, CharacterClass.MAGE).build();
-        cH = new GameCharacter.Builder("cH", series, CharacterElement.SUN, CharacterClass.MAGE).build();
-        cI = new GameCharacter.Builder("cI", series, CharacterElement.FIRE, CharacterClass.MAGE).build();
+        cG = new GameCharacter.Builder("cG", series, CharacterElement.SUN, CharacterClass.MAGE)
+                .overwriteID("G")
+                .build();
+
+        cH = new GameCharacter.Builder("cH", series, CharacterElement.SUN, CharacterClass.MAGE)
+                .overwriteID("H")
+                .build();
+
+        cI = new GameCharacter.Builder("cI", series, CharacterElement.FIRE, CharacterClass.MAGE)
+                .overwriteID("I")
+                .build();
 
         // Warriors
-        cJ = new GameCharacter.Builder("cJ", series, CharacterElement.WATER, CharacterClass.WARRIOR).build();
-        cK = new GameCharacter.Builder("cK", series, CharacterElement.WATER, CharacterClass.WARRIOR).build();
-        cL = new GameCharacter.Builder("cL", series, CharacterElement.WIND, CharacterClass.WARRIOR).build();
+        cJ = new GameCharacter.Builder("cJ", series, CharacterElement.WATER, CharacterClass.WARRIOR)
+                .overwriteID("J")
+                .build();
+
+        cK = new GameCharacter.Builder("cK", series, CharacterElement.WATER, CharacterClass.WARRIOR)
+                .overwriteID("K")
+                .build();
+
+        cL = new GameCharacter.Builder("cL", series, CharacterElement.WIND, CharacterClass.WARRIOR)
+                .overwriteID("L")
+                .build();
 
         // Alchemists
-        cM = new GameCharacter.Builder("cM", series, CharacterElement.WIND, CharacterClass.ALCHEMIST).build();
-        cN = new GameCharacter.Builder("cN", series, CharacterElement.WIND, CharacterClass.ALCHEMIST).build();
-        cO = new GameCharacter.Builder("cO", series, CharacterElement.FIRE, CharacterClass.ALCHEMIST).build();
+        cM = new GameCharacter.Builder("cM", series, CharacterElement.WIND, CharacterClass.ALCHEMIST)
+                .overwriteID("M")
+                .build();
+        cN = new GameCharacter.Builder("cN", series, CharacterElement.WIND, CharacterClass.ALCHEMIST)
+                .overwriteID("N")
+                .build();
+
+        cO = new GameCharacter.Builder("cO", series, CharacterElement.FIRE, CharacterClass.ALCHEMIST)
+                .overwriteID("O")
+                .build();
 
         // Characters with pre-exiting element/class combinations
         // Knights
-        cP = new GameCharacter.Builder("cP", series, CharacterElement.FIRE, CharacterClass.KNIGHT).build();
-        cQ = new GameCharacter.Builder("cQ", series, CharacterElement.WATER, CharacterClass.KNIGHT).build();
+        cP = new GameCharacter.Builder("cP", series, CharacterElement.FIRE, CharacterClass.KNIGHT)
+                .overwriteID("P")
+                .build();
+
+        cQ = new GameCharacter.Builder("cQ", series, CharacterElement.WATER, CharacterClass.KNIGHT)
+                .overwriteID("Q")
+                .build();
 
         // Priests
-        cR = new GameCharacter.Builder("cR", series, CharacterElement.SUN, CharacterClass.PRIEST).build();
-        cS = new GameCharacter.Builder("cS", series, CharacterElement.WIND, CharacterClass.PRIEST).build();
+        cR = new GameCharacter.Builder("cR", series, CharacterElement.SUN, CharacterClass.PRIEST)
+                .overwriteID("R")
+                .build();
+
+        cS = new GameCharacter.Builder("cS", series, CharacterElement.WIND, CharacterClass.PRIEST)
+                .overwriteID("S")
+                .build();
 
         // Mages
-        cT = new GameCharacter.Builder("cT", series, CharacterElement.WIND, CharacterClass.MAGE).build();
-        cU = new GameCharacter.Builder("cU", series, CharacterElement.MOON, CharacterClass.MAGE).build();
+        cT = new GameCharacter.Builder("cT", series, CharacterElement.WIND, CharacterClass.MAGE)
+                .overwriteID("T")
+                .build();
+
+        cU = new GameCharacter.Builder("cU", series, CharacterElement.MOON, CharacterClass.MAGE)
+                .overwriteID("U")
+                .build();
 
         // Warriors
-        cV = new GameCharacter.Builder("cV", series, CharacterElement.FIRE, CharacterClass.WARRIOR).build();
-        cW = new GameCharacter.Builder("cW", series, CharacterElement.MOON, CharacterClass.WARRIOR).build();
+        cV = new GameCharacter.Builder("cV", series, CharacterElement.FIRE, CharacterClass.WARRIOR)
+                .overwriteID("V")
+                .build();
+
+        cW = new GameCharacter.Builder("cW", series, CharacterElement.MOON, CharacterClass.WARRIOR)
+                .overwriteID("W")
+                .build();
 
         // Alchemists
-        cX = new GameCharacter.Builder("cX", series, CharacterElement.SUN, CharacterClass.ALCHEMIST).build();
-        cY = new GameCharacter.Builder("cY", series, CharacterElement.MOON, CharacterClass.ALCHEMIST).build();
+        cX = new GameCharacter.Builder("cX", series, CharacterElement.SUN, CharacterClass.ALCHEMIST)
+                .overwriteID("X")
+                .build();
+        cY = new GameCharacter.Builder("cY", series, CharacterElement.MOON, CharacterClass.ALCHEMIST)
+                .overwriteID("Y")
+                .build();
     }
 
     private void initializeMap() {
@@ -105,34 +168,54 @@ class MissingElementClassCombinationCheckTest {
 
         // Limit broken characters which are not referenced directly during testing
         GameCharacter c1 = new GameCharacter.Builder("c1", series, CharacterElement.FIRE, CharacterClass.KNIGHT)
-                .limitBroken().build();
+                .overwriteID("1")
+                .limitBroken()
+                .build();
 
         GameCharacter c2 = new GameCharacter.Builder("c2", series, CharacterElement.WATER, CharacterClass.KNIGHT)
-                .limitBroken().build();
+                .overwriteID("2")
+                .limitBroken()
+                .build();
 
         GameCharacter c3 = new GameCharacter.Builder("c3", series, CharacterElement.SUN, CharacterClass.PRIEST)
-                .limitBroken().build();
+                .overwriteID("3")
+                .limitBroken()
+                .build();
 
         GameCharacter c4 = new GameCharacter.Builder("c4", series, CharacterElement.WIND, CharacterClass.PRIEST)
-                .limitBroken().build();
+                .overwriteID("4")
+                .limitBroken()
+                .build();
 
         GameCharacter c5 = new GameCharacter.Builder("c5", series, CharacterElement.WIND, CharacterClass.MAGE)
-                .limitBroken().build();
+                .overwriteID("5")
+                .limitBroken()
+                .build();
 
         GameCharacter c6 = new GameCharacter.Builder("c6", series, CharacterElement.MOON, CharacterClass.MAGE)
-                .limitBroken().build();
+                .overwriteID("6")
+                .limitBroken()
+                .build();
 
         GameCharacter c7 = new GameCharacter.Builder("c7", series, CharacterElement.FIRE, CharacterClass.WARRIOR)
-                .limitBroken().build();
+                .overwriteID("7")
+                .limitBroken()
+                .build();
 
         GameCharacter c8 = new GameCharacter.Builder("c8", series, CharacterElement.MOON, CharacterClass.WARRIOR)
-                .limitBroken().build();
+                .overwriteID("8")
+                .limitBroken()
+                .build();
 
         GameCharacter c9 = new GameCharacter.Builder("c9", series, CharacterElement.SUN, CharacterClass.ALCHEMIST)
-                .limitBroken().build();
+                .overwriteID("9")
+                .limitBroken()
+                .build();
 
         GameCharacter c10 = new GameCharacter.Builder("c10", series, CharacterElement.MOON, CharacterClass.ALCHEMIST)
-                .limitBroken().build();
+                .overwriteID("10")
+                .limitBroken()
+                .build();
 
         List<GameCharacter> nonLimitBrokenCharacters = new ArrayList<>(Arrays.asList(
                 cA, cB, cC, cD, cE, cF, cG, cH, cI, cJ, cK, cL, cM, cN, cO, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cY

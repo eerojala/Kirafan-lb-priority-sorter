@@ -23,10 +23,21 @@ class NoWeaponCheckTest {
     public void compare_returnsCorrectValues() {
         Series series = new Series("Series", null);
 
-        GameCharacter chara1 = new GameCharacter.Builder("chara1", series, CharacterElement.FIRE, CharacterClass.ALCHEMIST).build();
-        GameCharacter chara2 = new GameCharacter.Builder("chara2", series, CharacterElement.WIND, CharacterClass.KNIGHT).build();
-        GameCharacter chara3 = new GameCharacter.Builder("chara3", series, CharacterElement.EARTH, CharacterClass.MAGE).build();
-        GameCharacter chara4 = new GameCharacter.Builder("chara4", series, CharacterElement.WATER, CharacterClass.PRIEST).build();
+        GameCharacter chara1 = new GameCharacter.Builder("chara1", series, CharacterElement.FIRE, CharacterClass.ALCHEMIST)
+                .overwriteID("1")
+                .build();
+
+        GameCharacter chara2 = new GameCharacter.Builder("chara2", series, CharacterElement.WIND, CharacterClass.KNIGHT)
+                .overwriteID("2")
+                .build();
+
+        GameCharacter chara3 = new GameCharacter.Builder("chara3", series, CharacterElement.EARTH, CharacterClass.MAGE)
+                .overwriteID("3")
+                .build();
+
+        GameCharacter chara4 = new GameCharacter.Builder("chara4", series, CharacterElement.WATER, CharacterClass.PRIEST)
+                .overwriteID("4")
+                .build();
 
         Weapon weapon1 = new Weapon.Builder("Weapon1")
                 .isExclusiveTo(chara1)

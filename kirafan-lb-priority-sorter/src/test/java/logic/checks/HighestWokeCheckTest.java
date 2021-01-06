@@ -49,16 +49,27 @@ class HighestWokeCheckTest {
 
     @Test
     public void compare_considers_wokeLevel1_asTheMinimum_forHighestWoke() {
-        chara1 = new GameCharacter.Builder("chara1", series1, CharacterElement.FIRE, CharacterClass.ALCHEMIST).build();
-        chara2 = new GameCharacter.Builder("chara2", series1, CharacterElement.WIND, CharacterClass.KNIGHT).build();
-        chara3 = new GameCharacter.Builder("chara3", series1, CharacterElement.EARTH, CharacterClass.MAGE)
-                .wokeLevelIs(1)
+        chara1 = new GameCharacter.Builder("chara1", series1, CharacterElement.FIRE, CharacterClass.ALCHEMIST)
+                .overwriteID("1")
                 .build();
-        chara4 = new GameCharacter.Builder("chara4", series2, CharacterElement.WATER, CharacterClass.PRIEST)
+
+        chara2 = new GameCharacter.Builder("chara2", series1, CharacterElement.WIND, CharacterClass.KNIGHT)
+                .overwriteID("2")
+                .build();
+
+        chara3 = new GameCharacter.Builder("chara3", series1, CharacterElement.EARTH, CharacterClass.MAGE)
+                .overwriteID("3")
                 .wokeLevelIs(1)
                 .build();
 
-        chara5 = new GameCharacter.Builder("chara5", series3, CharacterElement.MOON, CharacterClass.WARRIOR).build();
+        chara4 = new GameCharacter.Builder("chara4", series2, CharacterElement.WATER, CharacterClass.PRIEST)
+                .overwriteID("4")
+                .wokeLevelIs(1)
+                .build();
+
+        chara5 = new GameCharacter.Builder("chara5", series3, CharacterElement.MOON, CharacterClass.WARRIOR)
+                .overwriteID("5")
+                .build();
 
         addCharasToTheMap(chara1, chara2, chara3, chara4, chara5);
 
@@ -82,16 +93,21 @@ class HighestWokeCheckTest {
 
     @Test
     public void compare_considers_theCharacter_withTheHighestWokeLevel_asTheHighestWoke() {
-        chara1 = new GameCharacter.Builder("chara1", series1, CharacterElement.SUN, CharacterClass.ALCHEMIST).build();
+        chara1 = new GameCharacter.Builder("chara1", series1, CharacterElement.SUN, CharacterClass.ALCHEMIST)
+                .overwriteID("1")
+                .build();
         chara2 = new GameCharacter.Builder("chara2", series1, CharacterElement.FIRE, CharacterClass.KNIGHT)
+                .overwriteID("2")
                 .wokeLevelIs(1)
                 .build();
 
         chara3 = new GameCharacter.Builder("chara3", series2, CharacterElement.WIND, CharacterClass.MAGE)
+                .overwriteID("3")
                 .wokeLevelIs(1)
                 .build();
 
         chara4 = new GameCharacter.Builder("chara4", series2, CharacterElement.EARTH, CharacterClass.PRIEST)
+                .overwriteID("4")
                 .wokeLevelIs(2)
                 .build();
 
@@ -116,19 +132,23 @@ class HighestWokeCheckTest {
     @Test
     public void compare_functionsCorrectly_whenSeries_hasTwoOrMoreCharacters_asHighestWokes() {
         chara1 = new GameCharacter.Builder("chara1", series1, CharacterElement.WATER, CharacterClass.WARRIOR)
+                .overwriteID("1")
                 .wokeLevelIs(3)
                 .build();
 
         chara2 = new GameCharacter.Builder("chara2", series1, CharacterElement.MOON, CharacterClass.ALCHEMIST)
+                .overwriteID("2")
                 .wokeLevelIs(3)
                 .build();
 
         chara3 = new GameCharacter.Builder("chara3", series2, CharacterElement.SUN, CharacterClass.KNIGHT)
+               .overwriteID("3")
                 .wokeLevelIs(4)
                 .limitBroken()
                 .build();
 
         chara4 = new GameCharacter.Builder("chara4", series2, CharacterElement.FIRE, CharacterClass.MAGE)
+                .overwriteID("4")
                 .wokeLevelIs(4)
                 .build();
 

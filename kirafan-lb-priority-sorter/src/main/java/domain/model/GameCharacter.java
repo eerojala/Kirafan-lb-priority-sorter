@@ -7,6 +7,7 @@ import io.jsondb.annotation.Document;
 import io.jsondb.annotation.Id;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,7 +33,7 @@ public class GameCharacter {
             this.series = series;
             this.characterElement = characterElement;
             this.characterClass = characterClass;
-            id = name + series.getName() +  characterElement.getNameEN() + characterClass.getNameEN();
+            id = new Date().toString();
             skills = new ArrayList<>();
             preferredWeapon = null;
             limitBroken = false;
@@ -41,6 +42,12 @@ public class GameCharacter {
             magicDefense = 0;
             wokeLevel = 0;
             personalPreference = 0;
+        }
+
+        public Builder overwriteID(String id) {
+            this.id = id;
+
+            return this;
         }
 
         public Builder withSkill(Skill skill) {

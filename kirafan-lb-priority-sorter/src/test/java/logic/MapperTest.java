@@ -22,10 +22,21 @@ class MapperTest {
     public MapperTest() {
         series1 = new Series("series1", CreaStatus.NONE, "1");
         series2 = new Series("series2", CreaStatus.COMPLETE, "2");
-        chara1 = new GameCharacter.Builder("chara1", series1, CharacterElement.SUN, CharacterClass.ALCHEMIST).build();
-        chara2 = new GameCharacter.Builder("chara2", series2, CharacterElement.SUN, CharacterClass.ALCHEMIST).build();
-        chara3 = new GameCharacter.Builder("chara3", series1, CharacterElement.SUN, CharacterClass.WARRIOR).build();
-        chara4 = new GameCharacter.Builder("chara4", series1, CharacterElement.MOON, CharacterClass.ALCHEMIST).build();
+        chara1 = new GameCharacter.Builder("chara1", series1, CharacterElement.SUN, CharacterClass.ALCHEMIST)
+                .overwriteID("1")
+                .build();
+
+        chara2 = new GameCharacter.Builder("chara2", series2, CharacterElement.SUN, CharacterClass.ALCHEMIST)
+                .overwriteID("2")
+                .build();
+
+        chara3 = new GameCharacter.Builder("chara3", series1, CharacterElement.SUN, CharacterClass.WARRIOR)
+                .overwriteID("3")
+                .build();
+
+        chara4 = new GameCharacter.Builder("chara4", series1, CharacterElement.MOON, CharacterClass.ALCHEMIST)
+                .overwriteID("4")
+                .build();
 
 
         charaList = new ArrayList<>(Arrays.asList(chara1, chara2, chara3, chara4));

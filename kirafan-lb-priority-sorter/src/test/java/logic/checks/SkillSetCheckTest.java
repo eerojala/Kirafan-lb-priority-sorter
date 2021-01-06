@@ -42,59 +42,71 @@ class SkillSetCheckTest {
 
     @BeforeEach
     void setUp() {
-        Series series = new Series("series", null);
+        Series series = new Series("series", null, "1");
         Skill totteoki = new Skill(SkillType.TOTTEOKI, null, SkillTarget.ENEMY_ALL, 3500);
 
         alchemist1 = new GameCharacter.Builder("alchemist 1", series, CharacterElement.FIRE, CharacterClass.ALCHEMIST)
+                .overwriteID("a1")
                 .build();
 
         alchemist2 = new GameCharacter.Builder("alchemist 2", series, CharacterElement.FIRE, CharacterClass.ALCHEMIST)
+                .overwriteID("a2")
                 .build();
 
         alchemist3 = new GameCharacter.Builder("alchemist 3", series, CharacterElement.FIRE, CharacterClass.ALCHEMIST)
+                .overwriteID("a3")
                 .build();
 
         alchemist4 = new GameCharacter.Builder("alchemist 4", series, CharacterElement.WIND, CharacterClass.ALCHEMIST)
+                .overwriteID("a4")
                 .build();
 
         List<GameCharacter> fireAlchemists = new ArrayList<>(Arrays.asList(alchemist1, alchemist2, alchemist3));
 
         knight1 = new GameCharacter.Builder("knight 1", series, CharacterElement.MOON, CharacterClass.KNIGHT)
+                .overwriteID("k1")
                 .defenseIs(3800)
                 .magicDefenseIs(3500)
                 .build();
 
         knight2 = new GameCharacter.Builder("knight 2", series, CharacterElement.MOON, CharacterClass.KNIGHT)
+                .overwriteID("k2")
                 .defenseIs(3800)
                 .magicDefenseIs(3500)
                 .build();
 
         knight3 = new GameCharacter.Builder("knight 3", series, CharacterElement.MOON, CharacterClass.KNIGHT)
+                .overwriteID("k3")
                 .defenseIs(3800)
                 .magicDefenseIs(3500)
                 .build();
 
         GameCharacter knight4 = new GameCharacter.Builder("knight 4", series, CharacterElement.MOON, CharacterClass.KNIGHT)
+                .overwriteID("k4")
                 .defenseIs(4000)
                 .magicDefenseIs(4000)
                 .build();
 
         knight5 = new GameCharacter.Builder("knight 5", series, CharacterElement.WATER, CharacterClass.KNIGHT)
+                .overwriteID("k5")
                 .defenseIs(8000)
                 .magicDefenseIs(1000)
                 .build();
 
         knight6 = new GameCharacter.Builder("knight 6", series, CharacterElement.WATER, CharacterClass.KNIGHT)
+                .overwriteID("k6")
                 .defenseIs(1000)
                 .magicDefenseIs(8000)
                 .build();
 
         knight7 = new GameCharacter.Builder("knight 7", series, CharacterElement.WATER, CharacterClass.KNIGHT)
+                .overwriteID("k7")
                 .defenseIs(1000)
                 .magicDefenseIs(1000)
                 .build();
 
         knight8 = new GameCharacter.Builder("knight 8", series, CharacterElement.SUN, CharacterClass.KNIGHT)
+                .overwriteID("k8")
                 .defenseIs(4000)
                 .magicDefenseIs(4000)
                 .build();
@@ -103,36 +115,43 @@ class SkillSetCheckTest {
         List<GameCharacter> waterKnights = new ArrayList<>(Arrays.asList(knight5, knight6, knight7));
 
         mage1 = new GameCharacter.Builder("mage 1", series, CharacterElement.SUN, CharacterClass.MAGE)
+                .overwriteID("m1")
                 .offensiveStatIs(4000)
                 .withSkill(totteoki)
                 .build();
 
         mage2 = new GameCharacter.Builder("mage 2", series, CharacterElement.SUN, CharacterClass.MAGE)
+                .overwriteID("m2")
                 .offensiveStatIs(4000)
                 .withSkill(totteoki)
                 .build();
 
         mage3 = new GameCharacter.Builder("mage 3", series, CharacterElement.SUN, CharacterClass.MAGE)
+                .overwriteID("m3")
                 .offensiveStatIs(4000)
                 .withSkill(totteoki)
                 .build();
 
         mage4 = new GameCharacter.Builder("mage 4", series, CharacterElement.EARTH, CharacterClass.MAGE)
+                .overwriteID("m4")
                 .offensiveStatIs(4000)
                 .withSkill(totteoki)
                 .build();
 
         mage5 = new GameCharacter.Builder("mage 5", series, CharacterElement.EARTH, CharacterClass.MAGE)
+                .overwriteID("m5")
                 .offensiveStatIs(5000)
                 .withSkill(totteoki)
                 .build();
 
         mage6 = new GameCharacter.Builder("mage 6", series, CharacterElement.MOON, CharacterClass.MAGE)
+                .overwriteID("m6")
                 .offensiveStatIs(5000)
                 .withSkill(totteoki)
                 .build();
 
         GameCharacter mage7 = new GameCharacter.Builder("mage 7", series, CharacterElement.SUN, CharacterClass.MAGE)
+                .overwriteID("m7")
                 .offensiveStatIs(4500)
                 .withSkill(totteoki)
                 .build();
@@ -140,34 +159,50 @@ class SkillSetCheckTest {
         List<GameCharacter> sunMages = new ArrayList<>(Arrays.asList(mage1, mage2, mage3, mage7));
         List<GameCharacter> earthMages = new ArrayList<>(Arrays.asList(mage4, mage5));
 
-        priest1 = new GameCharacter.Builder("priest 1", series, CharacterElement.WIND, CharacterClass.PRIEST).build();
-        priest2 = new GameCharacter.Builder("priest 2", series, CharacterElement.WIND, CharacterClass.PRIEST).build();
-        priest3 = new GameCharacter.Builder("priest 3", series, CharacterElement.WIND, CharacterClass.PRIEST).build();
-        priest4 = new GameCharacter.Builder("priest 4", series, CharacterElement.WATER, CharacterClass.PRIEST).build();
+        priest1 = new GameCharacter.Builder("priest 1", series, CharacterElement.WIND, CharacterClass.PRIEST)
+                .overwriteID("p1")
+                .build();
+
+        priest2 = new GameCharacter.Builder("priest 2", series, CharacterElement.WIND, CharacterClass.PRIEST)
+                .overwriteID("p2")
+                .build();
+
+        priest3 = new GameCharacter.Builder("priest 3", series, CharacterElement.WIND, CharacterClass.PRIEST)
+                .overwriteID("p3")
+                .build();
+
+        priest4 = new GameCharacter.Builder("priest 4", series, CharacterElement.WATER, CharacterClass.PRIEST)
+                .overwriteID("p4")
+                .build();
 
         List<GameCharacter> windPriests = new ArrayList<>(Arrays.asList(priest1, priest2, priest3));
 
         warrior1 = new GameCharacter.Builder("warrior 1", series, CharacterElement.WATER, CharacterClass.WARRIOR)
+                .overwriteID("w1")
                 .offensiveStatIs(3000)
                 .withSkill(totteoki)
                 .build();
 
         warrior2 = new GameCharacter.Builder("warrior 2", series, CharacterElement.WATER, CharacterClass.WARRIOR)
+                .overwriteID("w2")
                 .offensiveStatIs(3000)
                 .withSkill(totteoki)
                 .build();
 
         warrior3 = new GameCharacter.Builder("warrior 3", series, CharacterElement.WATER, CharacterClass.WARRIOR)
+                .overwriteID("w3")
                 .offensiveStatIs(3000)
                 .withSkill(totteoki)
                 .build();
 
         warrior4 = new GameCharacter.Builder("warrior 4", series, CharacterElement.WIND, CharacterClass.WARRIOR)
+                .overwriteID("w4")
                 .offensiveStatIs(4000)
                 .withSkill(totteoki)
                 .build();
 
         GameCharacter warrior5 = new GameCharacter.Builder("warrior 5", series, CharacterElement.WATER, CharacterClass.WARRIOR)
+                .overwriteID("w5")
                 .offensiveStatIs(4000)
                 .withSkill(totteoki)
                 .build();

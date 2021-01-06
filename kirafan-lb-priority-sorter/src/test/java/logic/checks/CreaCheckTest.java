@@ -35,27 +35,62 @@ class CreaCheckTest {
         incompleteCheck = new CreaCheck(CreaStatus.INCOMPLETE);
         noneCheck = new CreaCheck(CreaStatus.NONE);
 
-        Series completeSeries1 = new Series("series1", CreaStatus.COMPLETE);
-        Series completeSeries2 = new Series("series2", CreaStatus.COMPLETE);
-        Series incompleteSeries1 = new Series("series3", CreaStatus.INCOMPLETE);
-        Series incompleteSeries2 = new Series("series4", CreaStatus.INCOMPLETE);
-        Series noneSeries1 = new Series("series5", CreaStatus.NONE);
-        Series noneSeries2 = new Series("series6", CreaStatus.NONE);
-        Series nullSeries1 = new Series("series7", null);
-        Series nullSeries2 = new Series("series8", null);
+        Series completeSeries1 = new Series("series1", CreaStatus.COMPLETE, "c1");
+        Series completeSeries2 = new Series("series2", CreaStatus.COMPLETE, "c2");
+        Series incompleteSeries1 = new Series("series3", CreaStatus.INCOMPLETE, "i1");
+        Series incompleteSeries2 = new Series("series4", CreaStatus.INCOMPLETE, "i2");
+        Series noneSeries1 = new Series("series5", CreaStatus.NONE, "no1");
+        Series noneSeries2 = new Series("series6", CreaStatus.NONE, "no2");
+        Series nullSeries1 = new Series("series7", null, "nu1");
+        Series nullSeries2 = new Series("series8", null, "nu2");
 
-        completeSeries1Character1 = new GameCharacter.Builder("chara1", completeSeries1, CharacterElement.MOON, CharacterClass.ALCHEMIST).build();
-        completeSeries1Character2 = new GameCharacter.Builder("chara2", completeSeries1, CharacterElement.MOON, CharacterClass.ALCHEMIST).build();
-        completeSeries2Character1 = new GameCharacter.Builder("chara3", completeSeries2, CharacterElement.MOON, CharacterClass.ALCHEMIST).build();
-        incompleteSeries1Character1 = new GameCharacter.Builder("chara4", incompleteSeries1, CharacterElement.MOON, CharacterClass.ALCHEMIST).build();
-        incompleteSeries1Character2 = new GameCharacter.Builder("chara5", incompleteSeries1, CharacterElement.MOON, CharacterClass.ALCHEMIST).build();
-        incompleteSeries2Character1 = new GameCharacter.Builder("chara6", incompleteSeries2, CharacterElement.MOON, CharacterClass.ALCHEMIST).build();
-        noneSeries1Character1 = new GameCharacter.Builder("chara7", noneSeries1, CharacterElement.MOON, CharacterClass.ALCHEMIST).build();
-        noneSeries1Character2 = new GameCharacter.Builder("chara8", noneSeries1, CharacterElement.MOON, CharacterClass.ALCHEMIST).build();
-        noneSeries2Character1 = new GameCharacter.Builder("chara9", noneSeries2, CharacterElement.MOON, CharacterClass.ALCHEMIST).build();
-        nullSeries1Character1 = new GameCharacter.Builder("chara10", nullSeries1, CharacterElement.MOON, CharacterClass.ALCHEMIST).build();
-        nullSeries1Character2 = new GameCharacter.Builder("chara11", nullSeries1, CharacterElement.MOON, CharacterClass.ALCHEMIST).build();
-        nullSeries2Character1 = new GameCharacter.Builder("chara12", nullSeries2, CharacterElement.MOON, CharacterClass.ALCHEMIST).build();
+        completeSeries1Character1 = new GameCharacter.Builder("chara1", completeSeries1, CharacterElement.MOON, CharacterClass.ALCHEMIST)
+                .overwriteID("1")
+                .build();
+
+        completeSeries1Character2 = new GameCharacter.Builder("chara2", completeSeries1, CharacterElement.MOON, CharacterClass.ALCHEMIST)
+                .overwriteID("2")
+                .build();
+
+        completeSeries2Character1 = new GameCharacter.Builder("chara3", completeSeries2, CharacterElement.MOON, CharacterClass.ALCHEMIST)
+                .overwriteID("3")
+                .build();
+
+        incompleteSeries1Character1 = new GameCharacter.Builder("chara4", incompleteSeries1, CharacterElement.MOON, CharacterClass.ALCHEMIST)
+                .overwriteID("4")
+                .build();
+
+        incompleteSeries1Character2 = new GameCharacter.Builder("chara5", incompleteSeries1, CharacterElement.MOON, CharacterClass.ALCHEMIST)
+                .overwriteID("5")
+                .build();
+
+        incompleteSeries2Character1 = new GameCharacter.Builder("chara6", incompleteSeries2, CharacterElement.MOON, CharacterClass.ALCHEMIST)
+                .overwriteID("6")
+                .build();
+
+        noneSeries1Character1 = new GameCharacter.Builder("chara7", noneSeries1, CharacterElement.MOON, CharacterClass.ALCHEMIST)
+                .overwriteID("7")
+                .build();
+
+        noneSeries1Character2 = new GameCharacter.Builder("chara8", noneSeries1, CharacterElement.MOON, CharacterClass.ALCHEMIST)
+                .overwriteID("8")
+                .build();
+
+        noneSeries2Character1 = new GameCharacter.Builder("chara9", noneSeries2, CharacterElement.MOON, CharacterClass.ALCHEMIST)
+                .overwriteID("9")
+                .build();
+
+        nullSeries1Character1 = new GameCharacter.Builder("chara10", nullSeries1, CharacterElement.MOON, CharacterClass.ALCHEMIST)
+                .overwriteID("10")
+                .build();
+
+        nullSeries1Character2 = new GameCharacter.Builder("chara11", nullSeries1, CharacterElement.MOON, CharacterClass.ALCHEMIST)
+                .overwriteID("11")
+                .build();
+
+        nullSeries2Character1 = new GameCharacter.Builder("chara12", nullSeries2, CharacterElement.MOON, CharacterClass.ALCHEMIST)
+                .overwriteID("12")
+                .build();
     }
 
     @Test

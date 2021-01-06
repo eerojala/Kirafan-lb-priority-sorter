@@ -18,9 +18,15 @@ class GameCharacterComparatorTest {
     public void compare_sortsCharactersCorrectly() {
         Series series1 = new Series("Series 1", null, "1");
 
-        GameCharacter chara1 = new GameCharacter.Builder("chara1", series1, CharacterElement.FIRE, CharacterClass.ALCHEMIST).build();
-        GameCharacter chara2 = new GameCharacter.Builder("chara2", series1, CharacterElement.WIND, CharacterClass.PRIEST).build();
-        GameCharacter chara3 = new GameCharacter.Builder("chara3", series1, CharacterElement.EARTH, CharacterClass.PRIEST).build();
+        GameCharacter chara1 = new GameCharacter.Builder("chara1", series1, CharacterElement.FIRE, CharacterClass.ALCHEMIST)
+                .overwriteID("1")
+                .build();
+        GameCharacter chara2 = new GameCharacter.Builder("chara2", series1, CharacterElement.WIND, CharacterClass.PRIEST)
+                .overwriteID("2")
+                .build();
+        GameCharacter chara3 = new GameCharacter.Builder("chara3", series1, CharacterElement.EARTH, CharacterClass.PRIEST)
+                .overwriteID("3")
+                .build();
 
         List<GameCharacter> nonLimitBrokenCharas = new ArrayList<>(Arrays.asList(chara1, chara2, chara3));
 //        List<GameCharacter> allCharas = new ArrayList<>(Arrays.asList(chara1, chara2, chara3));
@@ -89,10 +95,12 @@ class GameCharacterComparatorTest {
         // TESTING MissingElementClassCombinationCheck
         //
         GameCharacter chara4 = new GameCharacter.Builder("chara4", series1, chara2.getCharacterElement(), chara2.getCharacterClass())
+                .overwriteID("4")
                 .limitBroken()
                 .build();
 
         GameCharacter chara5 = new GameCharacter.Builder("chara5", series1, chara3.getCharacterElement(), chara3.getCharacterClass())
+                .overwriteID("5")
                 .limitBroken()
                 .build();
 
@@ -118,6 +126,7 @@ class GameCharacterComparatorTest {
         // TESTING THE FIRST CreaCheck(CreaStatus.INCOMPLETE))
         //
         GameCharacter chara6 = new GameCharacter.Builder("chara6", series1, chara1.getCharacterElement(), chara1.getCharacterClass())
+                .overwriteID("6")
                 .limitBroken()
                 .build();
 

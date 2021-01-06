@@ -22,26 +22,32 @@ class PersonalPreferenceCheckTest {
         Series s = new Series("s", CreaStatus.NONE);
 
         cA = new GameCharacter.Builder("c1", s, CharacterElement.EARTH, CharacterClass.WARRIOR)
+                .overwriteID("1")
                 .personalPreferenceIs(9)
                 .build();
 
         cB = new GameCharacter.Builder("c2", s, CharacterElement.EARTH, CharacterClass.WARRIOR)
+                .overwriteID("2")
                 .personalPreferenceIs(8)
                 .build();
 
         cC = new GameCharacter.Builder("c3", s, CharacterElement.FIRE, CharacterClass.ALCHEMIST)
+                .overwriteID("3")
                 .personalPreferenceIs(9)
                 .build();
 
         cD = new GameCharacter.Builder("c4", s, CharacterElement.FIRE, CharacterClass.ALCHEMIST)
+                .overwriteID("4")
                 .personalPreferenceIs(7)
                 .build();
 
         cE = new GameCharacter.Builder("c5", s, CharacterElement.FIRE, CharacterClass.ALCHEMIST)
+                .overwriteID("5")
                 .personalPreferenceIs(5)
                 .build();
 
         cF = new GameCharacter.Builder("c6", s, CharacterElement.FIRE, CharacterClass.ALCHEMIST)
+                .overwriteID("6")
                 .personalPreferenceIs(7)
                 .build();
 
