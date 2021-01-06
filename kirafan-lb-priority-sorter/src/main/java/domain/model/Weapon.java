@@ -5,7 +5,9 @@ import io.jsondb.annotation.Document;
 import io.jsondb.annotation.Id;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Document(collection = "weapons", schemaVersion = "1.0")
 public class Weapon {
@@ -19,13 +21,19 @@ public class Weapon {
         private GameCharacter exclusiveCharacter;
 
         public Builder(String name) {
-            id = name;
+            id = new Date().toString();
             this.name = name;
             offensiveStat = 0;
             defense = 0;
             magicDefense = 0;
             skills = new ArrayList<>();
             exclusiveCharacter = null;
+        }
+
+        public Builder overwriteID(String id) {
+            this.id = id;
+
+            return this;
         }
 
         public Builder offensiveStatIs(int offensivePower) {
@@ -138,6 +146,19 @@ public class Weapon {
 
     public void setExclusiveCharacter(GameCharacter exclusiveCharacter) {
         this.exclusiveCharacter = exclusiveCharacter;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Weapon weapon = (Weapon) o;
+        return getId().equals(weapon.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 
     @Override

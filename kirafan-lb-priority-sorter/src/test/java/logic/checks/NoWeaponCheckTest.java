@@ -40,10 +40,12 @@ class NoWeaponCheckTest {
                 .build();
 
         Weapon weapon1 = new Weapon.Builder("Weapon1")
+                .overwriteID("1")
                 .isExclusiveTo(chara1)
                 .build();
 
         Weapon weapon2 = new Weapon.Builder("Weapon2")
+                .overwriteID("2")
                 .isExclusiveTo(chara2)
                 .build();
 

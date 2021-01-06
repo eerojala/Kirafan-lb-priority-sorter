@@ -47,11 +47,13 @@ class CalculatorTest {
                 .build();
 
         weapon1 = new Weapon.Builder("weapon 1")
+                .overwriteID("1")
                 .offensiveStatIs(90)
                 .withSkill(new Skill(SkillType.ATK, SkillChange.UP, SkillTarget.ALLY_SELF, 24.0))
                 .build();
 
         weapon2 = new Weapon.Builder("weapon 2")
+                .overwriteID("2")
                 .defenseIs(200)
                 .magicDefenseIs(200)
                 .withSkill(new Skill(SkillType.ATK, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 24.0))

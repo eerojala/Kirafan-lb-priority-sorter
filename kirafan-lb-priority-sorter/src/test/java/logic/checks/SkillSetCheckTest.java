@@ -312,6 +312,7 @@ class SkillSetCheckTest {
 
         // after adding the weapon alchemist 3 should now have the most fire resist down skillpower
         Weapon weapon = new Weapon.Builder("weapon")
+                .overwriteID("1")
                 .withSkill(new Skill(SkillType.FIRE_RESIST, SkillChange.DOWN, SkillTarget.ENEMY_SINGLE, 0.01))
                 .build();
         alchemist3.setPreferredWeapon(weapon);
@@ -1082,7 +1083,7 @@ class SkillSetCheckTest {
         assertEquals(0, check.compare(warrior2, warrior3));
 
         // After warrior 1 gets a new weapon, she has the biggest max damage and gets true
-        warrior1.setPreferredWeapon(new Weapon.Builder("weapon").offensiveStatIs(2000).build());
+        warrior1.setPreferredWeapon(new Weapon.Builder("weapon").offensiveStatIs(2000).overwriteID("2").build());
         assertEquals(-1, check.compare(warrior1, warrior2));
         assertEquals(1, check.compare(warrior3, warrior1));
         assertEquals(0 , check.compare(warrior2, warrior3));

@@ -199,6 +199,7 @@ class GameCharacterComparatorTest {
         // TESTING NoWeaponCheck
         //
         Weapon weapon1 = new Weapon.Builder("weapon1")
+                .overwriteID("1")
                 .isExclusiveTo(chara1)
                 .build();
 
