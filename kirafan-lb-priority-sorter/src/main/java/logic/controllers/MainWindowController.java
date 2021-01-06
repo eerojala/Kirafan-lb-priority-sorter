@@ -11,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import logic.Database;
 
 import java.net.URL;
@@ -107,12 +109,12 @@ public class MainWindowController implements Controller, Initializable {
     }
 
     private void initializeObservableLists() {
+        charactersAll = FXCollections.observableArrayList(characterDatabase.findAll());
         seriesAll = FXCollections.observableArrayList(seriesDatabase.findAll());
-        // TODO: initialize other lists
+        weaponsAll = FXCollections.observableArrayList(weaponDatabase.findAll());
     }
 
     private void initializeAllSeriesListView() {
-
         listViewSeriesAll.setItems(seriesAll);
 
 //        listViewSeriesAll.setCellFactory(param -> new ListCell<Series>() {
@@ -134,7 +136,19 @@ public class MainWindowController implements Controller, Initializable {
 
     @FXML
     public void handleCreateCharacterButtonPressed(ActionEvent event) {
-        openCharacterWindow(Mode.CREATE);
+        if (seriesAll.isEmpty()) {
+            openWarningWindow("No series added yet", "Create at least one series before creating a character");
+        } else {
+            openCharacterWindow(Mode.CREATE);
+        }
+    }
+
+    private void openWarningWindow(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.WARNING, "abc");
+        alert.setTitle("Warning!");
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
     private void openCharacterWindow(Mode mode) {

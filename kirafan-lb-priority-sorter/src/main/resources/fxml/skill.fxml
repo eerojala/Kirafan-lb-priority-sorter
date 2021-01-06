@@ -10,9 +10,9 @@
    <children>
       <ComboBox fx:id="cmbBoxType" layoutX="126.0" layoutY="20.0" onAction="#handleTypeComboBox" prefWidth="150.0" AnchorPane.rightAnchor="24.0" />
       <Label layoutX="24.0" layoutY="24.0" text="Skill type" AnchorPane.leftAnchor="24.0" />
-      <ComboBox fx:id="cmbBoxChange" layoutX="126.0" layoutY="61.0" onAction="#handleChangeComboBox" prefWidth="150.0" AnchorPane.rightAnchor="24.0" />
+      <ComboBox fx:id="cmbBoxChange" layoutX="126.0" layoutY="61.0" prefWidth="150.0" AnchorPane.rightAnchor="24.0" />
       <Label layoutX="24.0" layoutY="65.0" text="Change" />
-      <ComboBox fx:id="cmbBoxTarget" layoutX="126.0" layoutY="101.0" onAction="#handleTargetComboBox" prefWidth="150.0" />
+      <ComboBox fx:id="cmbBoxTarget" layoutX="126.0" layoutY="101.0" prefWidth="150.0" />
       <Label layoutX="24.0" layoutY="105.0" text="Target" />
       <TextField fx:id="textFieldPower" layoutX="126.0" layoutY="140.0" prefHeight="25.0" prefWidth="150.0" />
       <Label layoutX="24.0" layoutY="144.0" text="Power" />

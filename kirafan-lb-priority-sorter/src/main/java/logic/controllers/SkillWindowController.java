@@ -79,7 +79,7 @@ public class SkillWindowController implements Controller, Initializable {
     }
 
     @FXML
-    void handleTypeComboBox(ActionEvent event) {
+    public void handleTypeComboBox(ActionEvent event) {
         SkillType selectedType = cmbBoxType.getValue();
 
         if (SkillType.isBuffOrDebuff(selectedType)) {
@@ -93,7 +93,6 @@ public class SkillWindowController implements Controller, Initializable {
             textFieldPower.setDisable(true);
         }
     }
-
 
     @FXML
     public void handleSubmitButtonPressed(ActionEvent event) {

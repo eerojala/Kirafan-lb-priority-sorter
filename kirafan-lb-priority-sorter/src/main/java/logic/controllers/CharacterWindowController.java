@@ -64,8 +64,8 @@ public class CharacterWindowController implements Controller, Initializable {
     private GameCharacter character;
     private List<GameCharacter> charactersAll;
     private List<Series> seriesAll;
-    private ObservableList<Skill> skills;
     private List<Weapon> weaponsAll;
+    private ObservableList<Skill> skills;
     private Mode mode;
 
     public Database<GameCharacter> getCharacterDatabase() {
@@ -121,15 +121,17 @@ public class CharacterWindowController implements Controller, Initializable {
         initializeSeriesComboBox();
         initializeElementComboBox();
         initializeClassComboBox();
-//        initializeWeaponComboBox();
+        initializeWeaponComboBox();
         initializeSkillListView();
     }
 
     private void initializeSeriesComboBox() {
-        System.out.println(seriesAll);
         ObservableList<Series> list = FXCollections.observableArrayList(seriesAll);
         cmbBoxSeries.setItems(list);
-        cmbBoxSeries.setValue(list.get(0));
+
+        if (!seriesAll.isEmpty()) {
+            cmbBoxSeries.setValue(list.get(0));
+        }
     }
 
     private void initializeElementComboBox() {
@@ -147,7 +149,6 @@ public class CharacterWindowController implements Controller, Initializable {
     private void initializeWeaponComboBox() {
         ObservableList<Weapon> list = FXCollections.observableArrayList(weaponsAll);
         cmbBoxWeapon.setItems(list);
-        cmbBoxWeapon.setValue(weaponsAll.get(0));
     }
 
     private void initializeSkillListView() {
@@ -163,6 +164,8 @@ public class CharacterWindowController implements Controller, Initializable {
     private void openSkillWindow(Mode mode) {
         URL url = getClass().getClassLoader().getResource("fxml/skill.fxml");
         SkillWindowController controller = new SkillWindowController();
+        controller.setMode(mode);
+        controller.setSkills(skills);
         String windowTitle = mode == Mode.CREATE ? "Create a new skill" : "Edit a skill";
 
         if (mode == Mode.EDIT) {
@@ -174,6 +177,6 @@ public class CharacterWindowController implements Controller, Initializable {
 
     @FXML
     void handleSubmitButtonPressed(ActionEvent event) {
-
+        System.out.println(skills);
     }
 }
