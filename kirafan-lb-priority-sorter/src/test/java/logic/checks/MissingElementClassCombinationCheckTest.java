@@ -169,52 +169,52 @@ class MissingElementClassCombinationCheckTest {
         // Limit broken characters which are not referenced directly during testing
         GameCharacter c1 = new GameCharacter.Builder("c1", series, CharacterElement.FIRE, CharacterClass.KNIGHT)
                 .overwriteID("1")
-                .limitBroken()
+                .limitBroken(true)
                 .build();
 
         GameCharacter c2 = new GameCharacter.Builder("c2", series, CharacterElement.WATER, CharacterClass.KNIGHT)
                 .overwriteID("2")
-                .limitBroken()
+                .limitBroken(true)
                 .build();
 
         GameCharacter c3 = new GameCharacter.Builder("c3", series, CharacterElement.SUN, CharacterClass.PRIEST)
                 .overwriteID("3")
-                .limitBroken()
+                .limitBroken(true)
                 .build();
 
         GameCharacter c4 = new GameCharacter.Builder("c4", series, CharacterElement.WIND, CharacterClass.PRIEST)
                 .overwriteID("4")
-                .limitBroken()
+                .limitBroken(true)
                 .build();
 
         GameCharacter c5 = new GameCharacter.Builder("c5", series, CharacterElement.WIND, CharacterClass.MAGE)
                 .overwriteID("5")
-                .limitBroken()
+                .limitBroken(true)
                 .build();
 
         GameCharacter c6 = new GameCharacter.Builder("c6", series, CharacterElement.MOON, CharacterClass.MAGE)
                 .overwriteID("6")
-                .limitBroken()
+                .limitBroken(true)
                 .build();
 
         GameCharacter c7 = new GameCharacter.Builder("c7", series, CharacterElement.FIRE, CharacterClass.WARRIOR)
                 .overwriteID("7")
-                .limitBroken()
+                .limitBroken(true)
                 .build();
 
         GameCharacter c8 = new GameCharacter.Builder("c8", series, CharacterElement.MOON, CharacterClass.WARRIOR)
                 .overwriteID("8")
-                .limitBroken()
+                .limitBroken(true)
                 .build();
 
         GameCharacter c9 = new GameCharacter.Builder("c9", series, CharacterElement.SUN, CharacterClass.ALCHEMIST)
                 .overwriteID("9")
-                .limitBroken()
+                .limitBroken(true)
                 .build();
 
         GameCharacter c10 = new GameCharacter.Builder("c10", series, CharacterElement.MOON, CharacterClass.ALCHEMIST)
                 .overwriteID("10")
-                .limitBroken()
+                .limitBroken(true)
                 .build();
 
         List<GameCharacter> nonLimitBrokenCharacters = new ArrayList<>(Arrays.asList(

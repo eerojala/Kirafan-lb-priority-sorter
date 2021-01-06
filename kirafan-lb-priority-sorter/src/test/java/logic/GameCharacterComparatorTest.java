@@ -96,12 +96,12 @@ class GameCharacterComparatorTest {
         //
         GameCharacter chara4 = new GameCharacter.Builder("chara4", series1, chara2.getCharacterElement(), chara2.getCharacterClass())
                 .overwriteID("4")
-                .limitBroken()
+                .limitBroken(true)
                 .build();
 
         GameCharacter chara5 = new GameCharacter.Builder("chara5", series1, chara3.getCharacterElement(), chara3.getCharacterClass())
                 .overwriteID("5")
-                .limitBroken()
+                .limitBroken(true)
                 .build();
 
         charasByElementAndClass.get(new AbstractMap.SimpleEntry<>(chara2.getCharacterElement(), chara2.getCharacterClass()))
@@ -127,7 +127,7 @@ class GameCharacterComparatorTest {
         //
         GameCharacter chara6 = new GameCharacter.Builder("chara6", series1, chara1.getCharacterElement(), chara1.getCharacterClass())
                 .overwriteID("6")
-                .limitBroken()
+                .limitBroken(true)
                 .build();
 
         charasByElementAndClass.get(new AbstractMap.SimpleEntry<>(chara1.getCharacterElement(), chara1.getCharacterClass()))

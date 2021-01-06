@@ -56,14 +56,20 @@ public class GameCharacter {
             return this;
         }
 
+        public Builder withSkills(List<Skill> skills) {
+            this.skills = skills;
+
+            return this;
+        }
+
         public Builder prefersWeapon(Weapon weapon) {
             this.preferredWeapon = weapon;
 
             return this;
         }
 
-        public Builder limitBroken() {
-            limitBroken = true;
+        public Builder limitBroken(boolean limitBroken) {
+            this.limitBroken = limitBroken;
 
             return this;
         }

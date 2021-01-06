@@ -9,15 +9,18 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.util.Callback;
+import logic.CustomParser;
 import logic.Database;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class CharacterWindowController implements Controller, Initializable {
+public class CharacterWindowController extends Controller implements Initializable {
     @FXML
     private TextField textFieldName;
 
@@ -176,7 +179,43 @@ public class CharacterWindowController implements Controller, Initializable {
     }
 
     @FXML
-    void handleSubmitButtonPressed(ActionEvent event) {
-        System.out.println(skills);
+    public void handleSubmitButtonPressed(ActionEvent event) {
+        if (mode == Mode.CREATE) {
+            createCharacter();
+        }
+
+        closeWindow((Node) event.getSource());
+    }
+
+    private void createCharacter() {
+        String name = textFieldName.getText();
+        Series series = cmbBoxSeries.getValue();
+        CharacterElement charaElement = cmbBoxElement.getValue();
+        CharacterClass charaClass = cmbBoxClass.getValue();
+        int wokeLevel = CustomParser.parseInteger(textFieldWokeLevel.getText());
+        int offensiveStat = CustomParser.parseInteger(textFieldOffensiveStat.getText());
+        int def = CustomParser.parseInteger(textFieldDEF.getText());
+        int mdf = CustomParser.parseInteger(textFieldMDF.getText());
+        int preference = CustomParser.parseInteger(textFieldPersonalPreference.getText());
+        Weapon preferredWeapon = cmbBoxWeapon.getValue();
+        List<Skill> skills = new ArrayList<>(listViewSkills.getItems());
+        boolean limitBroken = checkBoxLimitBroken.isSelected();
+
+        GameCharacter newCharacter = new GameCharacter.Builder(name, series, charaElement, charaClass)
+                .wokeLevelIs(wokeLevel)
+                .offensiveStatIs(offensiveStat)
+                .defenseIs(def)
+                .magicDefenseIs(mdf)
+                .personalPreferenceIs(preference)
+                .prefersWeapon(preferredWeapon)
+                .withSkills(skills)
+                .limitBroken(limitBroken)
+                .build();
+
+        if (characterDatabase.insert(newCharacter)) {
+            charactersAll.add(newCharacter);
+        } else {
+            openWarningWindow("Updating characters.json failed", "New character was not saved to characters.json");
+        }
     }
 }

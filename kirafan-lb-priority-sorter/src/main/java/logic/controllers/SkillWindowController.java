@@ -11,13 +11,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import logic.Parser;
+import logic.CustomParser;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class SkillWindowController implements Controller, Initializable {
+public class SkillWindowController extends Controller implements Initializable {
     @FXML
     private ComboBox<SkillType> cmbBoxType;
 
@@ -100,16 +100,14 @@ public class SkillWindowController implements Controller, Initializable {
             createSkill();
         }
 
-        Node node = (Node) event.getSource();
-        Stage stage = (Stage) node.getScene().getWindow();
-        stage.close(); // close the instance
+        closeWindow((Node) event.getSource());
     }
 
     private void createSkill() {
         SkillType selectedType = cmbBoxType.getValue();
         SkillChange selectedChange = cmbBoxChange.isDisabled() ? null : cmbBoxChange.getValue();
         SkillTarget selectedTarget = cmbBoxTarget.isDisabled() ? null : cmbBoxTarget.getValue();
-        double power = textFieldPower.isDisabled() ? null : Parser.parseDouble(textFieldPower.getText());
+        double power = textFieldPower.isDisabled() ? 0 : CustomParser.parseDouble(textFieldPower.getText());
 
         Skill skill = new Skill(selectedType, selectedChange, selectedTarget, power);
         skills.add(skill);

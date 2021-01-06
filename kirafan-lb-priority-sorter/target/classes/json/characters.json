@@ -1,1 +1,2 @@
 {"schemaVersion":"1.0"}
+{"id":"Wed Jan 06 18:15:26 EET 2021","name":"apina","series":{"id":"Wed Jan 06 18:15:00 EET 2021","name":"dsddssdsdsdsddssdsdsd","creaStatus":"INCOMPLETE"},"characterElement":"EARTH","characterClass":"MAGE","skills":[{"type":"ATK","change":"UP","target":"ALLY_SELF","power":22.0}],"preferredWeapon":null,"limitBroken":true,"offensiveStat":0,"defense":0,"magicDefense":0,"wokeLevel":0,"personalPreference":0}

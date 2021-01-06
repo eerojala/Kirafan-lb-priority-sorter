@@ -144,7 +144,7 @@ class HighestWokeCheckTest {
         chara3 = new GameCharacter.Builder("chara3", series2, CharacterElement.SUN, CharacterClass.KNIGHT)
                .overwriteID("3")
                 .wokeLevelIs(4)
-                .limitBroken()
+                .limitBroken(true)
                 .build();
 
         chara4 = new GameCharacter.Builder("chara4", series2, CharacterElement.FIRE, CharacterClass.MAGE)

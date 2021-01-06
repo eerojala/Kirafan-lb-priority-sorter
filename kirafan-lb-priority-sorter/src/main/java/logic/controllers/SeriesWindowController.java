@@ -17,7 +17,7 @@ import logic.Database;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class SeriesWindowController implements Controller, Initializable {
+public class SeriesWindowController extends Controller implements Initializable {
     @FXML
     private Button buttonSubmit;
 
@@ -113,23 +113,27 @@ public class SeriesWindowController implements Controller, Initializable {
             editSeries();
         }
 
-        // Close the series window:
-        Node node = (Node) event.getSource();
-        Stage stage = (Stage) node.getScene().getWindow();
-        stage.close(); // close the instance
+        closeWindow((Node) event.getSource());
     }
 
     private void createSeries() {
         Series newSeries = new Series(textFieldName.getText(), cmbBoxCrea.getValue());
-        seriesDatabase.insert(newSeries);
-        seriesAll.add(newSeries);
+
+        if (seriesDatabase.insert(newSeries)) {
+            seriesAll.add(newSeries);
+        } else {
+            openWarningWindow("Updating series.json failed", "New series was not saved to series.json");
+        }
     }
 
     private void editSeries() {
         seriesAll.remove(series);
         series.setName(textFieldName.getText());
         series.setCreaStatus(cmbBoxCrea.getValue());
-        seriesDatabase.update(series);
         seriesAll.add(series);
+
+        if (!seriesDatabase.update(series)) {
+            openWarningWindow("Updating series.json failed", "Changes were not saved to series.json");
+        }
     }
 }

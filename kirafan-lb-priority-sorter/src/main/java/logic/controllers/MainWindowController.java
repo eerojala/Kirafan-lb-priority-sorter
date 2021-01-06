@@ -18,7 +18,7 @@ import logic.Database;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainWindowController implements Controller, Initializable {
+public class MainWindowController extends Controller implements Initializable {
 
     @FXML
     private ListView<GameCharacter> listViewCharactersAll;
@@ -141,14 +141,6 @@ public class MainWindowController implements Controller, Initializable {
         } else {
             openCharacterWindow(Mode.CREATE);
         }
-    }
-
-    private void openWarningWindow(String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.WARNING, "abc");
-        alert.setTitle("Warning!");
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 
     private void openCharacterWindow(Mode mode) {
