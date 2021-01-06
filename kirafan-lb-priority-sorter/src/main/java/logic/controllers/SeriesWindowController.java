@@ -10,8 +10,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
-import javafx.util.Callback;
 import logic.Database;
 
 import java.net.URL;
@@ -69,7 +67,7 @@ public class SeriesWindowController extends Controller implements Initializable 
         initializeComboBox();
 
         if (mode == Mode.EDIT) {
-            fillInputFieldsWithCharacterData();
+            setInputValuesWithCharacterData();
         }
     }
 
@@ -100,7 +98,7 @@ public class SeriesWindowController extends Controller implements Initializable 
         cmbBoxCrea.setValue(CreaStatus.NONE);
     }
 
-    private void fillInputFieldsWithCharacterData() {
+    private void setInputValuesWithCharacterData() {
         textFieldName.setText(series.getName());
         cmbBoxCrea.setValue(series.getCreaStatus());
     }

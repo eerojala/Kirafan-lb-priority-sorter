@@ -33,8 +33,18 @@ public class SkillWindowController extends Controller implements Initializable {
     @FXML
     private Button buttonSubmit;
 
+    private int skillsSelectedIndex;
     private List<Skill> skills;
     private Mode mode;
+    private Skill skill;
+
+    public int getSkillsSelectedIndex() {
+        return skillsSelectedIndex;
+    }
+
+    public void setSkillsSelectedIndex(int skillsSelectedIndex) {
+        this.skillsSelectedIndex = skillsSelectedIndex;
+    }
 
     public List<Skill> getSkills() {
         return skills;
@@ -52,12 +62,23 @@ public class SkillWindowController extends Controller implements Initializable {
         this.mode = mode;
     }
 
+    public Skill getSkill() {
+        return skill;
+    }
+
+    public void setSkill(Skill skill) {
+        this.skill = skill;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeTypeComboBox();
         initializeChangeComboBox();
         initializeTargetComboBox();
-        textFieldPower.setText("0");
+
+        if (mode == Mode.EDIT) {
+            setInputValuesWithSkillData();
+        }
     }
 
     private void initializeTypeComboBox() {
@@ -76,6 +97,13 @@ public class SkillWindowController extends Controller implements Initializable {
         ObservableList<SkillTarget> list = FXCollections.observableArrayList(SkillTarget.values());
         cmbBoxTarget.setItems(list);
         cmbBoxTarget.setValue(SkillTarget.ALLY_SELF);
+    }
+
+    private void setInputValuesWithSkillData() {
+        cmbBoxType.setValue(skill.getType());
+        cmbBoxChange.setValue(skill.getChange());
+        cmbBoxTarget.setValue(skill.getTarget());
+        textFieldPower.setText("" + skill.getPower());
     }
 
     @FXML
@@ -98,6 +126,8 @@ public class SkillWindowController extends Controller implements Initializable {
     public void handleSubmitButtonPressed(ActionEvent event) {
         if (mode == Mode.CREATE) {
             createSkill();
+        } else if (mode == Mode.EDIT) {
+            editSkill();
         }
 
         closeWindow((Node) event.getSource());
@@ -108,8 +138,16 @@ public class SkillWindowController extends Controller implements Initializable {
         SkillChange selectedChange = cmbBoxChange.isDisabled() ? null : cmbBoxChange.getValue();
         SkillTarget selectedTarget = cmbBoxTarget.isDisabled() ? null : cmbBoxTarget.getValue();
         double power = textFieldPower.isDisabled() ? 0 : CustomParser.parseDouble(textFieldPower.getText());
-
         Skill skill = new Skill(selectedType, selectedChange, selectedTarget, power);
+        skills.add(skill);
+    }
+
+    private void editSkill() {
+        skill.setType(cmbBoxType.getValue());
+        skill.setChange(cmbBoxChange.isDisabled() ? null : cmbBoxChange.getValue());
+        skill.setTarget( cmbBoxTarget.isDisabled() ? null : cmbBoxTarget.getValue());
+        skill.setPower(textFieldPower.isDisabled() ? 0 : CustomParser.parseDouble(textFieldPower.getText()));
+        skills.remove(skillsSelectedIndex);
         skills.add(skill);
     }
 }

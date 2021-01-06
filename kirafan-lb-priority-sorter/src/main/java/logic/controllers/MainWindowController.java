@@ -11,8 +11,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import logic.Database;
 
 import java.net.URL;
@@ -105,7 +103,7 @@ public class MainWindowController extends Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeObservableLists();
-        initializeAllSeriesListView();
+        initializeListViews();
     }
 
     private void initializeObservableLists() {
@@ -114,9 +112,11 @@ public class MainWindowController extends Controller implements Initializable {
         weaponsAll = FXCollections.observableArrayList(weaponDatabase.findAll());
     }
 
-    private void initializeAllSeriesListView() {
+    private void initializeListViews() {
         listViewSeriesAll.setItems(seriesAll);
-
+        listViewCharactersAll.setItems(charactersAll);
+// If you ever want to display objects in an another way than the toString() method, this is how you do it:
+//
 //        listViewSeriesAll.setCellFactory(param -> new ListCell<Series>() {
 //            @Override
 //            protected void updateItem(Series item, boolean empty) {

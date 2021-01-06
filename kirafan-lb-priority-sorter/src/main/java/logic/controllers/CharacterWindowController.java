@@ -52,6 +52,12 @@ public class CharacterWindowController extends Controller implements Initializab
     private ListView<Skill> listViewSkills;
 
     @FXML
+    private MenuItem menuItemSkillEdit;
+
+    @FXML
+    private MenuItem menuItemSkillRemove;
+
+    @FXML
     private Button buttonCreateSkill;
 
     @FXML
@@ -172,10 +178,21 @@ public class CharacterWindowController extends Controller implements Initializab
         String windowTitle = mode == Mode.CREATE ? "Create a new skill" : "Edit a skill";
 
         if (mode == Mode.EDIT) {
-
+            controller.setSkill(listViewSkills.getSelectionModel().getSelectedItem());
+            controller.setSkillsSelectedIndex(listViewSkills.getSelectionModel().getSelectedIndex());
         }
 
         Controller.openWindow(url, controller, windowTitle);
+    }
+
+    @FXML
+    public void handleMenuItemSkillEditClicked(ActionEvent event) {
+        openSkillWindow(Mode.EDIT);
+    }
+
+    @FXML
+    void handleMenuItemSkillRemoveClicked(ActionEvent event) {
+        skills.remove(listViewSkills.getSelectionModel().getSelectedIndex());
     }
 
     @FXML

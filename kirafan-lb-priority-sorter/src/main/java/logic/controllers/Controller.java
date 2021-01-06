@@ -11,9 +11,6 @@ import java.net.URL;
 
 public abstract class Controller {
     public static void openWindow(URL url, Controller controller, String windowTitle) {
-        //        Node node = (Node) event.getSource(); // Grab the node representing the button from the event object
-        //        Stage stage = (Stage) node.getScene().getWindow(); // Get the instance of the stage from the node
-        //        stage.close(); // close the instance
         try {
             FXMLLoader loader = new FXMLLoader(url);
             loader.setController(controller);
