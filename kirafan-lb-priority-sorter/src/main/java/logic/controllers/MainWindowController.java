@@ -172,7 +172,7 @@ public class MainWindowController extends Controller implements Initializable {
         GameCharacter character = listViewCharactersAll.getSelectionModel().getSelectedItem();
 
         if (databaseHandler.deleteCharacter(character)) {
-            listHandler.removeCharacter(character);
+            listHandler.deleteCharacter(character);
         } else {
             openErrorWindow("Updating characters.json failed", "Character was not deleted from characters.json");
         }
@@ -211,7 +211,7 @@ public class MainWindowController extends Controller implements Initializable {
         Series series = listViewSeriesAll.getSelectionModel().getSelectedItem();
 
         if (databaseHandler.deleteSeries(series)) {
-            listHandler.removeSeries(series);
+            listHandler.deleteSeries(series);
         } else {
             openErrorWindow("Updating series.json failed", "Series was not deleted from series.json");
         }

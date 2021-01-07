@@ -5,6 +5,7 @@ import domain.model.Series;
 import domain.model.Weapon;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ListHandler {
     private List<GameCharacter> charactersAll;
@@ -45,11 +46,31 @@ public class ListHandler {
         charactersAll.remove(character);
     }
 
-    public void addSeriesToSeriesAll(Series series) {
-        seriesAll.add(series);
+    public void deleteCharacter(GameCharacter character) {
+        removeCharacter(character);
     }
 
+    public void addSeriesToSeriesAll(Series series) {
+        seriesAll.add(series);
+
+    }
+
+    // Removes only the series
     public void removeSeries(Series series) {
         seriesAll.remove(series);
+    }
+
+    // Removes the series as well as the characters belonging to it
+    public void deleteSeries(Series series) {
+        removeSeries(series);
+
+        // remove the characters belonging to the series
+        List<GameCharacter> seriesCharacters = getCharactersAll().stream()
+                .filter(c -> c.getSeries().equals(series))
+                .collect(Collectors.toList());
+
+        for (GameCharacter character : seriesCharacters) {
+            deleteCharacter(character);
+        }
     }
 }
