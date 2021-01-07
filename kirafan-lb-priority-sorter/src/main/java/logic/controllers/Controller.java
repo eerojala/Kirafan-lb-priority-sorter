@@ -27,11 +27,18 @@ public abstract class Controller {
     public Controller() {
     }
 
+    protected void openErrorWindow(String header, String content) {
+        openAlertWindow(Alert.AlertType.ERROR, "Error", header, content);
+    }
+
     protected void openWarningWindow(String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.WARNING, "abc");
-        alert.setTitle("Warning!");
+        openAlertWindow(Alert.AlertType.WARNING, "Warning", header, content);
+    }
+
+    private void openAlertWindow(Alert.AlertType type, String title, String header, String content) {
+        Alert alert = new Alert(type, content);
+        alert.setTitle(title);
         alert.setHeaderText(header);
-        alert.setContentText(content);
         alert.showAndWait();
     }
 

@@ -120,7 +120,7 @@ public class SeriesWindowController extends Controller implements Initializable 
         if (seriesDatabase.insert(newSeries)) {
             seriesAll.add(newSeries);
         } else {
-            openWarningWindow("Updating series.json failed", "New series was not saved to series.json");
+            openErrorWindow("Updating series.json failed", "New series was not saved to series.json");
         }
     }
 
@@ -131,7 +131,7 @@ public class SeriesWindowController extends Controller implements Initializable 
         seriesAll.add(series);
 
         if (!seriesDatabase.update(series)) {
-            openWarningWindow("Updating series.json failed", "Changes were not saved to series.json");
+            openErrorWindow("Updating series.json failed", "Changes were not saved to series.json");
         }
     }
 }

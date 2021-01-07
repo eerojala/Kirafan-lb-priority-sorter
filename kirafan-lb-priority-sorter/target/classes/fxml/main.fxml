@@ -19,7 +19,15 @@
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
-                              <ListView fx:id="listViewCharactersAll" layoutX="19.0" layoutY="31.0" prefHeight="262.0" prefWidth="262.0" AnchorPane.bottomAnchor="50.6" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="31.0" />
+                              <ListView fx:id="listViewCharactersAll" layoutX="19.0" layoutY="31.0" prefHeight="262.0" prefWidth="262.0" AnchorPane.bottomAnchor="50.6" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="31.0">
+                                 <contextMenu>
+                                    <ContextMenu>
+                                      <items>
+                                        <MenuItem fx:id="menuItemCharacterEdit" mnemonicParsing="false" onAction="#handleCharacterEditMenuItemClicked" text="Edit" />
+                                          <MenuItem fx:id="menuItemCharacterDelete" mnemonicParsing="false" onAction="#handleCharacterDeleteMenuItemClicked" text="Delete" />
+                                      </items>
+                                    </ContextMenu>
+                                 </contextMenu></ListView>
                               <Label layoutX="19.0" layoutY="14.0" text="Characters (all)" AnchorPane.leftAnchor="19.0" AnchorPane.topAnchor="14.0" />
                               <Button fx:id="buttonCreateCharacter" layoutX="77.0" layoutY="303.0" mnemonicParsing="false" onAction="#handleCreateCharacterButtonPressed" prefHeight="26.0" prefWidth="144.0" text="Create a new character" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="77.0" AnchorPane.rightAnchor="76.0" />
                            </children>
@@ -34,13 +42,13 @@
                                              <contextMenu>
                                                 <ContextMenu>
                                                   <items>
-                                                    <MenuItem fx:id="menuItemSeriesEdit" mnemonicParsing="false" onAction="#handleMenuItemSeriesEditClicked" text="Edit" />
-                                                      <MenuItem fx:id="menuItemSeriesDelete" mnemonicParsing="false" onAction="#handleMenuItemSeriesDeleteClicked" text="Delete" />
+                                                    <MenuItem fx:id="menuItemSeriesEdit" mnemonicParsing="false" onAction="#handleSeriesEditMenuItemClicked" text="Edit" />
+                                                      <MenuItem fx:id="menuItemSeriesDelete" mnemonicParsing="false" onAction="#handleSeriesDeleteMenuItemClicked" text="Delete" />
                                                   </items>
                                                 </ContextMenu>
                                              </contextMenu></ListView>
                                           <Label layoutX="18.0" layoutY="14.0" text="Series" AnchorPane.leftAnchor="19.0" AnchorPane.topAnchor="14.0" />
-                                          <Button fx:id="buttonCreateSeries" layoutX="89.0" layoutY="301.0" mnemonicParsing="false" onAction="#handleButtonCreateSeriesPressed" prefHeight="26.0" prefWidth="123.0" text="Create a new series" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="89.0" AnchorPane.rightAnchor="88.0" />
+                                          <Button fx:id="buttonCreateSeries" layoutX="89.0" layoutY="301.0" mnemonicParsing="false" onAction="#handleCreateSeriesButtonPressed" prefHeight="26.0" prefWidth="123.0" text="Create a new series" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="89.0" AnchorPane.rightAnchor="88.0" />
                                        </children>
                                     </AnchorPane>
                                   <AnchorPane fx:id="allWeaponsListView" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">

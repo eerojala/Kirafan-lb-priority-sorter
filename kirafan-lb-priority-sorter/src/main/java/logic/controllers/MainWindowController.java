@@ -22,6 +22,12 @@ public class MainWindowController extends Controller implements Initializable {
     private ListView<GameCharacter> listViewCharactersAll;
 
     @FXML
+    private MenuItem menuItemCharacterEdit;
+
+    @FXML
+    private MenuItem menuItemCharacterDelete;
+
+    @FXML
     private Button buttonCreateCharacter;
 
     @FXML
@@ -164,7 +170,23 @@ public class MainWindowController extends Controller implements Initializable {
     }
 
     @FXML
-    public void handleButtonCreateSeriesPressed(ActionEvent event) {
+    public void handleCharacterEditMenuItemClicked(ActionEvent event) {
+        openCharacterWindow(Mode.EDIT);
+    }
+
+    @FXML
+    public void handleCharacterDeleteMenuItemClicked(ActionEvent event) {
+        GameCharacter character = listViewCharactersAll.getSelectionModel().getSelectedItem();
+
+        if (characterDatabase.remove(character)) {
+            charactersAll.remove(character);
+        } else {
+            openErrorWindow("Updating characters.json failed", "Character was not deleted from characters.json");
+        }
+    }
+
+    @FXML
+    public void handleCreateSeriesButtonPressed(ActionEvent event) {
         openSeriesWindow(Mode.CREATE);
     }
 
@@ -187,15 +209,17 @@ public class MainWindowController extends Controller implements Initializable {
     }
 
     @FXML
-    public void handleMenuItemSeriesDeleteClicked(ActionEvent event) {
-        Series series = listViewSeriesAll.getSelectionModel().getSelectedItem();
-        if (seriesDatabase.remove(series)) {
-            seriesAll.remove(series);
-        }
+    public void handleSeriesEditMenuItemClicked(ActionEvent event) {
+        openSeriesWindow(Mode.EDIT);
     }
 
     @FXML
-    public void handleMenuItemSeriesEditClicked(ActionEvent event) {
-        openSeriesWindow(Mode.EDIT);
+    public void handleSeriesDeleteMenuItemClicked(ActionEvent event) {
+        Series series = listViewSeriesAll.getSelectionModel().getSelectedItem();
+        if (seriesDatabase.remove(series)) {
+            seriesAll.remove(series);
+        } else {
+            openErrorWindow("Updating series.json failed", "Series was not deleted from series.json");
+        }
     }
 }
