@@ -5,6 +5,7 @@ import domain.model.Series;
 import domain.model.Weapon;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DatabaseHandler {
     private Database<GameCharacter> characterDatabase;
@@ -48,11 +49,40 @@ public class DatabaseHandler {
     }
 
     public boolean updateSeries(Series series) {
-        return seriesDatabase.update(series);
+        if (!seriesDatabase.update(series)) {
+            System.out.println("Failed updating series " + series);
+            return false;
+        }
+        // apparently JsonDb automatically updates the characters of the updated series, so this is unnecessary
+//        List<GameCharacter> seriesCharacters = getSeriesCharacters(series);
+//
+//        for (GameCharacter character : seriesCharacters) {
+//            character.setSeries(series);
+//            updateCharacter(character);
+//        }
+
+        return true;
+    }
+
+    private List<GameCharacter> getSeriesCharacters(Series series) {
+        return getAllCharacters().stream()
+                .filter(c -> c.getSeries().equals(series))
+                .collect(Collectors.toList());
     }
 
     public boolean deleteSeries(Series series) {
-        return seriesDatabase.remove(series);
+        if (!seriesDatabase.remove(series)) {
+            System.out.println("Failed deleting series " + series);
+            return false;
+        }
+
+        List<GameCharacter> seriesCharacters = getSeriesCharacters(series);
+
+        for (GameCharacter character : seriesCharacters) {
+            deleteCharacter(character);
+        }
+
+        return true;
     }
 
     public List<Weapon> getAllWeapons() {

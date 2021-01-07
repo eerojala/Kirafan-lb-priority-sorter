@@ -94,6 +94,18 @@ public class MainWindowController extends Controller implements Initializable {
         initializeListViews();
     }
 
+//    private void refreshGUI() {
+//        /*
+//        * A separate function to refresh the gui since updating all the observable lists separately might end up being
+//        * too spaghetti (for example when one deletes a series, all the characters belonging to that series have to be
+//        * deleted as well, as well as deleting the exclusive weapons belonging to those characters. These characters
+//        * would then have possibly have to be deleted from the event bonus and non-limit broken character lists as well)
+//        */
+//
+//        initializeObservableLists();
+//        initializeListViews();
+//    }
+
     private void initializeObservableLists() {
         charactersAll = FXCollections.observableArrayList(databaseHandler.getAllCharacters());
         seriesAll = FXCollections.observableArrayList(databaseHandler.getAllSeries());

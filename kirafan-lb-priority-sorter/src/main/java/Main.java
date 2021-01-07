@@ -24,6 +24,7 @@ public class Main extends Application {
         Database<Series> seriesDatabase = new Database<>(dbFilesLocation, modelPackageName, "series");
         Database<Weapon> weaponDatabase = new Database<>(dbFilesLocation, modelPackageName, "weapons");
         DatabaseHandler databaseHandler = new DatabaseHandler(characterDatabase, seriesDatabase, weaponDatabase);
+        databaseHandler.initializeCollections();
 
         URL url = getClass().getClassLoader().getResource("fxml/main.fxml");
         MainWindowController controller = new MainWindowController();
