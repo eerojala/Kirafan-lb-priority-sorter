@@ -10,7 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import logic.Database;
+import logic.DatabaseHandler;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,17 +25,17 @@ public class SeriesWindowController extends Controller implements Initializable 
     @FXML
     private ComboBox<CreaStatus> cmbBoxCrea;
 
-    private Database<Series> seriesDatabase;
+    private DatabaseHandler databaseHandler;
     private Mode mode;
     private ObservableList<Series> seriesAll;
     private Series series;
 
-    public Database<Series> getSeriesDatabase() {
-        return seriesDatabase;
+    public DatabaseHandler getDatabaseHandler() {
+        return databaseHandler;
     }
 
-    public void setSeriesDatabase(Database<Series> seriesDatabase) {
-        this.seriesDatabase = seriesDatabase;
+    public void setDatabaseHandler(DatabaseHandler databaseHandler) {
+        this.databaseHandler = databaseHandler;
     }
 
     public Mode getMode() {
@@ -117,7 +117,7 @@ public class SeriesWindowController extends Controller implements Initializable 
     private void createSeries() {
         Series newSeries = new Series(textFieldName.getText(), cmbBoxCrea.getValue());
 
-        if (seriesDatabase.insert(newSeries)) {
+        if (databaseHandler.createSeries(newSeries)) {
             seriesAll.add(newSeries);
         } else {
             openErrorWindow("Updating series.json failed", "New series was not saved to series.json");
@@ -130,7 +130,7 @@ public class SeriesWindowController extends Controller implements Initializable 
         series.setCreaStatus(cmbBoxCrea.getValue());
         seriesAll.add(series);
 
-        if (!seriesDatabase.update(series)) {
+        if (!databaseHandler.updateSeries(series)) {
             openErrorWindow("Updating series.json failed", "Changes were not saved to series.json");
         }
     }

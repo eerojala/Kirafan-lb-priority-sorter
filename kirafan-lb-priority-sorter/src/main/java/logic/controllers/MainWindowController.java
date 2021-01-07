@@ -11,7 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import logic.Database;
+import logic.DatabaseHandler;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -75,35 +75,17 @@ public class MainWindowController extends Controller implements Initializable {
     @FXML
     private CheckBox checkBoxFilter;
 
-    private Database<GameCharacter> characterDatabase;
-    private Database<Series> seriesDatabase;
-    private Database<Weapon> weaponDatabase;
+    private DatabaseHandler databaseHandler;
     private ObservableList<GameCharacter> charactersAll;
     private ObservableList<Series> seriesAll;
     private ObservableList<Weapon> weaponsAll;
 
-    public Database<GameCharacter> getCharacterDatabase() {
-        return characterDatabase;
+    public DatabaseHandler getDatabaseHandler() {
+        return databaseHandler;
     }
 
-    public void setCharacterDatabase(Database<GameCharacter> characterDatabase) {
-        this.characterDatabase = characterDatabase;
-    }
-
-    public Database<Series> getSeriesDatabase() {
-        return seriesDatabase;
-    }
-
-    public void setSeriesDatabase(Database<Series> seriesDatabase) {
-        this.seriesDatabase = seriesDatabase;
-    }
-
-    public Database<Weapon> getWeaponDatabase() {
-        return weaponDatabase;
-    }
-
-    public void setWeaponDatabase(Database<Weapon> weaponDatabase) {
-        this.weaponDatabase = weaponDatabase;
+    public void setDatabaseHandler(DatabaseHandler databaseHandler) {
+        this.databaseHandler = databaseHandler;
     }
 
     @Override
@@ -113,9 +95,9 @@ public class MainWindowController extends Controller implements Initializable {
     }
 
     private void initializeObservableLists() {
-        charactersAll = FXCollections.observableArrayList(characterDatabase.findAll());
-        seriesAll = FXCollections.observableArrayList(seriesDatabase.findAll());
-        weaponsAll = FXCollections.observableArrayList(weaponDatabase.findAll());
+        charactersAll = FXCollections.observableArrayList(databaseHandler.getAllCharacters());
+        seriesAll = FXCollections.observableArrayList(databaseHandler.getAllSeries());
+        weaponsAll = FXCollections.observableArrayList(databaseHandler.getAllWeapons());
     }
 
     private void initializeListViews() {
@@ -153,7 +135,7 @@ public class MainWindowController extends Controller implements Initializable {
         URL url = getClass().getClassLoader().getResource("fxml/character.fxml");
         CharacterWindowController controller = new CharacterWindowController();
         controller.setMode(mode);
-        controller.setCharacterDatabase(characterDatabase);
+        controller.setDatabaseHandler(databaseHandler);
         controller.setCharactersAll(charactersAll);
         controller.setSeriesAll(seriesAll);
         controller.setWeaponsAll(weaponsAll);
@@ -178,7 +160,7 @@ public class MainWindowController extends Controller implements Initializable {
     public void handleCharacterDeleteMenuItemClicked(ActionEvent event) {
         GameCharacter character = listViewCharactersAll.getSelectionModel().getSelectedItem();
 
-        if (characterDatabase.remove(character)) {
+        if (databaseHandler.deleteCharacter(character)) {
             charactersAll.remove(character);
         } else {
             openErrorWindow("Updating characters.json failed", "Character was not deleted from characters.json");
@@ -194,7 +176,7 @@ public class MainWindowController extends Controller implements Initializable {
         URL url = getClass().getClassLoader().getResource("fxml/series.fxml");
         SeriesWindowController controller = new SeriesWindowController();
         controller.setMode(mode);
-        controller.setSeriesDatabase(seriesDatabase);
+        controller.setDatabaseHandler(databaseHandler);
         controller.setSeriesAll(seriesAll);
         String windowTitle = "";
 
@@ -216,7 +198,8 @@ public class MainWindowController extends Controller implements Initializable {
     @FXML
     public void handleSeriesDeleteMenuItemClicked(ActionEvent event) {
         Series series = listViewSeriesAll.getSelectionModel().getSelectedItem();
-        if (seriesDatabase.remove(series)) {
+
+        if (databaseHandler.deleteSeries(series)) {
             seriesAll.remove(series);
         } else {
             openErrorWindow("Updating series.json failed", "Series was not deleted from series.json");

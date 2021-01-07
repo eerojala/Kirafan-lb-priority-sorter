@@ -12,7 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import logic.CustomParser;
-import logic.Database;
+import logic.DatabaseHandler;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class CharacterWindowController extends Controller implements Initializab
     @FXML
     private Button buttonSubmit;
 
-    private Database<GameCharacter> characterDatabase;
+    private DatabaseHandler databaseHandler;
     private GameCharacter character;
     private List<GameCharacter> charactersAll;
     private List<Series> seriesAll;
@@ -77,12 +77,12 @@ public class CharacterWindowController extends Controller implements Initializab
     private ObservableList<Skill> skills;
     private Mode mode;
 
-    public Database<GameCharacter> getCharacterDatabase() {
-        return characterDatabase;
+    public DatabaseHandler getDatabaseHandler() {
+        return databaseHandler;
     }
 
-    public void setCharacterDatabase(Database<GameCharacter> characterDatabase) {
-        this.characterDatabase = characterDatabase;
+    public void setDatabaseHandler(DatabaseHandler databaseHandler) {
+        this.databaseHandler = databaseHandler;
     }
 
     public GameCharacter getCharacter() {
@@ -272,7 +272,7 @@ public class CharacterWindowController extends Controller implements Initializab
                 .limitBroken(limitBroken)
                 .build();
 
-        if (characterDatabase.insert(newCharacter)) {
+        if (databaseHandler.createCharacter(newCharacter)) {
             charactersAll.add(newCharacter);
         } else {
             openWarningWindow("Updating characters.json failed", "New character was not saved to characters.json");
@@ -297,7 +297,7 @@ public class CharacterWindowController extends Controller implements Initializab
 
         charactersAll.add(character);
 
-        if (!characterDatabase.update(character)) {
+        if (!databaseHandler.updateCharacter(character)) {
             openErrorWindow("Updating characters.json failed", "Changes were not saved to characters.json");
         }
     }

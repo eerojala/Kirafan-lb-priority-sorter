@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import logic.Database;
+import logic.DatabaseHandler;
 import logic.controllers.Controller;
 import logic.controllers.MainWindowController;
 
@@ -22,16 +23,11 @@ public class Main extends Application {
         Database<GameCharacter> characterDatabase = new Database<>(dbFilesLocation, modelPackageName, "characters");
         Database<Series> seriesDatabase = new Database<>(dbFilesLocation, modelPackageName, "series");
         Database<Weapon> weaponDatabase = new Database<>(dbFilesLocation, modelPackageName, "weapons");
-
-        characterDatabase.createCollection();
-        seriesDatabase.createCollection();
-        weaponDatabase.createCollection();
+        DatabaseHandler databaseHandler = new DatabaseHandler(characterDatabase, seriesDatabase, weaponDatabase);
 
         URL url = getClass().getClassLoader().getResource("fxml/main.fxml");
         MainWindowController controller = new MainWindowController();
-        controller.setCharacterDatabase(characterDatabase);
-        controller.setSeriesDatabase(seriesDatabase);
-        controller.setWeaponDatabase(weaponDatabase);
+        controller.setDatabaseHandler(databaseHandler);
         String windowTitle = "Kirafan limit break priority sorter";
         Controller.openWindow(url, controller, windowTitle);
 
