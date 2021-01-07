@@ -13,12 +13,12 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import logic.CustomParser;
 import logic.DatabaseHandler;
+import logic.ListHandler;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class CharacterWindowController extends Controller implements Initializable {
     @FXML
@@ -71,9 +71,7 @@ public class CharacterWindowController extends Controller implements Initializab
 
     private DatabaseHandler databaseHandler;
     private GameCharacter character;
-    private List<GameCharacter> charactersAll;
-    private List<Series> seriesAll;
-    private List<Weapon> weaponsAll;
+    private ListHandler listHandler;
     private ObservableList<Skill> skills;
     private Mode mode;
 
@@ -93,28 +91,12 @@ public class CharacterWindowController extends Controller implements Initializab
         this.character = character;
     }
 
-    public List<GameCharacter> getCharactersAll() {
-        return charactersAll;
+    public ListHandler getListHandler() {
+        return listHandler;
     }
 
-    public void setCharactersAll(List<GameCharacter> charactersAll) {
-        this.charactersAll = charactersAll;
-    }
-
-    public List<Weapon> getWeaponsAll() {
-        return weaponsAll;
-    }
-
-    public List<Series> getSeriesAll() {
-        return seriesAll;
-    }
-
-    public void setSeriesAll(List<Series> seriesAll) {
-        this.seriesAll = seriesAll;
-    }
-
-    public void setWeaponsAll(List<Weapon> weaponsAll) {
-        this.weaponsAll = weaponsAll;
+    public void setListHandler(ListHandler listHandler) {
+        this.listHandler = listHandler;
     }
 
     public Mode getMode() {
@@ -135,11 +117,12 @@ public class CharacterWindowController extends Controller implements Initializab
         if (mode == Mode.EDIT) {
             setInputValuesWithCharacterData();
         } else {
-            initializeSkillListView(new ArrayList<Skill>());
+            initializeSkillListView(new ArrayList<>());
         }
     }
 
     private void initializeSeriesComboBox() {
+        List<Series> seriesAll = listHandler.getSeriesAll();
         ObservableList<Series> list = FXCollections.observableArrayList(seriesAll);
         cmbBoxSeries.setItems(list);
 
@@ -161,7 +144,7 @@ public class CharacterWindowController extends Controller implements Initializab
     }
 
     private void initializeWeaponComboBox() {
-        ObservableList<Weapon> list = FXCollections.observableArrayList(weaponsAll);
+        ObservableList<Weapon> list = FXCollections.observableArrayList(listHandler.getWeaponsAll());
         cmbBoxWeapon.setItems(list);
     }
 
@@ -273,14 +256,14 @@ public class CharacterWindowController extends Controller implements Initializab
                 .build();
 
         if (databaseHandler.createCharacter(newCharacter)) {
-            charactersAll.add(newCharacter);
+            listHandler.addCharacterToCharactersAll(newCharacter);
         } else {
             openWarningWindow("Updating characters.json failed", "New character was not saved to characters.json");
         }
     }
 
     private void editCharacter() {
-        charactersAll.remove(character);
+        listHandler.removeCharacter(character);
 
         character.setName(textFieldName.getText());
         character.setSeries(cmbBoxSeries.getValue());
@@ -295,7 +278,7 @@ public class CharacterWindowController extends Controller implements Initializab
         character.setSkills(skills);
         character.setLimitBroken(checkBoxLimitBroken.isSelected());
 
-        charactersAll.add(character);
+        listHandler.addCharacterToCharactersAll(character);
 
         if (!databaseHandler.updateCharacter(character)) {
             openErrorWindow("Updating characters.json failed", "Changes were not saved to characters.json");

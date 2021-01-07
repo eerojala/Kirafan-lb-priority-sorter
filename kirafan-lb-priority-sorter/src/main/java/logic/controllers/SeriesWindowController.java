@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import logic.DatabaseHandler;
+import logic.ListHandler;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,8 +27,8 @@ public class SeriesWindowController extends Controller implements Initializable 
     private ComboBox<CreaStatus> cmbBoxCrea;
 
     private DatabaseHandler databaseHandler;
+    private ListHandler listHandler;
     private Mode mode;
-    private ObservableList<Series> seriesAll;
     private Series series;
 
     public DatabaseHandler getDatabaseHandler() {
@@ -38,20 +39,20 @@ public class SeriesWindowController extends Controller implements Initializable 
         this.databaseHandler = databaseHandler;
     }
 
+    public ListHandler getListHandler() {
+        return listHandler;
+    }
+
+    public void setListHandler(ListHandler listHandler) {
+        this.listHandler = listHandler;
+    }
+
     public Mode getMode() {
         return mode;
     }
 
     public void setMode(Mode mode) {
         this.mode = mode;
-    }
-
-    public ObservableList<Series> getSeriesAll() {
-        return seriesAll;
-    }
-
-    public void setSeriesAll(ObservableList<Series> seriesAll) {
-        this.seriesAll = seriesAll;
     }
 
     public Series getSeries() {
@@ -118,17 +119,17 @@ public class SeriesWindowController extends Controller implements Initializable 
         Series newSeries = new Series(textFieldName.getText(), cmbBoxCrea.getValue());
 
         if (databaseHandler.createSeries(newSeries)) {
-            seriesAll.add(newSeries);
+            listHandler.addSeriesToSeriesAll(newSeries);
         } else {
             openErrorWindow("Updating series.json failed", "New series was not saved to series.json");
         }
     }
 
     private void editSeries() {
-        seriesAll.remove(series);
+        listHandler.removeSeries(series);
         series.setName(textFieldName.getText());
         series.setCreaStatus(cmbBoxCrea.getValue());
-        seriesAll.add(series);
+        listHandler.addSeriesToSeriesAll(series);
 
         if (!databaseHandler.updateSeries(series)) {
             openErrorWindow("Updating series.json failed", "Changes were not saved to series.json");

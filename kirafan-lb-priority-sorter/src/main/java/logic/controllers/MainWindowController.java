@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import logic.DatabaseHandler;
+import logic.ListHandler;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -76,9 +77,7 @@ public class MainWindowController extends Controller implements Initializable {
     private CheckBox checkBoxFilter;
 
     private DatabaseHandler databaseHandler;
-    private ObservableList<GameCharacter> charactersAll;
-    private ObservableList<Series> seriesAll;
-    private ObservableList<Weapon> weaponsAll;
+    private ListHandler listHandler;
 
     public DatabaseHandler getDatabaseHandler() {
         return databaseHandler;
@@ -90,29 +89,18 @@ public class MainWindowController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initializeObservableLists();
-        initializeListViews();
-    }
+        // Initialize ObservableLists
+        ObservableList<GameCharacter> charactersAll = FXCollections.observableArrayList(databaseHandler.getAllCharacters());
+        ObservableList<Series> seriesAll = FXCollections.observableArrayList(databaseHandler.getAllSeries());
+        ObservableList<Weapon> weaponsAll = FXCollections.observableArrayList(databaseHandler.getAllWeapons());
 
-//    private void refreshGUI() {
-//        /*
-//        * A separate function to refresh the gui since updating all the observable lists separately might end up being
-//        * too spaghetti (for example when one deletes a series, all the characters belonging to that series have to be
-//        * deleted as well, as well as deleting the exclusive weapons belonging to those characters. These characters
-//        * would then have possibly have to be deleted from the event bonus and non-limit broken character lists as well)
-//        */
-//
-//        initializeObservableLists();
-//        initializeListViews();
-//    }
+        // Initialize ListHandler
+        listHandler = new ListHandler();
+        listHandler.setCharactersAll(charactersAll);
+        listHandler.setSeriesAll(seriesAll);
+        listHandler.setWeaponsAll(weaponsAll);
 
-    private void initializeObservableLists() {
-        charactersAll = FXCollections.observableArrayList(databaseHandler.getAllCharacters());
-        seriesAll = FXCollections.observableArrayList(databaseHandler.getAllSeries());
-        weaponsAll = FXCollections.observableArrayList(databaseHandler.getAllWeapons());
-    }
-
-    private void initializeListViews() {
+        // Initialize ListViews
         listViewSeriesAll.setItems(seriesAll);
         listViewCharactersAll.setItems(charactersAll);
 // If you ever want to display objects in an another way than the toString() method, this is how you do it:
@@ -134,9 +122,22 @@ public class MainWindowController extends Controller implements Initializable {
 //        });
     }
 
+//    private void refreshGUI() {
+//        /*
+//        * A separate function to refresh the gui since updating all the observable lists separately might end up being
+//        * too spaghetti (for example when one deletes a series, all the characters belonging to that series have to be
+//        * deleted as well, as well as deleting the exclusive weapons belonging to those characters. These characters
+//        * would then have possibly have to be deleted from the event bonus and non-limit broken character lists as well)
+//        */
+//
+//        initializeObservableLists();
+//        initializeListViews();
+//    }
+
+
     @FXML
     public void handleCreateCharacterButtonPressed(ActionEvent event) {
-        if (seriesAll.isEmpty()) {
+        if (listHandler.getSeriesAll().isEmpty()) {
             openWarningWindow("No series added yet", "Create at least one series before creating a character");
         } else {
             openCharacterWindow(Mode.CREATE);
@@ -148,9 +149,7 @@ public class MainWindowController extends Controller implements Initializable {
         CharacterWindowController controller = new CharacterWindowController();
         controller.setMode(mode);
         controller.setDatabaseHandler(databaseHandler);
-        controller.setCharactersAll(charactersAll);
-        controller.setSeriesAll(seriesAll);
-        controller.setWeaponsAll(weaponsAll);
+        controller.setListHandler(listHandler);
         String windowTitle = "";
 
         if (mode == Mode.CREATE) {
@@ -173,7 +172,7 @@ public class MainWindowController extends Controller implements Initializable {
         GameCharacter character = listViewCharactersAll.getSelectionModel().getSelectedItem();
 
         if (databaseHandler.deleteCharacter(character)) {
-            charactersAll.remove(character);
+            listHandler.removeCharacter(character);
         } else {
             openErrorWindow("Updating characters.json failed", "Character was not deleted from characters.json");
         }
@@ -189,7 +188,7 @@ public class MainWindowController extends Controller implements Initializable {
         SeriesWindowController controller = new SeriesWindowController();
         controller.setMode(mode);
         controller.setDatabaseHandler(databaseHandler);
-        controller.setSeriesAll(seriesAll);
+        controller.setListHandler(listHandler);
         String windowTitle = "";
 
         if (mode == Mode.CREATE) {
@@ -212,7 +211,7 @@ public class MainWindowController extends Controller implements Initializable {
         Series series = listViewSeriesAll.getSelectionModel().getSelectedItem();
 
         if (databaseHandler.deleteSeries(series)) {
-            seriesAll.remove(series);
+            listHandler.removeSeries(series);
         } else {
             openErrorWindow("Updating series.json failed", "Series was not deleted from series.json");
         }
