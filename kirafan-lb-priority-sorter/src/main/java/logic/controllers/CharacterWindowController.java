@@ -13,7 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import logic.CustomParser;
 import logic.DatabaseHandler;
-import logic.ListHandler;
+import logic.GlobalListHandler;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -71,8 +71,8 @@ public class CharacterWindowController extends Controller implements Initializab
 
     private DatabaseHandler databaseHandler;
     private GameCharacter character;
-    private ListHandler listHandler;
-    private ObservableList<Skill> skills;
+    private GlobalListHandler listHandler;
+    private ObservableList<Skill> characterSkills;
     private Mode mode;
 
     public DatabaseHandler getDatabaseHandler() {
@@ -91,11 +91,11 @@ public class CharacterWindowController extends Controller implements Initializab
         this.character = character;
     }
 
-    public ListHandler getListHandler() {
+    public GlobalListHandler getListHandler() {
         return listHandler;
     }
 
-    public void setListHandler(ListHandler listHandler) {
+    public void setGlobalHandler(GlobalListHandler listHandler) {
         this.listHandler = listHandler;
     }
 
@@ -149,8 +149,8 @@ public class CharacterWindowController extends Controller implements Initializab
     }
 
     private void initializeSkillListView(List<Skill> initialSkills) {
-        skills = FXCollections.observableArrayList(initialSkills);
-        listViewSkills.setItems(skills);
+        characterSkills = FXCollections.observableArrayList(initialSkills);
+        listViewSkills.setItems(characterSkills);
     }
 
     private void setInputValuesWithCharacterData() {
@@ -164,29 +164,8 @@ public class CharacterWindowController extends Controller implements Initializab
         textFieldMDF.setText("" + character.getMagicDefense());
         textFieldPersonalPreference.setText("" + character.getPersonalPreference());
         cmbBoxWeapon.setValue(character.getPreferredWeapon());
-        initializeSkillListView(cloneSkillList(character.getSkills()));
+        initializeSkillListView(Skill.cloneSkills(character.getSkills()));
         checkBoxLimitBroken.setSelected(character.isLimitBroken());
-    }
-
-    private List<Skill> cloneSkillList(List<Skill> skills) {
-        /*
-        * Creates a new list of skills from the given list.
-        * Skills in the new list are not the same objects but have the same values (so the original list is not affected
-        * when making changes in the edit window)
-        * If the given list has no values, a completely new list is created anyway
-        *
-        * This is done that so if the user edit's a characters skill(s) but cancels the editing process by not pressing
-        * the submit button and closing the window manually, the character's skill list remains unaffected (the edits are
-        * done to the cloned list and when pressing the submit button the cloned list is assigned as the characters
-        * new skill list)
-        */
-        List<Skill> clonedList = new ArrayList<>();
-
-        for (Skill skill : skills) {
-            clonedList.add(new Skill(skill.getType(), skill.getChange(), skill.getTarget(), skill.getPower()));
-        }
-
-        return clonedList;
     }
 
     @FXML
@@ -198,7 +177,7 @@ public class CharacterWindowController extends Controller implements Initializab
         URL url = getClass().getClassLoader().getResource("fxml/skill.fxml");
         SkillWindowController controller = new SkillWindowController();
         controller.setMode(mode);
-        controller.setSkills(skills);
+        controller.setSkills(characterSkills);
         String windowTitle = mode == Mode.CREATE ? "Create a new skill" : "Edit a skill";
 
         if (mode == Mode.EDIT) {
@@ -216,7 +195,7 @@ public class CharacterWindowController extends Controller implements Initializab
 
     @FXML
     public void handleSkillRemoveMenuItemClicked(ActionEvent event) {
-        skills.remove(listViewSkills.getSelectionModel().getSelectedIndex());
+        characterSkills.remove(listViewSkills.getSelectionModel().getSelectedIndex());
     }
 
     @FXML
@@ -258,11 +237,13 @@ public class CharacterWindowController extends Controller implements Initializab
         if (databaseHandler.createCharacter(newCharacter)) {
             listHandler.addCharacterToCharactersAll(newCharacter);
         } else {
-            openWarningWindow("Updating characters.json failed", "New character was not saved to characters.json");
+            openErrorWindow("Updating characters.json failed", "New character was not saved to characters.json");
         }
     }
 
     private void editCharacter() {
+        // The GUI only updates when objects are added to or removed from ObservableLists. Updating objects (which are
+        // in the observable lists) does not update the GUI.
         listHandler.removeCharacter(character);
 
         character.setName(textFieldName.getText());
@@ -275,7 +256,7 @@ public class CharacterWindowController extends Controller implements Initializab
         character.setMagicDefense(CustomParser.parseInteger(textFieldMDF.getText()));
         character.setPersonalPreference(CustomParser.parseInteger(textFieldPersonalPreference.getText()));
         character.setPreferredWeapon(cmbBoxWeapon.getValue());
-        character.setSkills(skills);
+        character.setSkills(characterSkills);
         character.setLimitBroken(checkBoxLimitBroken.isSelected());
 
         listHandler.addCharacterToCharactersAll(character);

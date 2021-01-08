@@ -3,16 +3,35 @@ package logic;
 import domain.model.GameCharacter;
 import domain.model.Series;
 import domain.model.Weapon;
+import javafx.collections.FXCollections;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ListHandler {
+/*
+* This class handles the various lists of model classes (GameCharacter, Series and Weapon) used by the ListViews and
+* ComboBoxes of the GUI. The main purpose of this class is to encapsulate cascading deletions behind a single function
+* call (e.g. deleting a series should on top of removing the skill from the all skills list also remove the characters
+* belonging to that series from the all characters list). By handling the deletions this way the GUI updates automatically
+* (since the lists are originally ObservableLists) and we do not need to manually refresh the GUI by rereading data
+* from the json files.
+*
+* NOTE: This class does NOT handle skill lists, since they exist only as part of characters and weapons, and thus there
+* is no global list of all skills (instead there are only smaller character- and weapon specific skill lists) that would
+* need to be managed in the case of character/weapon deletion etc..
+*/
+
+public class GlobalListHandler {
     private List<GameCharacter> charactersAll;
     private List<Series> seriesAll;
     private List<Weapon> weaponsAll;
 
-    public ListHandler() { }
+    public GlobalListHandler() {
+        charactersAll = FXCollections.observableArrayList();
+        seriesAll = FXCollections.observableArrayList();
+        weaponsAll = FXCollections.observableArrayList();
+    }
 
     public List<GameCharacter> getCharactersAll() {
         return charactersAll;
@@ -73,4 +92,13 @@ public class ListHandler {
             deleteCharacter(character);
         }
     }
+
+    public void addWeaponToWeaponsAll(Weapon weapon) {
+        weaponsAll.add(weapon);
+    }
+
+    public void removeWeapon(Weapon weapon) {
+        weaponsAll.remove(weapon);
+    }
+
 }

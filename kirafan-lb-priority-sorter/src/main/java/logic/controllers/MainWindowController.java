@@ -12,7 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import logic.DatabaseHandler;
-import logic.ListHandler;
+import logic.GlobalListHandler;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -44,10 +44,13 @@ public class MainWindowController extends Controller implements Initializable {
     private Button buttonCreateSeries;
 
     @FXML
-    private AnchorPane allWeaponsListView;
+    private ListView<Weapon> listViewWeaponsAll;
 
     @FXML
-    private ListView<?> listViewWeaponsAll;
+    private MenuItem menuItemEditWeapon;
+
+    @FXML
+    private MenuItem menuItemWeaponDelete;
 
     @FXML
     private Button buttonCreateWeapon;
@@ -77,7 +80,7 @@ public class MainWindowController extends Controller implements Initializable {
     private CheckBox checkBoxFilter;
 
     private DatabaseHandler databaseHandler;
-    private ListHandler listHandler;
+    private GlobalListHandler listHandler;
 
     public DatabaseHandler getDatabaseHandler() {
         return databaseHandler;
@@ -95,7 +98,7 @@ public class MainWindowController extends Controller implements Initializable {
         ObservableList<Weapon> weaponsAll = FXCollections.observableArrayList(databaseHandler.getAllWeapons());
 
         // Initialize ListHandler
-        listHandler = new ListHandler();
+        listHandler = new GlobalListHandler();
         listHandler.setCharactersAll(charactersAll);
         listHandler.setSeriesAll(seriesAll);
         listHandler.setWeaponsAll(weaponsAll);
@@ -103,6 +106,7 @@ public class MainWindowController extends Controller implements Initializable {
         // Initialize ListViews
         listViewSeriesAll.setItems(seriesAll);
         listViewCharactersAll.setItems(charactersAll);
+        listViewWeaponsAll.setItems(weaponsAll);
 // If you ever want to display objects in an another way than the toString() method, this is how you do it:
 //
 //        listViewSeriesAll.setCellFactory(param -> new ListCell<Series>() {
@@ -122,19 +126,6 @@ public class MainWindowController extends Controller implements Initializable {
 //        });
     }
 
-//    private void refreshGUI() {
-//        /*
-//        * A separate function to refresh the gui since updating all the observable lists separately might end up being
-//        * too spaghetti (for example when one deletes a series, all the characters belonging to that series have to be
-//        * deleted as well, as well as deleting the exclusive weapons belonging to those characters. These characters
-//        * would then have possibly have to be deleted from the event bonus and non-limit broken character lists as well)
-//        */
-//
-//        initializeObservableLists();
-//        initializeListViews();
-//    }
-
-
     @FXML
     public void handleCreateCharacterButtonPressed(ActionEvent event) {
         if (listHandler.getSeriesAll().isEmpty()) {
@@ -149,7 +140,7 @@ public class MainWindowController extends Controller implements Initializable {
         CharacterWindowController controller = new CharacterWindowController();
         controller.setMode(mode);
         controller.setDatabaseHandler(databaseHandler);
-        controller.setListHandler(listHandler);
+        controller.setGlobalHandler(listHandler);
         String windowTitle = "";
 
         if (mode == Mode.CREATE) {
@@ -188,7 +179,7 @@ public class MainWindowController extends Controller implements Initializable {
         SeriesWindowController controller = new SeriesWindowController();
         controller.setMode(mode);
         controller.setDatabaseHandler(databaseHandler);
-        controller.setListHandler(listHandler);
+        controller.setGlobalListHandler(listHandler);
         String windowTitle = "";
 
         if (mode == Mode.CREATE) {
@@ -216,4 +207,40 @@ public class MainWindowController extends Controller implements Initializable {
             openErrorWindow("Updating series.json failed", "Series was not deleted from series.json");
         }
     }
+
+    @FXML
+    public void handleCreateWeaponButtonPressed(ActionEvent event) {
+        openWeaponWindow(Mode.CREATE);
+    }
+
+    private void openWeaponWindow(Mode mode) {
+        URL url = getClass().getClassLoader().getResource("fxml/weapon.fxml");
+        WeaponWindowController controller = new WeaponWindowController();
+        controller.setMode(mode);
+        controller.setDatabaseHandler(databaseHandler);
+        controller.setGlobalListHandler(listHandler);
+
+        String windowTitle = "";
+
+        if (mode == Mode.CREATE) {
+            windowTitle = "Create a new weapon";
+        } else if (mode == Mode.EDIT) {
+            windowTitle = "Edit a weapon";
+            controller.setWeapon(listViewWeaponsAll.getSelectionModel().getSelectedItem());
+        }
+
+        Controller.openWindow(url, controller, windowTitle);
+    }
+
+    @FXML
+    public void handleWeaponEditMenuItemClicked(ActionEvent event) {
+        openWeaponWindow(Mode.EDIT);
+    }
+
+    @FXML
+    public void handleWeaponDeleteMenuItemClicked(ActionEvent event) {
+
+    }
+
+
 }

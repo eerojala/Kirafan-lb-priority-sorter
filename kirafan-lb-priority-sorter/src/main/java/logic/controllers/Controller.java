@@ -21,6 +21,7 @@ public abstract class Controller {
             stage.show();
         } catch (Exception e) {
             System.out.println(e);
+            e.printStackTrace();
         }
     }
 

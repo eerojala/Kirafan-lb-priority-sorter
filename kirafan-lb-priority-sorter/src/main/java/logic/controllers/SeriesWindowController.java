@@ -11,7 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import logic.DatabaseHandler;
-import logic.ListHandler;
+import logic.GlobalListHandler;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -27,7 +27,7 @@ public class SeriesWindowController extends Controller implements Initializable 
     private ComboBox<CreaStatus> cmbBoxCrea;
 
     private DatabaseHandler databaseHandler;
-    private ListHandler listHandler;
+    private GlobalListHandler listHandler;
     private Mode mode;
     private Series series;
 
@@ -39,11 +39,11 @@ public class SeriesWindowController extends Controller implements Initializable 
         this.databaseHandler = databaseHandler;
     }
 
-    public ListHandler getListHandler() {
+    public GlobalListHandler getListHandler() {
         return listHandler;
     }
 
-    public void setListHandler(ListHandler listHandler) {
+    public void setGlobalListHandler(GlobalListHandler listHandler) {
         this.listHandler = listHandler;
     }
 

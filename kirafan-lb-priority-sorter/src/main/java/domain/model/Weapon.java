@@ -60,6 +60,12 @@ public class Weapon {
             return this;
         }
 
+        public Builder withSkills(List<Skill> skills) {
+            this.skills = skills;
+
+            return this;
+        }
+
         public Builder isExclusiveTo(GameCharacter exclusiveCharacter) {
             this.exclusiveCharacter = exclusiveCharacter;
 

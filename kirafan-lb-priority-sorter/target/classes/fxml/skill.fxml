@@ -8,14 +8,14 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="224.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ComboBox fx:id="cmbBoxType" layoutX="126.0" layoutY="20.0" onAction="#handleTypeComboBox" prefWidth="150.0" AnchorPane.rightAnchor="24.0" />
-      <Label layoutX="24.0" layoutY="24.0" text="Skill type" AnchorPane.leftAnchor="24.0" />
-      <ComboBox fx:id="cmbBoxChange" layoutX="126.0" layoutY="61.0" prefWidth="150.0" AnchorPane.rightAnchor="24.0" />
-      <Label layoutX="24.0" layoutY="65.0" text="Change" />
-      <ComboBox fx:id="cmbBoxTarget" layoutX="126.0" layoutY="101.0" prefWidth="150.0" />
-      <Label layoutX="24.0" layoutY="105.0" text="Target" />
-      <TextField fx:id="textFieldPower" layoutX="126.0" layoutY="140.0" prefHeight="25.0" prefWidth="150.0" />
-      <Label layoutX="24.0" layoutY="144.0" text="Power" />
-      <Button fx:id="buttonSubmit" layoutX="123.0" layoutY="188.0" mnemonicParsing="false" onAction="#handleSubmitButtonPressed" text="Submit" />
+      <ComboBox fx:id="cmbBoxType" layoutX="126.0" layoutY="20.0" onAction="#handleTypeComboBox" prefWidth="150.0" AnchorPane.leftAnchor="126.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="20.0" />
+      <Label layoutX="24.0" layoutY="24.0" text="Skill type" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="24.0" />
+      <ComboBox fx:id="cmbBoxChange" layoutX="126.0" layoutY="61.0" prefWidth="150.0" AnchorPane.leftAnchor="126.0" AnchorPane.rightAnchor="24.0" />
+      <Label layoutX="24.0" layoutY="65.0" text="Change" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="65.0" />
+      <ComboBox fx:id="cmbBoxTarget" layoutX="126.0" layoutY="101.0" prefWidth="150.0" AnchorPane.leftAnchor="126.0" AnchorPane.rightAnchor="24.0" />
+      <Label layoutX="24.0" layoutY="105.0" text="Target" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="105.0" />
+      <TextField fx:id="textFieldPower" layoutX="126.0" layoutY="140.0" prefHeight="25.0" prefWidth="150.0" AnchorPane.leftAnchor="126.0" AnchorPane.rightAnchor="24.0" />
+      <Label layoutX="24.0" layoutY="144.0" text="Power" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="144.0" />
+      <Button fx:id="buttonSubmit" layoutX="123.0" layoutY="188.0" mnemonicParsing="false" onAction="#handleSubmitButtonPressed" text="Submit" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="123.0" AnchorPane.rightAnchor="123.0" />
    </children>
 </AnchorPane>

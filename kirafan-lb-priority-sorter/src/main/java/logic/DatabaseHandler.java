@@ -7,6 +7,12 @@ import domain.model.Weapon;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/*
+* Class which handles the various Database<T> objects (i.e. objects that interact with the json files with JsonDB) used
+* by the GUI controller classes. Since AFAIK JsonDB does not support cascading deletions, the main purpose of this class
+* is to encapsulate those deletions behind single function calls (e.g deleting a series should also delete the characters
+* which belong to that series)
+*/
 public class DatabaseHandler {
     private Database<GameCharacter> characterDatabase;
     private Database<Series> seriesDatabase;

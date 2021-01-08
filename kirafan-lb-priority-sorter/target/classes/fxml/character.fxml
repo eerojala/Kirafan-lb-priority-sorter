@@ -30,7 +30,7 @@
         <Label layoutX="21.0" layoutY="299.0" text="MDF" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="299.0" />
         <ComboBox fx:id="cmbBoxWeapon" layoutX="135.0" layoutY="372.0" prefHeight="25.0" prefWidth="177.0" AnchorPane.leftAnchor="135.0" AnchorPane.rightAnchor="24.0" />
         <Label layoutX="26.0" layoutY="376.0" text="Preferred weapon" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="376.0" />
-        <ListView fx:id="listViewSkills" layoutX="136.0" layoutY="409.0" prefHeight="101.0" prefWidth="177.0" AnchorPane.bottomAnchor="87.0" AnchorPane.leftAnchor="136.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="409.0">
+        <ListView fx:id="listViewSkills" layoutX="136.0" layoutY="409.0" prefHeight="100.0" prefWidth="177.0" AnchorPane.bottomAnchor="87.0" AnchorPane.leftAnchor="136.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="409.0">
             <contextMenu>
                 <ContextMenu>
                     <items>

@@ -30,18 +30,18 @@ public enum SkillType {
     // *** BEGIN SKILL TYPES FOR OTHER EFFECTS //
 
     // Skill types which cause abnormal effects (known as status affects in other games)
-    CONFUSION("Confusion", "混乱"), // Causes enemies to take damage randomly instead of using a skills / player characters to select a random skill
+    CONFUSION("Confusion", "混乱"), // Causes enemies to take damage randomly instead of using a skills and player characters to select a random skill and random target (for skills which target one ally/enemy)
     ISOLATION("Isolation", "孤立"), // Causes the target to be unable to switch places with another party member
     HUNGER("Hunger", "腹ペコ"), // Causes the target to take damage at the end of their turn
     MISFORTUNE("Misfortune", "不幸"), // Causes all kinds of healing having no effect on the target
     PARALYSIS("Paralysis", "金縛り"), // Causes the target to randomly skip their turn
     SILENCE("Silence", "沈黙"), // Causes the target unable to use other skills than their default attack
-    SLEEP("Sleep", "眠り"), // Causes the target to skip their turn until they take damage
+    SLEEP("Sleep", "眠り"), // Causes the target to skip their turn until they take damage or wake up (after enough turns have passed)
     TIMID("Timid", "弱気"), // Causes all damage dealt to the target to be critical hits
 
     // Skill types which cause damage
     DAMAGE("Damage", "ダメージ"), // Deal physical or magical damage
-    TOTTEOKI("Totteoki", "とっておき"), // A special attack, totteoki means along the lines of  "ace in the hole" in english
+    TOTTEOKI("Totteoki", "とっておき"), // A special attack, totteoki means along the lines of  "ace in the hole" in english (deals either physical or magical damage)
 
     // Skill types for misc. effects
     ABNORMAL_DISABLE("Disable abnormals", "状態異常無効"), // Gives character immunity from status effects
