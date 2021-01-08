@@ -30,22 +30,6 @@ public class DatabaseHandler {
         weaponDatabase.createCollection();
     }
 
-    public List<GameCharacter> getAllCharacters() {
-        return characterDatabase.findAll();
-    }
-
-    public boolean createCharacter(GameCharacter character) {
-        return characterDatabase.insert(character);
-    }
-
-    public boolean updateCharacter(GameCharacter character) {
-        return characterDatabase.update(character);
-    }
-
-    public boolean deleteCharacter(GameCharacter character) {
-        return characterDatabase.remove(character);
-    }
-
     public List<Series> getAllSeries() {
         return seriesDatabase.findAll();
     }
@@ -70,23 +54,40 @@ public class DatabaseHandler {
         return true;
     }
 
-    private List<GameCharacter> getSeriesCharacters(Series series) {
-        return getAllCharacters().stream()
-                .filter(c -> c.getSeries().equals(series))
-                .collect(Collectors.toList());
-    }
-
     public boolean deleteSeries(Series series) {
         if (!seriesDatabase.remove(series)) {
-            System.out.println("Failed deleting series " + series);
             return false;
         }
 
-        List<GameCharacter> seriesCharacters = getSeriesCharacters(series);
+        // Delete the characters belonging to the series as well
+        getAllCharacters().stream()
+                .filter(c -> c.getSeries().equals(series)) // c.getSeries() should never be null
+                .forEach(c -> deleteCharacter(c));
 
-        for (GameCharacter character : seriesCharacters) {
-            deleteCharacter(character);
+        return true;
+    }
+
+    public List<GameCharacter> getAllCharacters() {
+        return characterDatabase.findAll();
+    }
+
+    public boolean createCharacter(GameCharacter character) {
+        return characterDatabase.insert(character);
+    }
+
+    public boolean updateCharacter(GameCharacter character) {
+        return characterDatabase.update(character);
+    }
+
+    public boolean deleteCharacter(GameCharacter character) {
+        if (!characterDatabase.remove(character)) {
+            return false;
         }
+
+        // Delete character's exclusive weapons as well
+        getAllWeapons().stream()
+                .filter(w -> character.equals(w.getExclusiveCharacter())) // w.getExclusiveCharacter() can be null
+                .forEach(w -> deleteWeapon(w));
 
         return true;
     }
@@ -104,6 +105,18 @@ public class DatabaseHandler {
     }
 
     public boolean deleteWeapon(Weapon weapon) {
-        return weaponDatabase.remove(weapon);
+       if (!weaponDatabase.remove(weapon)) {
+           return false;
+       }
+
+       // Set the preferred weapon to null for characters whose preferred weapon is weapon
+        getAllCharacters().stream()
+                .filter(c -> weapon.equals(c.getPreferredWeapon())) // c.getPreferredWeapon can be null
+                .forEach(c -> {
+                    c.setPreferredWeapon(null);
+                    updateCharacter(c);
+                });
+
+       return true;
     }
 }

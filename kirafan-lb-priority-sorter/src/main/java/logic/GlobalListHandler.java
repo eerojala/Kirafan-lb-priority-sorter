@@ -57,21 +57,8 @@ public class GlobalListHandler {
         this.weaponsAll = weaponsAll;
     }
 
-    public void addCharacterToCharactersAll(GameCharacter character) {
-        charactersAll.add(character);
-    }
-
-    public void removeCharacter(GameCharacter character) {
-        charactersAll.remove(character);
-    }
-
-    public void deleteCharacter(GameCharacter character) {
-        removeCharacter(character);
-    }
-
     public void addSeriesToSeriesAll(Series series) {
         seriesAll.add(series);
-
     }
 
     // Removes only the series
@@ -93,6 +80,27 @@ public class GlobalListHandler {
         }
     }
 
+    public void addCharacterToCharactersAll(GameCharacter character) {
+        charactersAll.add(character);
+    }
+
+    public void removeCharacter(GameCharacter character) {
+        charactersAll.remove(character);
+    }
+
+    public void deleteCharacter(GameCharacter character) {
+        removeCharacter(character);
+
+        // remove weapons which are exclusive to the character
+        List<Weapon> weaponsExclusiveToCharacter = getWeaponsAll().stream()
+                .filter(w -> w.getExclusiveCharacter().equals(character))
+                .collect(Collectors.toList());
+
+        for (Weapon weapon : weaponsExclusiveToCharacter) {
+            deleteWeapon(weapon);
+        }
+    }
+
     public void addWeaponToWeaponsAll(Weapon weapon) {
         weaponsAll.add(weapon);
     }
@@ -101,4 +109,12 @@ public class GlobalListHandler {
         weaponsAll.remove(weapon);
     }
 
+    public void deleteWeapon(Weapon weapon) {
+        removeWeapon(weapon);
+
+        // Set preferred weapon as null to characters who have their preferred weapon as the deleted weapon
+        getCharactersAll().stream()
+                .filter(c -> c.getPreferredWeapon().equals(weapon))
+                .forEach(c -> c.setPreferredWeapon(null));
+    }
 }

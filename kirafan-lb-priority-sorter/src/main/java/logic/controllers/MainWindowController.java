@@ -239,7 +239,13 @@ public class MainWindowController extends Controller implements Initializable {
 
     @FXML
     public void handleWeaponDeleteMenuItemClicked(ActionEvent event) {
+        Weapon weapon = listViewWeaponsAll.getSelectionModel().getSelectedItem();
 
+        if (databaseHandler.deleteWeapon(weapon)) {
+            listHandler.deleteWeapon(weapon);
+        } else {
+            openErrorWindow("Updating weapons.json failed", "Weapon was not deleted from series.json");
+        }
     }
 
 
