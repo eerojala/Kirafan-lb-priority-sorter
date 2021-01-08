@@ -144,7 +144,12 @@ public class CharacterWindowController extends Controller implements Initializab
     }
 
     private void initializeWeaponComboBox() {
-        ObservableList<Weapon> list = FXCollections.observableArrayList(listHandler.getWeaponsAll());
+        ObservableList<Weapon> list = mode == Mode.CREATE ?
+                FXCollections.observableArrayList(listHandler.getNonExclusiveWeapons()) :
+                FXCollections.observableArrayList(listHandler.getUsableWeapons(character));
+
+        // a null is added to the list in the case that the user wants to de-assign the preferred weapon
+        list.add(0, null);
         cmbBoxWeapon.setItems(list);
     }
 

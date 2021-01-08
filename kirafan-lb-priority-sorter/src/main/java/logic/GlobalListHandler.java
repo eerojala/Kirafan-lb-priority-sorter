@@ -5,17 +5,16 @@ import domain.model.Series;
 import domain.model.Weapon;
 import javafx.collections.FXCollections;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /*
 * This class handles the various lists of model classes (GameCharacter, Series and Weapon) used by the ListViews and
 * ComboBoxes of the GUI. The main purpose of this class is to encapsulate cascading deletions behind a single function
-* call (e.g. deleting a series should on top of removing the skill from the all skills list also remove the characters
+* call (e.g. deleting a series should on top of removing the series from the all series list also remove the characters
 * belonging to that series from the all characters list). By handling the deletions this way the GUI updates automatically
-* (since the lists are originally ObservableLists) and we do not need to manually refresh the GUI by rereading data
-* from the json files.
+* (since the lists are set with the ObservableLists from MainController) and we do not need to manually refresh the GUI
+* by rereading data from the json files.
 *
 * NOTE: This class does NOT handle skill lists, since they exist only as part of characters and weapons, and thus there
 * is no global list of all skills (instead there are only smaller character- and weapon specific skill lists) that would
@@ -51,6 +50,20 @@ public class GlobalListHandler {
 
     public List<Weapon> getWeaponsAll() {
         return weaponsAll;
+    }
+
+    // Returns the weapons that the given character is able to use (i.e. weapons that are either exclusive to the
+    // character or do not have an exclusive character at all)
+    public List<Weapon> getUsableWeapons(GameCharacter character) {
+        return getWeaponsAll().stream()
+                .filter(w -> w.getExclusiveCharacter() == null || w.getExclusiveCharacter().equals(character))
+                .collect(Collectors.toList());
+    }
+
+    public List<Weapon> getNonExclusiveWeapons() {
+        return getWeaponsAll().stream()
+                .filter(w -> w.getExclusiveCharacter() == null)
+                .collect(Collectors.toList());
     }
 
     public void setWeaponsAll(List<Weapon> weaponsAll) {
