@@ -1,11 +1,11 @@
 package logic;
 
 import domain.model.GameCharacter;
+import domain.model.GameEvent;
 import domain.model.Series;
 import domain.model.Weapon;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /*
 * Class which handles the various Database<T> objects (i.e. objects that interact with the json files with JsonDB) used
@@ -14,20 +14,36 @@ import java.util.stream.Collectors;
 * which belong to that series)
 */
 public class DatabaseHandler {
+    private final static String EVENT_ID = "1";
+
     private Database<GameCharacter> characterDatabase;
+    private Database<GameEvent> eventDatabase;
     private Database<Series> seriesDatabase;
     private Database<Weapon> weaponDatabase;
+    private GameEvent event;
 
-    public DatabaseHandler(Database<GameCharacter> characterDatabase, Database<Series> seriesDatabase, Database<Weapon> weaponDatabase) {
+    public DatabaseHandler(Database<GameCharacter> characterDatabase, Database<GameEvent> eventDatabase,
+                           Database<Series> seriesDatabase, Database<Weapon> weaponDatabase) {
         this.characterDatabase = characterDatabase;
+        this.eventDatabase = eventDatabase;
         this.seriesDatabase = seriesDatabase;
         this.weaponDatabase = weaponDatabase;
     }
 
     public void initializeCollections() {
         characterDatabase.createCollection();
+        eventDatabase.createCollection();
         seriesDatabase.createCollection();
         weaponDatabase.createCollection();
+    }
+
+    public void initializeEvent() {
+        event = eventDatabase.findById(EVENT_ID);
+
+        if (event == null) {
+            event = new GameEvent(EVENT_ID);
+            eventDatabase.insert(event);
+        }
     }
 
     public List<Series> getAllSeries() {
@@ -35,29 +51,42 @@ public class DatabaseHandler {
     }
 
     public boolean createSeries(Series series) {
-        return seriesDatabase.insert(series);
+        if (seriesDatabase.insert(series)) {
+            return true;
+        } else {
+            System.out.println("Failed to add series " + series + " to json");
+            return false;
+        }
     }
 
     public boolean updateSeries(Series series) {
-        if (!seriesDatabase.update(series)) {
-            System.out.println("Failed updating series " + series);
+        if (seriesDatabase.update(series)) {
+            // update also the series in the event's available series list (JsonDB doesn't automatically update this)
+            if (event.getAvailableSeries().contains(series)) {
+                removeAndAddAvailableSeries(series);
+            }
+
+            return true;
+        } else {
+            System.out.println("Failed to update series " + series + " to json");
             return false;
         }
-        // apparently JsonDb automatically updates the characters of the updated series, so this is unnecessary
+        // apparently JsonDB automatically updates the characters of the updated series, so this is unnecessary
 //        List<GameCharacter> seriesCharacters = getSeriesCharacters(series);
 //
 //        for (GameCharacter character : seriesCharacters) {
 //            character.setSeries(series);
 //            updateCharacter(character);
 //        }
-
-        return true;
     }
 
     public boolean deleteSeries(Series series) {
         if (!seriesDatabase.remove(series)) {
+            System.out.println("Failed to delete series " + series + " from json");
             return false;
         }
+        // Remove the series from the event available series list
+        removeEventSeries(series);
 
         // Delete the characters belonging to the series as well
         getAllCharacters().stream()
@@ -72,17 +101,35 @@ public class DatabaseHandler {
     }
 
     public boolean createCharacter(GameCharacter character) {
-        return characterDatabase.insert(character);
+        if (characterDatabase.insert(character)) {
+            return true;
+        } else {
+            System.out.println("Failed to add character " + character +" to json");
+            return false;
+        }
     }
 
     public boolean updateCharacter(GameCharacter character) {
-        return characterDatabase.update(character);
+        if (characterDatabase.update(character)) {
+            if (event.getBonusCharacters().contains(character)) {
+                // update also the character in the event's available character list (JsonDB doesn't automatically update this)
+                removeAndAddEventCharacter(character);
+            }
+
+            return true;
+        } else {
+            System.out.println("Failed to update character " + character);
+            return false;
+        }
     }
 
     public boolean deleteCharacter(GameCharacter character) {
         if (!characterDatabase.remove(character)) {
+            System.out.println("Failed to delete character " + character + " from json");
             return false;
         }
+        // Remove the character from the event bonus character list
+        removeEventCharacter(character);
 
         // Delete character's exclusive weapons as well
         getAllWeapons().stream()
@@ -97,15 +144,26 @@ public class DatabaseHandler {
     }
 
     public boolean createWeapon(Weapon weapon) {
-        return weaponDatabase.insert(weapon);
+        if (weaponDatabase.insert(weapon)) {
+            return true;
+        } else {
+            System.out.println("Failed to add weapon " + weapon + " to json");
+            return false;
+        }
     }
 
     public boolean updateWeapon(Weapon weapon) {
-        return weaponDatabase.update(weapon);
+        if (weaponDatabase.update(weapon)) {
+            return true;
+        } else {
+            System.out.println("Failed to update weapon " + weapon);
+            return false;
+        }
     }
 
     public boolean deleteWeapon(Weapon weapon) {
        if (!weaponDatabase.remove(weapon)) {
+           System.out.println("Failed to delete weapon " + weapon + " from json");
            return false;
        }
 
@@ -118,5 +176,72 @@ public class DatabaseHandler {
                 });
 
        return true;
+    }
+
+    public List<GameCharacter> getEventCharacters() {
+        return event.getBonusCharacters();
+    }
+
+    public boolean addEventCharacter(GameCharacter character) {
+        event.addBonusCharacter(character);
+
+       return updateEvent();
+    }
+
+    private boolean updateEvent() {
+        if (eventDatabase.update(event)) {
+            return true;
+        } else {
+            System.out.println("Failed to update event to json");
+            return false;
+        }
+    }
+
+    public boolean removeEventCharacter(GameCharacter character) {
+        event.removeBonusCharacter(character);
+
+        return updateEvent();
+    }
+
+    public boolean clearEventCharacters() {
+        event.clearBonusCharacters();
+
+        return updateEvent();
+    }
+
+    private boolean removeAndAddEventCharacter(GameCharacter character) {
+        event.removeBonusCharacter(character);
+        event.addBonusCharacter(character);
+
+        return updateEvent();
+    }
+
+    public List<Series> getEventSeries() {
+        return event.getAvailableSeries();
+    }
+
+    public boolean addEventSeries(Series series) {
+        event.addAvailableSeries(series);
+
+        return updateEvent();
+    }
+
+    public boolean removeEventSeries(Series series) {
+        event.removeAvailableSeries(series);
+
+        return updateEvent();
+    }
+
+    public boolean clearEventSeries() {
+        event.clearAvailableSeries();
+
+        return updateEvent();
+    }
+
+    private boolean removeAndAddAvailableSeries(Series series) {
+        event.removeAvailableSeries(series);
+        event.addAvailableSeries(series);
+
+        return updateEvent();
     }
 }

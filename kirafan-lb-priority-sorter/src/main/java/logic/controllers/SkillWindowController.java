@@ -126,7 +126,7 @@ public class SkillWindowController extends Controller implements Initializable {
         if (mode == Mode.CREATE) {
             createSkill();
         } else if (mode == Mode.EDIT) {
-            editSkill();
+            updateSkill();
         }
 
         closeWindow((Node) event.getSource());
@@ -141,7 +141,7 @@ public class SkillWindowController extends Controller implements Initializable {
         skills.add(skill);
     }
 
-    private void editSkill() {
+    private void updateSkill() {
         skill.setType(cmbBoxType.getValue());
         skill.setChange(cmbBoxChange.isDisabled() ? null : cmbBoxChange.getValue());
         skill.setTarget( cmbBoxTarget.isDisabled() ? null : cmbBoxTarget.getValue());

@@ -25,6 +25,7 @@
                                       <items>
                                         <MenuItem fx:id="menuItemCharacterEdit" mnemonicParsing="false" onAction="#handleCharacterEditMenuItemClicked" text="Edit" />
                                           <MenuItem fx:id="menuItemCharacterDelete" mnemonicParsing="false" onAction="#handleCharacterDeleteMenuItemClicked" text="Delete" />
+                                          <MenuItem fx:id="menuItemAddEventCharacter" mnemonicParsing="false" onAction="#handleAddEventCharacterMenuItemClicked" text="Add to bonus characters" />
                                       </items>
                                     </ContextMenu>
                                  </contextMenu></ListView>
@@ -44,6 +45,7 @@
                                                   <items>
                                                     <MenuItem fx:id="menuItemSeriesEdit" mnemonicParsing="false" onAction="#handleSeriesEditMenuItemClicked" text="Edit" />
                                                       <MenuItem fx:id="menuItemSeriesDelete" mnemonicParsing="false" onAction="#handleSeriesDeleteMenuItemClicked" text="Delete" />
+                                                      <MenuItem fx:id="menuItemAddEventSeries" mnemonicParsing="false" onAction="#handleAddEventSeriesMenuItemClicked" text="Add to limit breakable series" />
                                                   </items>
                                                 </ContextMenu>
                                              </contextMenu></ListView>
@@ -84,17 +86,29 @@
                                 <items>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                        <children>
-                                          <ListView fx:id="listViewCharactersEvent" layoutX="18.0" layoutY="22.0" prefHeight="262.0" prefWidth="262.0" AnchorPane.bottomAnchor="50.6" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="31.0" />
+                                          <ListView fx:id="listViewCharactersEvent" layoutX="18.0" layoutY="22.0" prefHeight="262.0" prefWidth="262.0" AnchorPane.bottomAnchor="50.6" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="31.0">
+                                             <contextMenu>
+                                                <ContextMenu>
+                                                  <items>
+                                                    <MenuItem fx:id="menuItemRemoveEventCharacter" mnemonicParsing="false" onAction="#handleRemoveEventCharacterMenuItemClicked" text="Remove from bonus characters" />
+                                                  </items>
+                                                </ContextMenu>
+                                             </contextMenu></ListView>
                                           <Label layoutX="19.0" layoutY="14.0" text="Event bonus characters" AnchorPane.leftAnchor="19.0" AnchorPane.topAnchor="14.0" />
-                                          <Button fx:id="buttonAddEventCharacter" layoutX="19.0" layoutY="302.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="92.0" text="Add character" AnchorPane.bottomAnchor="13.2" AnchorPane.leftAnchor="18.0" />
-                                          <Button fx:id="buttonClearEventCharacters" layoutX="202.0" layoutY="302.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="78.0" text="Remove all" AnchorPane.bottomAnchor="13.2" AnchorPane.rightAnchor="18.0" />
+                                          <Button fx:id="buttonClearEventCharacters" layoutX="102.0" layoutY="301.0" mnemonicParsing="false" onAction="#handleClearEventCharactersButtonPressed" prefHeight="26.0" prefWidth="78.0" text="Remove all" AnchorPane.bottomAnchor="14.200000000000045" AnchorPane.rightAnchor="117.99999999999997" />
                                        </children></AnchorPane>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                        <children>
-                                          <ListView fx:id="listViewSeriesEvent" layoutX="18.0" layoutY="33.0" prefHeight="262.0" prefWidth="262.0" AnchorPane.bottomAnchor="50.6" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="31.0" />
+                                          <ListView fx:id="listViewSeriesEvent" layoutX="18.0" layoutY="33.0" prefHeight="262.0" prefWidth="262.0" AnchorPane.bottomAnchor="50.6" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="31.0">
+                                             <contextMenu>
+                                                <ContextMenu>
+                                                  <items>
+                                                    <MenuItem fx:id="menuItemRemoveEventSeries" mnemonicParsing="false" onAction="#handleRemoveEventSeriesMenuItemClicked" text="Remove" />
+                                                  </items>
+                                                </ContextMenu>
+                                             </contextMenu></ListView>
                                           <Label layoutX="19.0" layoutY="14.0" text="Event limit breakable series" AnchorPane.leftAnchor="19.0" AnchorPane.topAnchor="14.0" />
-                                          <Button fx:id="buttonAddEventSeries" layoutX="19.0" layoutY="303.0" mnemonicParsing="false" text="Add series" AnchorPane.bottomAnchor="13.2" AnchorPane.leftAnchor="18.0" />
-                                          <Button fx:id="buttonClearEventSeries" layoutX="206.0" layoutY="303.0" mnemonicParsing="false" text="Remove all" AnchorPane.bottomAnchor="13.2" AnchorPane.rightAnchor="18.0" />
+                                          <Button fx:id="buttonClearEventSeries" layoutX="112.0" layoutY="302.0" mnemonicParsing="false" onAction="#handleClearEventSeriesButtonPressed" text="Remove all" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="111.99999999999997" />
                                        </children></AnchorPane>
                                 </items>
                               </SplitPane>
@@ -103,7 +117,7 @@
                            <children>
                               <ListView fx:id="listViewCharactersNoLB" layoutX="14.0" layoutY="32.0" prefHeight="262.0" prefWidth="262.0" AnchorPane.bottomAnchor="50.6" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="31.0" />
                               <Label layoutX="14.0" layoutY="14.0" prefHeight="18.0" prefWidth="165.0" text="Characters (non-limit broken)" AnchorPane.leftAnchor="19.0" AnchorPane.topAnchor="14.0" />
-                              <CheckBox fx:id="checkBoxFilter" layoutX="84.0" layoutY="311.0" mnemonicParsing="false" text="Filter available series" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="85.0" />
+                              <CheckBox fx:id="checkBoxFilter" layoutX="84.0" layoutY="311.0" mnemonicParsing="false" onAction="#handleFilterCheckBoxTicked" text="Filter available series" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="85.0" />
                            </children></AnchorPane>
                     </items>
                   </SplitPane>

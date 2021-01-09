@@ -101,7 +101,7 @@ public class WeaponWindowController extends Controller implements Initializable 
     }
 
     private void initializeCharacterComboBox() {
-        List<GameCharacter> characters = listHandler.getCharactersAll();
+        List<GameCharacter> characters = listHandler.getAllCharacters();
         ObservableList<GameCharacter> list = FXCollections.observableArrayList(characters);
         list.add(0, null); // a null element is added if the user wishes to de-assign the exclusive character
         cmbBoxCharacter.setItems(list);
@@ -156,7 +156,7 @@ public class WeaponWindowController extends Controller implements Initializable 
         if (mode == Mode.CREATE) {
             createWeapon();
         } else if (mode == Mode.EDIT) {
-            editWeapon();
+            updateWeapon();
         }
 
         closeWindow((Node) event.getSource());
@@ -179,24 +179,22 @@ public class WeaponWindowController extends Controller implements Initializable 
                 .build();
 
         if (databaseHandler.createWeapon(newWeapon)) {
-            listHandler.addWeaponToWeaponsAll(newWeapon);
+            listHandler.addWeaponToAllWeapons(newWeapon);
         } else {
             openErrorWindow("Updating weapons.json failed", "New weapon was not saved to weapons.json");
         }
     }
 
-    private void editWeapon() {
-        listHandler.removeWeapon(weapon);
-
+    private void updateWeapon() {
         weapon.setName(textFieldName.getText());
         weapon.setOffensiveStat(CustomParser.parseInteger(textFieldOffensiveStat.getText()));
         weapon.setDefense(CustomParser.parseInteger(textFieldDEF.getText()));
         weapon.setExclusiveCharacter(cmbBoxCharacter.getValue());
         weapon.setSkills(weaponSkills);
 
-        listHandler.addWeaponToWeaponsAll(weapon);
-
-        if (!databaseHandler.updateWeapon(weapon)) {
+        if (databaseHandler.updateWeapon(weapon)) {
+            listHandler.updateWeapon(weapon);
+        } else {
             openErrorWindow("Updating weapons.json failed", "Changes were not saved to weapons.json");
         }
     }

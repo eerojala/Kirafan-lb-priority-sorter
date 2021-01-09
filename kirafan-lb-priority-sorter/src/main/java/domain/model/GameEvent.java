@@ -39,11 +39,39 @@ public class GameEvent {
         this.bonusCharacters = bonusCharacters;
     }
 
+    public void addBonusCharacter(GameCharacter character) {
+        if (!bonusCharacters.contains(character)) {
+            bonusCharacters.add(character);
+        }
+    }
+
+    public void removeBonusCharacter(GameCharacter character) {
+        bonusCharacters.remove(character);
+    }
+
+    public void clearBonusCharacters() {
+        bonusCharacters.clear();
+    }
+
     public List<Series> getAvailableSeries() {
         return availableSeries;
     }
 
     public void setAvailableSeries(List<Series> availableSeries) {
         this.availableSeries = availableSeries;
+    }
+
+    public void addAvailableSeries(Series series) {
+        if (!this.availableSeries.contains(series)) {
+            this.availableSeries.add(series);
+        }
+    }
+
+    public void removeAvailableSeries(Series series) {
+        this.availableSeries.remove(series);
+    }
+
+    public void clearAvailableSeries() {
+        availableSeries.clear();
     }
 }

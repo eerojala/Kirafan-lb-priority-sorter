@@ -10,7 +10,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import logic.DatabaseHandler;
 import logic.GlobalListHandler;
 
@@ -29,6 +28,9 @@ public class MainWindowController extends Controller implements Initializable {
     private MenuItem menuItemCharacterDelete;
 
     @FXML
+    private MenuItem menuItemAddEventCharacter;
+
+    @FXML
     private Button buttonCreateCharacter;
 
     @FXML
@@ -39,6 +41,9 @@ public class MainWindowController extends Controller implements Initializable {
 
     @FXML
     private MenuItem menuItemSeriesDelete;
+
+    @FXML
+    private MenuItem menuItemAddEventSeries;
 
     @FXML
     private Button buttonCreateSeries;
@@ -56,25 +61,25 @@ public class MainWindowController extends Controller implements Initializable {
     private Button buttonCreateWeapon;
 
     @FXML
-    private ListView<?> listViewCharactersEvent;
+    private ListView<GameCharacter> listViewCharactersEvent;
 
     @FXML
-    private Button buttonAddEventCharacter;
+    private MenuItem menuItemRemoveEventCharacter;
 
     @FXML
     private Button buttonClearEventCharacters;
 
     @FXML
-    private ListView<?> listViewSeriesEvent;
+    private ListView<Series> listViewSeriesEvent;
 
     @FXML
-    private Button buttonAddEventSeries;
+    private MenuItem menuItemRemoveEventSeries;
 
     @FXML
     private Button buttonClearEventSeries;
 
     @FXML
-    private ListView<?> listViewCharactersNoLB;
+    private ListView<GameCharacter> listViewCharactersNoLB;
 
     @FXML
     private CheckBox checkBoxFilter;
@@ -94,19 +99,26 @@ public class MainWindowController extends Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         // Initialize ObservableLists
         ObservableList<GameCharacter> charactersAll = FXCollections.observableArrayList(databaseHandler.getAllCharacters());
+        ObservableList<GameCharacter> charactersEvent = FXCollections.observableArrayList(databaseHandler.getEventCharacters());
         ObservableList<Series> seriesAll = FXCollections.observableArrayList(databaseHandler.getAllSeries());
+        ObservableList<Series> seriesEvent = FXCollections.observableArrayList(databaseHandler.getEventSeries());
         ObservableList<Weapon> weaponsAll = FXCollections.observableArrayList(databaseHandler.getAllWeapons());
 
         // Initialize ListHandler
         listHandler = new GlobalListHandler();
-        listHandler.setCharactersAll(charactersAll);
-        listHandler.setSeriesAll(seriesAll);
-        listHandler.setWeaponsAll(weaponsAll);
+        listHandler.setAllCharacters(charactersAll);
+        listHandler.setEventCharacters(charactersEvent);
+        listHandler.setAllSeries(seriesAll);
+        listHandler.setEventSeries(seriesEvent);
+        listHandler.setAllWeapons(weaponsAll);
 
         // Initialize ListViews
-        listViewSeriesAll.setItems(seriesAll);
         listViewCharactersAll.setItems(charactersAll);
+        listViewCharactersEvent.setItems(charactersEvent);
+        listViewSeriesAll.setItems(seriesAll);
+        listViewSeriesEvent.setItems(seriesEvent);
         listViewWeaponsAll.setItems(weaponsAll);
+
 // If you ever want to display objects in an another way than the toString() method, this is how you do it:
 //
 //        listViewSeriesAll.setCellFactory(param -> new ListCell<Series>() {
@@ -128,7 +140,7 @@ public class MainWindowController extends Controller implements Initializable {
 
     @FXML
     public void handleCreateCharacterButtonPressed(ActionEvent event) {
-        if (listHandler.getSeriesAll().isEmpty()) {
+        if (listHandler.getAllSeries().isEmpty()) {
             openWarningWindow("No series added yet", "Create at least one series before creating a character");
         } else {
             openCharacterWindow(Mode.CREATE);
@@ -170,6 +182,18 @@ public class MainWindowController extends Controller implements Initializable {
     }
 
     @FXML
+    public void handleAddEventCharacterMenuItemClicked(ActionEvent event) {
+        GameCharacter character = listViewCharactersAll.getSelectionModel().getSelectedItem();
+
+        if (databaseHandler.addEventCharacter(character)) {
+            listHandler.addCharacterToEventCharacters(character);
+        } else {
+            openErrorWindow("Updating event.json failed", "Changes were not saved to event.json");
+        }
+    }
+
+
+    @FXML
     public void handleCreateSeriesButtonPressed(ActionEvent event) {
         openSeriesWindow(Mode.CREATE);
     }
@@ -205,6 +229,17 @@ public class MainWindowController extends Controller implements Initializable {
             listHandler.deleteSeries(series);
         } else {
             openErrorWindow("Updating series.json failed", "Series was not deleted from series.json");
+        }
+    }
+
+    @FXML
+    public void handleAddEventSeriesMenuItemClicked(ActionEvent event) {
+        Series series = listViewSeriesAll.getSelectionModel().getSelectedItem();
+
+        if (databaseHandler.addEventSeries(series)) {
+            listHandler.addSeriesToEventSeries(series);
+        } else {
+            openErrorWindow("Updating event.json failed", "Changes were not saved to event.json");
         }
     }
 
@@ -248,5 +283,49 @@ public class MainWindowController extends Controller implements Initializable {
         }
     }
 
+    @FXML
+    public void handleClearEventCharactersButtonPressed(ActionEvent event) {
+        if (databaseHandler.clearEventCharacters()) {
+            listHandler.clearEventCharacters();
+        } else {
+            openErrorWindow("Updating event.json failed", "Changes were not saved to event.json");
+        }
+    }
+
+    @FXML
+    public void handleRemoveEventCharacterMenuItemClicked(ActionEvent event) {
+        GameCharacter character = listViewCharactersEvent.getSelectionModel().getSelectedItem();
+
+        if (databaseHandler.removeEventCharacter(character)) {
+            listHandler.removeCharacterFromEventCharacters(character);
+        } else {
+            openErrorWindow("Updating event.json failed", "Changes were not saved to event.json");
+        }
+    }
+
+    @FXML
+    public void handleClearEventSeriesButtonPressed(ActionEvent event) {
+        if (databaseHandler.clearEventSeries()) {
+            listHandler.clearEventSeries();
+        } else {
+            openErrorWindow("Updating event.json failed", "Changes were not saved to event.json");
+        }
+    }
+
+    @FXML
+    public void handleRemoveEventSeriesMenuItemClicked(ActionEvent event) {
+        Series series = listViewSeriesEvent.getSelectionModel().getSelectedItem();
+
+        if (databaseHandler.removeEventSeries(series)) {
+            listHandler.removeSeriesFromEventSeries(series);
+        } else {
+            openErrorWindow("Updating event.json failed", "Changes were not saved to event.json");
+        }
+    }
+
+    @FXML
+    public void handleFilterCheckBoxTicked(ActionEvent event) {
+
+    }
 
 }

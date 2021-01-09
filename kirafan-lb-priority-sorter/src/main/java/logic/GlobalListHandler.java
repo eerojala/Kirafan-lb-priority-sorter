@@ -22,69 +22,112 @@ import java.util.stream.Collectors;
 */
 
 public class GlobalListHandler {
-    private List<GameCharacter> charactersAll;
-    private List<Series> seriesAll;
-    private List<Weapon> weaponsAll;
+    private List<GameCharacter> allCharacters;
+    private List<GameCharacter> eventCharacters;
+    private List<Series> allSeries;
+    private List<Series> eventSeries;
+    private List<Weapon> allWeapons;
 
     public GlobalListHandler() {
-        charactersAll = FXCollections.observableArrayList();
-        seriesAll = FXCollections.observableArrayList();
-        weaponsAll = FXCollections.observableArrayList();
+        allCharacters = FXCollections.observableArrayList();
+        eventCharacters = FXCollections.observableArrayList();
+        allSeries = FXCollections.observableArrayList();
+        eventSeries = FXCollections.observableArrayList();
+        allWeapons = FXCollections.observableArrayList();
     }
 
-    public List<GameCharacter> getCharactersAll() {
-        return charactersAll;
+    public List<GameCharacter> getAllCharacters() {
+        return allCharacters;
     }
 
-    public void setCharactersAll(List<GameCharacter> charactersAll) {
-        this.charactersAll = charactersAll;
+    public void setAllCharacters(List<GameCharacter> charactersAll) {
+        this.allCharacters = charactersAll;
     }
 
-    public List<Series> getSeriesAll() {
-        return seriesAll;
+    public List<GameCharacter> getEventCharacters() {
+        return eventCharacters;
     }
 
-    public void setSeriesAll(List<Series> seriesAll) {
-        this.seriesAll = seriesAll;
+    public void setEventCharacters(List<GameCharacter> eventCharacters) {
+        this.eventCharacters = eventCharacters;
     }
 
-    public List<Weapon> getWeaponsAll() {
-        return weaponsAll;
+    public List<Series> getAllSeries() {
+        return allSeries;
+    }
+
+    public void setAllSeries(List<Series> allSeries) {
+        this.allSeries = allSeries;
+    }
+
+    public List<Series> getEventSeries() {
+        return eventSeries;
+    }
+
+    public void setEventSeries(List<Series> eventSeries) {
+        this.eventSeries = eventSeries;
+    }
+
+    public List<Weapon> getAllWeapons() {
+        return allWeapons;
     }
 
     // Returns the weapons that the given character is able to use (i.e. weapons that are either exclusive to the
     // character or do not have an exclusive character at all)
     public List<Weapon> getUsableWeapons(GameCharacter character) {
-        return getWeaponsAll().stream()
+        return getAllWeapons().stream()
                 .filter(w -> w.getExclusiveCharacter() == null || w.getExclusiveCharacter().equals(character))
                 .collect(Collectors.toList());
     }
 
     public List<Weapon> getNonExclusiveWeapons() {
-        return getWeaponsAll().stream()
+        return getAllWeapons().stream()
                 .filter(w -> w.getExclusiveCharacter() == null)
                 .collect(Collectors.toList());
     }
 
-    public void setWeaponsAll(List<Weapon> weaponsAll) {
-        this.weaponsAll = weaponsAll;
+    public void setAllWeapons(List<Weapon> allWeapons) {
+        this.allWeapons = allWeapons;
     }
 
-    public void addSeriesToSeriesAll(Series series) {
-        seriesAll.add(series);
+    public void addSeriesToAllSeries(Series series) {
+        allSeries.add(series);
     }
 
-    // Removes only the series
-    public void removeSeries(Series series) {
-        seriesAll.remove(series);
+    public void addSeriesToEventSeries(Series series) {
+        if (!eventSeries.contains(series)) {
+            eventSeries.add(series);
+        }
     }
 
-    // Removes the series as well as the characters belonging to it
+    public void removeSeriesFromAllSeries(Series series) {
+        allSeries.remove(series);
+    }
+
+    public void removeSeriesFromEventSeries(Series series) {
+        eventSeries.remove(series);
+    }
+
+    public void clearEventSeries() {
+        eventSeries.clear();
+    }
+
+    public void updateSeries(Series series) {
+        removeSeriesFromAllSeries(series);
+        addSeriesToAllSeries(series);
+
+        if (eventSeries.contains(series)) {
+            removeSeriesFromEventSeries(series);
+            addSeriesToEventSeries(series);
+        }
+    }
+
     public void deleteSeries(Series series) {
-        removeSeries(series);
+        removeSeriesFromAllSeries(series);
+        removeSeriesFromEventSeries(series);
 
         // remove the characters belonging to the series
-        List<GameCharacter> seriesCharacters = getCharactersAll().stream()
+        List<GameCharacter> seriesCharacters = getAllCharacters().stream()
                 .filter(c -> c.getSeries().equals(series))
                 .collect(Collectors.toList());
 
@@ -93,20 +136,45 @@ public class GlobalListHandler {
         }
     }
 
-    public void addCharacterToCharactersAll(GameCharacter character) {
-        charactersAll.add(character);
+    public void addCharacterToAllCharacters(GameCharacter character) {
+        allCharacters.add(character);
     }
 
-    public void removeCharacter(GameCharacter character) {
-        charactersAll.remove(character);
+    public void addCharacterToEventCharacters(GameCharacter character) {
+        if (!eventCharacters.contains(character)) {
+            eventCharacters.add(character);
+        }
+    }
+
+    public void removeCharacterFromAllCharacters(GameCharacter character) {
+        allCharacters.remove(character);
+    }
+
+    public void removeCharacterFromEventCharacters(GameCharacter character) {
+        eventCharacters.remove(character);
+    }
+
+    public void clearEventCharacters() {
+        eventCharacters.clear();
+    }
+
+    public void updateCharacter(GameCharacter character) {
+        removeCharacterFromAllCharacters(character);
+        addCharacterToAllCharacters(character);
+
+        if (eventCharacters.contains(character)) {
+            removeCharacterFromEventCharacters(character);
+            addCharacterToEventCharacters(character);
+        }
     }
 
     public void deleteCharacter(GameCharacter character) {
-        removeCharacter(character);
+        removeCharacterFromAllCharacters(character);
+        removeCharacterFromEventCharacters(character);
 
         // remove weapons which are exclusive to the character
-        List<Weapon> weaponsExclusiveToCharacter = getWeaponsAll().stream()
-                .filter(w -> w.getExclusiveCharacter().equals(character))
+        List<Weapon> weaponsExclusiveToCharacter = getAllWeapons().stream()
+                .filter(w -> character.equals(w.getExclusiveCharacter())) // w.getExclusiveCharacter can be null
                 .collect(Collectors.toList());
 
         for (Weapon weapon : weaponsExclusiveToCharacter) {
@@ -114,19 +182,24 @@ public class GlobalListHandler {
         }
     }
 
-    public void addWeaponToWeaponsAll(Weapon weapon) {
-        weaponsAll.add(weapon);
+    public void addWeaponToAllWeapons(Weapon weapon) {
+        allWeapons.add(weapon);
     }
 
-    public void removeWeapon(Weapon weapon) {
-        weaponsAll.remove(weapon);
+    public void removeWeaponFromAllWeapons(Weapon weapon) {
+        allWeapons.remove(weapon);
+    }
+
+    public void updateWeapon(Weapon weapon) {
+        removeWeaponFromAllWeapons(weapon);
+        addWeaponToAllWeapons(weapon);
     }
 
     public void deleteWeapon(Weapon weapon) {
-        removeWeapon(weapon);
+        removeWeaponFromAllWeapons(weapon);
 
         // Set preferred weapon as null to characters who have their preferred weapon as the deleted weapon
-        getCharactersAll().stream()
+        getAllCharacters().stream()
                 .filter(c -> c.getPreferredWeapon().equals(weapon))
                 .forEach(c -> c.setPreferredWeapon(null));
     }

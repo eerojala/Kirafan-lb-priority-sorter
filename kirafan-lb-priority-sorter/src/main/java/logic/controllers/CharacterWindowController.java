@@ -122,7 +122,7 @@ public class CharacterWindowController extends Controller implements Initializab
     }
 
     private void initializeSeriesComboBox() {
-        List<Series> seriesAll = listHandler.getSeriesAll();
+        List<Series> seriesAll = listHandler.getAllSeries();
         ObservableList<Series> list = FXCollections.observableArrayList(seriesAll);
         cmbBoxSeries.setItems(list);
 
@@ -208,7 +208,7 @@ public class CharacterWindowController extends Controller implements Initializab
         if (mode == Mode.CREATE) {
             createCharacter();
         } else if (mode == Mode.EDIT) {
-            editCharacter();
+            updateCharacter();
         }
 
         closeWindow((Node) event.getSource());
@@ -240,17 +240,13 @@ public class CharacterWindowController extends Controller implements Initializab
                 .build();
 
         if (databaseHandler.createCharacter(newCharacter)) {
-            listHandler.addCharacterToCharactersAll(newCharacter);
+            listHandler.addCharacterToAllCharacters(newCharacter);
         } else {
             openErrorWindow("Updating characters.json failed", "New character was not saved to characters.json");
         }
     }
 
-    private void editCharacter() {
-        // The GUI only updates when objects are added to or removed from ObservableLists. Updating objects (which are
-        // in the observable lists) does not update the GUI.
-        listHandler.removeCharacter(character);
-
+    private void updateCharacter() {
         character.setName(textFieldName.getText());
         character.setSeries(cmbBoxSeries.getValue());
         character.setCharacterElement(cmbBoxElement.getValue());
@@ -264,9 +260,11 @@ public class CharacterWindowController extends Controller implements Initializab
         character.setSkills(characterSkills);
         character.setLimitBroken(checkBoxLimitBroken.isSelected());
 
-        listHandler.addCharacterToCharactersAll(character);
-
-        if (!databaseHandler.updateCharacter(character)) {
+        if (databaseHandler.updateCharacter(character)) {
+            // The GUI only updates when objects are added to or removed from ObservableLists. Updating objects (which are
+            // in the observable lists) does not update the GUI.
+            listHandler.updateCharacter(character);
+        } else {
             openErrorWindow("Updating characters.json failed", "Changes were not saved to characters.json");
         }
     }

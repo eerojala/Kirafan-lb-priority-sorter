@@ -37,6 +37,7 @@ public class Database<T> {
 
     public T findById(String id) {
         try {
+            // returns null if no object found matching id
             return database.findById(id, collectionName);
         } catch (Exception e) {
             System.out.println(e);

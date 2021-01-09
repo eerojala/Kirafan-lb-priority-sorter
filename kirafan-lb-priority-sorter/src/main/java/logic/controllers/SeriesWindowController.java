@@ -109,7 +109,7 @@ public class SeriesWindowController extends Controller implements Initializable 
         if (mode == Mode.CREATE) {
             createSeries();
         } else if (mode == Mode.EDIT){
-            editSeries();
+            updateSeries();
         }
 
         closeWindow((Node) event.getSource());
@@ -119,19 +119,19 @@ public class SeriesWindowController extends Controller implements Initializable 
         Series newSeries = new Series(textFieldName.getText(), cmbBoxCrea.getValue());
 
         if (databaseHandler.createSeries(newSeries)) {
-            listHandler.addSeriesToSeriesAll(newSeries);
+            listHandler.addSeriesToAllSeries(newSeries);
         } else {
             openErrorWindow("Updating series.json failed", "New series was not saved to series.json");
         }
     }
 
-    private void editSeries() {
-        listHandler.removeSeries(series);
+    private void updateSeries() {
         series.setName(textFieldName.getText());
         series.setCreaStatus(cmbBoxCrea.getValue());
-        listHandler.addSeriesToSeriesAll(series);
 
-        if (!databaseHandler.updateSeries(series)) {
+        if (databaseHandler.updateSeries(series)) {
+            listHandler.updateSeries(series);
+        } else {
             openErrorWindow("Updating series.json failed", "Changes were not saved to series.json");
         }
     }
