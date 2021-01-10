@@ -156,14 +156,14 @@ class MapperTest {
     @Test
     public void getWeaponsByCharacter_returnsEmptyMapWhenAppropriate() {
         List<Weapon> weapons = new ArrayList<>();
-        assertTrue(Mapper.getWeaponsByCharacter(null).isEmpty()); // when given list is null
-        assertTrue(Mapper.getWeaponsByCharacter(weapons).isEmpty()); // when given empty list
+        assertTrue(Mapper.getWeaponsByExclusiveCharacter(null).isEmpty()); // when given list is null
+        assertTrue(Mapper.getWeaponsByExclusiveCharacter(weapons).isEmpty()); // when given empty list
 
         weapons.add(new Weapon.Builder("weapon1").overwriteID("1").build());
         weapons.add(new Weapon.Builder("weapon2").overwriteID("2").build());
 
         assertEquals(2, weapons.size());
-        assertTrue(Mapper.getWeaponsByCharacter(weapons).isEmpty()); // when given a list of weapons that aren't exclusive to anyone
+        assertTrue(Mapper.getWeaponsByExclusiveCharacter(weapons).isEmpty()); // when given a list of weapons that aren't exclusive to anyone
     }
 
     @Test
@@ -173,7 +173,7 @@ class MapperTest {
         Weapon weapon3 = new Weapon.Builder("weapon3").overwriteID("3").build();
         List<Weapon> weapons = new ArrayList<>(Arrays.asList(weapon1, weapon2, weapon3));
 
-        Map<GameCharacter, Weapon> map = Mapper.getWeaponsByCharacter(weapons);
+        Map<GameCharacter, Weapon> map = Mapper.getWeaponsByExclusiveCharacter(weapons);
         assertEquals(2, map.size()); // the weapon without an exclusive character shoud not be added to the map
         assertEquals(weapon1, map.get(chara1));
         assertEquals(weapon2, map.get(chara3));

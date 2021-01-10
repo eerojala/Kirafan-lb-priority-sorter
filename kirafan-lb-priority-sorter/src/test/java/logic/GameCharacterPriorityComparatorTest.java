@@ -11,8 +11,8 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GameCharacterComparatorTest {
-    public GameCharacterComparatorTest() {}
+class GameCharacterPriorityComparatorTest {
+    public GameCharacterPriorityComparatorTest() {}
 
     @Test
     public void compare_sortsCharactersCorrectly() {
@@ -54,7 +54,7 @@ class GameCharacterComparatorTest {
         GameEvent event = new GameEvent("asdf");
         event.setBonusCharacters(new ArrayList<>(Collections.singletonList(chara2)));
 
-        GameCharacterComparator comparator = new GameCharacterComparator(charasByElementAndClass, charasBySeries,
+        GameCharacterPriorityComparator comparator = new GameCharacterPriorityComparator(charasByElementAndClass, charasBySeries,
                 weaponsByChara, event);
 
         // Initially the list should be ordered as such:

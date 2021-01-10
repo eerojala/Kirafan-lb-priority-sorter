@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Objects;
 
 @Document(collection = "series", schemaVersion = "1.0")
-public class Series {
+public class Series implements Comparable<Series> {
     @Id
     private String id;
     private String name;
@@ -70,5 +70,10 @@ public class Series {
         sb.append(" (Crea status: ").append(creaStatus).append(")");
 
         return sb.toString();
+    }
+
+    @Override
+    public int compareTo(Series o) {
+        return this.toString().compareTo(o.toString());
     }
 }

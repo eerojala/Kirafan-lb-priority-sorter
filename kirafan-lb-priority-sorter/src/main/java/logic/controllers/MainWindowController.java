@@ -100,21 +100,25 @@ public class MainWindowController extends Controller implements Initializable {
         // Initialize ObservableLists
         ObservableList<GameCharacter> charactersAll = FXCollections.observableArrayList(databaseHandler.getAllCharacters());
         ObservableList<GameCharacter> charactersEvent = FXCollections.observableArrayList(databaseHandler.getEventCharacters());
+        ObservableList<GameCharacter> charactersNoLB = FXCollections.observableArrayList(databaseHandler.getNonLimitBrokenCharacters());
         ObservableList<Series> seriesAll = FXCollections.observableArrayList(databaseHandler.getAllSeries());
         ObservableList<Series> seriesEvent = FXCollections.observableArrayList(databaseHandler.getEventSeries());
         ObservableList<Weapon> weaponsAll = FXCollections.observableArrayList(databaseHandler.getAllWeapons());
 
         // Initialize ListHandler
-        listHandler = new GlobalListHandler();
+        listHandler = new GlobalListHandler(databaseHandler.getEvent());
         listHandler.setAllCharacters(charactersAll);
         listHandler.setEventCharacters(charactersEvent);
+        listHandler.setNonLimitBrokenCharacters(charactersNoLB);
         listHandler.setAllSeries(seriesAll);
         listHandler.setEventSeries(seriesEvent);
         listHandler.setAllWeapons(weaponsAll);
+        listHandler.sortAllLists();
 
         // Initialize ListViews
         listViewCharactersAll.setItems(charactersAll);
         listViewCharactersEvent.setItems(charactersEvent);
+        listViewCharactersNoLB.setItems(charactersNoLB);
         listViewSeriesAll.setItems(seriesAll);
         listViewSeriesEvent.setItems(seriesEvent);
         listViewWeaponsAll.setItems(weaponsAll);
@@ -174,10 +178,13 @@ public class MainWindowController extends Controller implements Initializable {
     public void handleCharacterDeleteMenuItemClicked(ActionEvent event) {
         GameCharacter character = listViewCharactersAll.getSelectionModel().getSelectedItem();
 
-        if (databaseHandler.deleteCharacter(character)) {
-            listHandler.deleteCharacter(character);
-        } else {
-            openErrorWindow("Updating characters.json failed", "Character was not deleted from characters.json");
+        if (openConfirmationWindow("Deleting character", "Are you sure you want to delete character " + character + "?")) {
+            if (databaseHandler.deleteCharacter(character)) {
+                listHandler.deleteCharacter(character);
+                listHandler.sortNonLimitBrokenCharacters();
+            } else {
+                openErrorWindow("Updating characters.json failed", "Character was not deleted from characters.json");
+            }
         }
     }
 
@@ -187,11 +194,12 @@ public class MainWindowController extends Controller implements Initializable {
 
         if (databaseHandler.addEventCharacter(character)) {
             listHandler.addCharacterToEventCharacters(character);
+            listHandler.sortEventCharacters();
+            listHandler.sortNonLimitBrokenCharacters();
         } else {
             openErrorWindow("Updating event.json failed", "Changes were not saved to event.json");
         }
     }
-
 
     @FXML
     public void handleCreateSeriesButtonPressed(ActionEvent event) {
@@ -225,10 +233,13 @@ public class MainWindowController extends Controller implements Initializable {
     public void handleSeriesDeleteMenuItemClicked(ActionEvent event) {
         Series series = listViewSeriesAll.getSelectionModel().getSelectedItem();
 
-        if (databaseHandler.deleteSeries(series)) {
-            listHandler.deleteSeries(series);
-        } else {
-            openErrorWindow("Updating series.json failed", "Series was not deleted from series.json");
+        if (openConfirmationWindow("Deleting series", "Are you sure you want to delete series " + series + "?")) {
+            if (databaseHandler.deleteSeries(series)) {
+                listHandler.deleteSeries(series);
+                listHandler.sortNonLimitBrokenCharacters();
+            } else {
+                openErrorWindow("Updating series.json failed", "Series was not deleted from series.json");
+            }
         }
     }
 
@@ -238,6 +249,7 @@ public class MainWindowController extends Controller implements Initializable {
 
         if (databaseHandler.addEventSeries(series)) {
             listHandler.addSeriesToEventSeries(series);
+            listHandler.sortEventSeries();
         } else {
             openErrorWindow("Updating event.json failed", "Changes were not saved to event.json");
         }
@@ -276,10 +288,13 @@ public class MainWindowController extends Controller implements Initializable {
     public void handleWeaponDeleteMenuItemClicked(ActionEvent event) {
         Weapon weapon = listViewWeaponsAll.getSelectionModel().getSelectedItem();
 
-        if (databaseHandler.deleteWeapon(weapon)) {
-            listHandler.deleteWeapon(weapon);
-        } else {
-            openErrorWindow("Updating weapons.json failed", "Weapon was not deleted from series.json");
+        if (openConfirmationWindow("Deleting weapon", "Are you sure you want to delete weapon " + weapon + "?")) {
+            if (databaseHandler.deleteWeapon(weapon)) {
+                listHandler.deleteWeapon(weapon);
+                listHandler.sortNonLimitBrokenCharacters();
+            } else {
+                openErrorWindow("Updating weapons.json failed", "Weapon was not deleted from series.json");
+            }
         }
     }
 
@@ -287,6 +302,7 @@ public class MainWindowController extends Controller implements Initializable {
     public void handleClearEventCharactersButtonPressed(ActionEvent event) {
         if (databaseHandler.clearEventCharacters()) {
             listHandler.clearEventCharacters();
+            listHandler.sortNonLimitBrokenCharacters();
         } else {
             openErrorWindow("Updating event.json failed", "Changes were not saved to event.json");
         }
@@ -298,6 +314,7 @@ public class MainWindowController extends Controller implements Initializable {
 
         if (databaseHandler.removeEventCharacter(character)) {
             listHandler.removeCharacterFromEventCharacters(character);
+            listHandler.sortNonLimitBrokenCharacters();
         } else {
             openErrorWindow("Updating event.json failed", "Changes were not saved to event.json");
         }
@@ -325,7 +342,6 @@ public class MainWindowController extends Controller implements Initializable {
 
     @FXML
     public void handleFilterCheckBoxTicked(ActionEvent event) {
-
+        listHandler.filterNonLimitBrokenCharacters(checkBoxFilter.isSelected(), databaseHandler);
     }
-
 }

@@ -240,7 +240,9 @@ public class CharacterWindowController extends Controller implements Initializab
                 .build();
 
         if (databaseHandler.createCharacter(newCharacter)) {
-            listHandler.addCharacterToAllCharacters(newCharacter);
+            listHandler.createCharacter(newCharacter);
+            listHandler.sortAllCharacters();
+            listHandler.sortNonLimitBrokenCharacters();
         } else {
             openErrorWindow("Updating characters.json failed", "New character was not saved to characters.json");
         }
@@ -264,6 +266,12 @@ public class CharacterWindowController extends Controller implements Initializab
             // The GUI only updates when objects are added to or removed from ObservableLists. Updating objects (which are
             // in the observable lists) does not update the GUI.
             listHandler.updateCharacter(character);
+            listHandler.sortAllCharacters();
+            listHandler.sortNonLimitBrokenCharacters();
+
+            if (listHandler.isCharacterInEventCharacters(character)) {
+                listHandler.sortEventCharacters();
+            }
         } else {
             openErrorWindow("Updating characters.json failed", "Changes were not saved to characters.json");
         }

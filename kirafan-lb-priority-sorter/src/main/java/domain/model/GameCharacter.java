@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Document(collection = "characters", schemaVersion = "1.0")
-public class GameCharacter {
+public class GameCharacter implements Comparable<GameCharacter> {
     public static class Builder {
         private String id;
         private String name;
@@ -266,5 +266,10 @@ public class GameCharacter {
         sb.append(" (").append(characterElement).append(" ").append(characterClass).append(")");
 
         return sb.toString();
+    }
+
+    @Override
+    public int compareTo(GameCharacter o) {
+        return this.toString().compareTo(o.toString());
     }
 }

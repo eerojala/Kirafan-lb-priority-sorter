@@ -6,6 +6,7 @@ import domain.model.Series;
 import domain.model.Weapon;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /*
 * Class which handles the various Database<T> objects (i.e. objects that interact with the json files with JsonDB) used
@@ -100,6 +101,12 @@ public class DatabaseHandler {
         return characterDatabase.findAll();
     }
 
+    public List<GameCharacter> getNonLimitBrokenCharacters() {
+        return getAllCharacters().stream()
+                .filter(c -> !c.isLimitBroken())
+                .collect(Collectors.toList());
+    }
+
     public boolean createCharacter(GameCharacter character) {
         if (characterDatabase.insert(character)) {
             return true;
@@ -176,6 +183,10 @@ public class DatabaseHandler {
                 });
 
        return true;
+    }
+
+    public GameEvent getEvent() {
+        return this.event;
     }
 
     public List<GameCharacter> getEventCharacters() {

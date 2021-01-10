@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Document(collection = "weapons", schemaVersion = "1.0")
-public class Weapon {
+public class Weapon implements Comparable<Weapon> {
     public static class Builder {
         private String id;
         private String name;
@@ -170,5 +170,10 @@ public class Weapon {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public int compareTo(Weapon o) {
+        return this.toString().compareTo(o.toString());
     }
 }
