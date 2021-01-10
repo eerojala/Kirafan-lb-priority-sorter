@@ -176,9 +176,9 @@ public class GlobalListHandler {
         allCharacters.remove(character);
         allCharacters.add(character);
 
-        if (nonLimitBrokenCharacters.contains(character) && !character.isLimitBroken()) {
+        if (nonLimitBrokenCharacters.contains(character) && character.isLimitBroken()) {
             nonLimitBrokenCharacters.remove(character);
-        } else if (!nonLimitBrokenCharacters.contains(character) && character.isLimitBroken()) {
+        } else if (!nonLimitBrokenCharacters.contains(character) && !character.isLimitBroken()) {
             nonLimitBrokenCharacters.add(character);
         }
 
