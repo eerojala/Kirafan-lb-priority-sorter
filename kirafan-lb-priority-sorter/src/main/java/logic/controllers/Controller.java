@@ -52,7 +52,12 @@ public abstract class Controller {
         Alert alert = new Alert(type, content);
         alert.setTitle(title);
         alert.setHeaderText(header);
-        return alert.showAndWait().get();
+
+        try {
+            return alert.showAndWait().get();
+        } catch (Exception e) {
+            return ButtonType.CLOSE;
+        }
     }
 
     protected void closeWindow(Node node) {

@@ -1,5 +1,7 @@
 package domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import domain.CharacterClass;
 import domain.CharacterElement;
 import domain.Skill;
@@ -12,6 +14,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Document(collection = "characters", schemaVersion = "1.0")
+// This annotation is required because GameCharacter and Weapon have a bilateral relation
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class GameCharacter implements Comparable<GameCharacter> {
     public static class Builder {
         private String id;
