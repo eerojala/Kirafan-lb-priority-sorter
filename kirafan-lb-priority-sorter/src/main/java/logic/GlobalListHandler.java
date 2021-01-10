@@ -246,7 +246,7 @@ public class GlobalListHandler {
 
         // Set preferred weapon as null to characters who have their preferred weapon as the deleted weapon
         getAllCharacters().stream()
-                .filter(c -> c.getPreferredWeapon().equals(weapon))
+                .filter(c -> weapon.equals(c.getPreferredWeapon())) // c.getPreferredWeapon can be null
                 .forEach(c -> c.setPreferredWeapon(null));
     }
 
