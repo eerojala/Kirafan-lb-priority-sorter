@@ -140,7 +140,7 @@ public class DatabaseHandler {
 
         // Delete character's exclusive weapons as well
         getAllWeapons().stream()
-                .filter(w -> character.equals(w.getExclusiveCharacter())) // w.getExclusiveCharacter() can be null
+                .filter(w -> character.getId().equals(w.getExclusiveCharacterId())) // w.getExclusiveCharacterId() can be null
                 .forEach(w -> deleteWeapon(w));
 
         return true;

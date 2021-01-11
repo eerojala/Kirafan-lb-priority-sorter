@@ -1,6 +1,7 @@
 package domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import domain.Skill;
 import io.jsondb.annotation.Document;
@@ -12,8 +13,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Document(collection = "weapons", schemaVersion = "1.0")
-// This annotation is required because GameCharacter and Weapon have a bilateral relation
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Weapon implements Comparable<Weapon> {
     public static class Builder {
         private String id;
@@ -23,6 +22,7 @@ public class Weapon implements Comparable<Weapon> {
         private int magicDefense;
         private List<Skill> skills;
         private GameCharacter exclusiveCharacter;
+        private String exclusiveCharacterId;
 
         public Builder(String name) {
             id = new Date().toString();
@@ -32,6 +32,7 @@ public class Weapon implements Comparable<Weapon> {
             magicDefense = 0;
             skills = new ArrayList<>();
             exclusiveCharacter = null;
+            exclusiveCharacterId = null;
         }
 
         public Builder overwriteID(String id) {
@@ -72,6 +73,7 @@ public class Weapon implements Comparable<Weapon> {
 
         public Builder isExclusiveTo(GameCharacter exclusiveCharacter) {
             this.exclusiveCharacter = exclusiveCharacter;
+            exclusiveCharacterId = exclusiveCharacter.getId();
 
             return this;
         }
@@ -85,6 +87,7 @@ public class Weapon implements Comparable<Weapon> {
             weapon.magicDefense = magicDefense;
             weapon.skills = skills;
             weapon.exclusiveCharacter = exclusiveCharacter;
+            weapon.exclusiveCharacterId = exclusiveCharacterId;
 
             return weapon;
         }
@@ -97,7 +100,9 @@ public class Weapon implements Comparable<Weapon> {
     private int defense;
     private int magicDefense;
     private List<Skill> skills;
+    @JsonIgnore
     private GameCharacter exclusiveCharacter;
+    private String exclusiveCharacterId;
 
     // Jackson requires a public constructor with no parameters
     public Weapon() {}
@@ -156,6 +161,14 @@ public class Weapon implements Comparable<Weapon> {
 
     public void setExclusiveCharacter(GameCharacter exclusiveCharacter) {
         this.exclusiveCharacter = exclusiveCharacter;
+    }
+
+    public String getExclusiveCharacterId() {
+        return exclusiveCharacterId;
+    }
+
+    public void setExclusiveCharacterId(String exclusiveCharacterId) {
+        this.exclusiveCharacterId = exclusiveCharacterId;
     }
 
     @Override

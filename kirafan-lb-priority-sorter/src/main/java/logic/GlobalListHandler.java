@@ -50,6 +50,16 @@ public class GlobalListHandler {
         allWeapons = FXCollections.observableArrayList();
     }
 
+    public void assignExclusiveCharactersToWeapons() {
+        /*
+        * JsonDB cannot handle bidirectional relationships between models (GameCharacter.preferredWeapon and
+        * Weapon.exclusiveCharacter cause an infinite recursion during deserialization), so Weapon.exclusiveCharacter
+        * is not saved into the json (annotation @JsonIgnore), but the character's id is (Weapon.exclusiveCharacterId).
+        * So in this function we assign the actual exclusive characters to the weapons' exclusiveCharacter field.
+        */
+        Mapper.assignExclusiveCharactersToWeapons(allCharacters, allWeapons);
+    }
+
     public List<Series> getAllSeries() {
         return allSeries;
     }

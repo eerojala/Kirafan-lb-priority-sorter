@@ -129,4 +129,31 @@ public final class Mapper {
             skillTotalPowers.put(skill, Calculator.sumDoubles(previousTotalPower, power));
         }
     }
+
+    public static void assignExclusiveCharactersToWeapons(List<GameCharacter> characters, List<Weapon> weapons) {
+        Map<String, GameCharacter> charactersById = getCharactersById(characters);
+        weapons.stream()
+                .forEach(w -> {
+                    String exclusiveCharacterId = w.getExclusiveCharacterId();
+
+                    if (exclusiveCharacterId != null) {
+                        GameCharacter exclusiveCharacter = charactersById.get(exclusiveCharacterId);
+
+                        if (exclusiveCharacter != null) {
+                            w.setExclusiveCharacter(exclusiveCharacter);
+                        } else {
+                            System.out.println("Error! weapon.exclusiveCharacterId found, but no character found matching id: " + exclusiveCharacterId);
+                        }
+                    }
+                });
+    }
+
+    private static Map<String, GameCharacter> getCharactersById(List<GameCharacter> characters) {
+        Map<String, GameCharacter> charactersById = new HashMap<>();
+        characters.stream()
+                .forEach(c -> charactersById.put(c.getId(), c));
+
+        return charactersById;
+
+    }
 }

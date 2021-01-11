@@ -188,10 +188,14 @@ public class WeaponWindowController extends Controller implements Initializable 
     }
 
     private void updateWeapon() {
+        GameCharacter exclusiveCharacter = cmbBoxCharacter.getValue();
+        String exclusiveCharacterId = exclusiveCharacter == null ? null : exclusiveCharacter.getId();
+
         weapon.setName(textFieldName.getText());
         weapon.setOffensiveStat(CustomParser.parseInteger(textFieldOffensiveStat.getText()));
         weapon.setDefense(CustomParser.parseInteger(textFieldDEF.getText()));
-        weapon.setExclusiveCharacter(cmbBoxCharacter.getValue());
+        weapon.setExclusiveCharacter(exclusiveCharacter);
+        weapon.setExclusiveCharacterId(exclusiveCharacterId);
         weapon.setSkills(weaponSkills);
 
         if (databaseHandler.updateWeapon(weapon)) {

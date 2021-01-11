@@ -113,6 +113,7 @@ public class MainWindowController extends Controller implements Initializable {
         listHandler.setAllSeries(seriesAll);
         listHandler.setEventSeries(seriesEvent);
         listHandler.setAllWeapons(weaponsAll);
+        listHandler.assignExclusiveCharactersToWeapons();
         listHandler.sortAllLists();
 
         // Initialize ListViews
