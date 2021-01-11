@@ -73,7 +73,7 @@ public class Weapon implements Comparable<Weapon> {
 
         public Builder isExclusiveTo(GameCharacter exclusiveCharacter) {
             this.exclusiveCharacter = exclusiveCharacter;
-            exclusiveCharacterId = exclusiveCharacter.getId();
+            exclusiveCharacterId = exclusiveCharacter == null ? null : exclusiveCharacter.getId();
 
             return this;
         }

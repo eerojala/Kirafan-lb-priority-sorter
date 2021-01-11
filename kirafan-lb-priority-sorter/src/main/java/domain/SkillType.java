@@ -21,8 +21,8 @@ public enum SkillType {
 
     // Skill types which affect other multipliers in damage calculation
     CRIT_DAMAGE("Critical damage", "クリティカルダメージ"), // Affect the damage of a critical hit
-    NEXT_ATK("Next physical attack", "次回の物理攻撃"), // Affect damage for the next physical attack (dispels after 1 attack, other buffs/debuffs dispel usually after 3 attacks)
-    NEXT_MAT("Next magical attack up", "次回の魔法攻撃"), // Affect damage for the next magical attack
+    NEXT_ATK("Next ATK", "次回の物理攻撃"), // Affect damage for the next physical attack (dispels after 1 attack, other buffs/debuffs dispel usually after 3 attacks)
+    NEXT_MAT("Next MAT", "次回の魔法攻撃"), // Affect damage for the next magical attack
     WEAK_ELEMENT_BONUS("Weak element bonus", "有利属性ボーナス"), // Increases damage done against an opponent with a element which is weak to the damage dealers element
 
     // *** END SKILL TYPES FOR BUFFS/DEBUFFS //
