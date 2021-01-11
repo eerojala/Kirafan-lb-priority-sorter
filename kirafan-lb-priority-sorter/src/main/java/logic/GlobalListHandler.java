@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 */
 
 public class GlobalListHandler {
+    private boolean filterOn;
     private GameEvent event;
     private List<GameCharacter> allCharacters;
     private List<GameCharacter> eventCharacters;
@@ -41,6 +42,7 @@ public class GlobalListHandler {
     private List<Weapon> allWeapons;
 
     public GlobalListHandler(GameEvent event) {
+        filterOn = false;
         this.event = event;
         allCharacters = FXCollections.observableArrayList();
         eventCharacters = FXCollections.observableArrayList();
@@ -147,21 +149,33 @@ public class GlobalListHandler {
     }
 
     public void filterNonLimitBrokenCharacters(boolean filterOn, DatabaseHandler databaseHandler) {
-        if (filterOn) {
-            nonLimitBrokenCharacters = nonLimitBrokenCharacters.stream()
+        this.filterOn = filterOn;
+
+        if (this.filterOn) {
+            List<GameCharacter> filteredNonLBCharacters = nonLimitBrokenCharacters.stream()
                     .filter(c -> eventSeries.contains(c.getSeries()))
                     .collect(Collectors.toList());
+
+            nonLimitBrokenCharacters.clear();
+            nonLimitBrokenCharacters.addAll(filteredNonLBCharacters);
         } else {
-            nonLimitBrokenCharacters = databaseHandler.getNonLimitBrokenCharacters();
+            nonLimitBrokenCharacters.clear();
+            nonLimitBrokenCharacters.addAll(databaseHandler.getNonLimitBrokenCharacters());
         }
     }
 
     public void createCharacter(GameCharacter character) {
         allCharacters.add(character);
 
-        if (!character.isLimitBroken()) {
+        if (!character.isLimitBroken() && characterGetsPastEventSeriesFilter(character)) {
             nonLimitBrokenCharacters.add(character);
         }
+    }
+
+    private boolean characterGetsPastEventSeriesFilter(GameCharacter character) {
+        // Returns true if the character belongs to a series that has lb mats currently available in the event or if
+        // the filter is not currently on.
+        return (filterOn && eventSeries.contains(character.getSeries())) || !filterOn;
     }
 
     public void addCharacterToEventCharacters(GameCharacter character) {
@@ -185,10 +199,9 @@ public class GlobalListHandler {
     public void updateCharacter(GameCharacter character) {
         allCharacters.remove(character);
         allCharacters.add(character);
+        nonLimitBrokenCharacters.remove(character);
 
-        if (nonLimitBrokenCharacters.contains(character) && character.isLimitBroken()) {
-            nonLimitBrokenCharacters.remove(character);
-        } else if (!nonLimitBrokenCharacters.contains(character) && !character.isLimitBroken()) {
+        if (characterGetsPastEventSeriesFilter(character) && !character.isLimitBroken()) {
             nonLimitBrokenCharacters.add(character);
         }
 
@@ -201,16 +214,13 @@ public class GlobalListHandler {
     public void deleteCharacter(GameCharacter character) {
         allCharacters.remove(character);
         removeCharacterFromEventCharacters(character);
+        nonLimitBrokenCharacters.remove(character);
 
-        if (nonLimitBrokenCharacters.contains(character)) {
-            nonLimitBrokenCharacters.remove(character);
-        }
-
-        // remove weapons which are exclusive to the character
         List<Weapon> weaponsExclusiveToCharacter = getAllWeapons().stream()
                 .filter(w -> character.equals(w.getExclusiveCharacter())) // w.getExclusiveCharacter can be null
                 .collect(Collectors.toList());
 
+        // remove weapons which are exclusive to the character
         for (Weapon weapon : weaponsExclusiveToCharacter) {
             deleteWeapon(weapon);
         }
@@ -224,9 +234,10 @@ public class GlobalListHandler {
         this.allWeapons = allWeapons;
     }
 
-    // Returns the weapons that the given character is able to use (i.e. weapons that are either exclusive to the
-    // character or do not have an exclusive character at all)
+
     public List<Weapon> getUsableWeapons(GameCharacter character) {
+        // Returns the weapons that the given character is able to use (i.e. weapons that are either exclusive to the
+        // character or do not have an exclusive character at all)
         return getAllWeapons().stream()
                 .filter(w -> w.getExclusiveCharacter() == null || w.getExclusiveCharacter().equals(character))
                 .collect(Collectors.toList());
@@ -301,9 +312,6 @@ public class GlobalListHandler {
         GameCharacterPriorityComparator comparator = new GameCharacterPriorityComparator(charactersByElementAndClass,
                 charactersBySeries, exclusiveWeaponsByCharacter, event);
 
-        Collections.sort(nonLimitBrokenCharacters, comparator);
+        nonLimitBrokenCharacters.sort(comparator);
     }
-
-
-
 }

@@ -344,5 +344,6 @@ public class MainWindowController extends Controller implements Initializable {
     @FXML
     public void handleFilterCheckBoxTicked(ActionEvent event) {
         listHandler.filterNonLimitBrokenCharacters(checkBoxFilter.isSelected(), databaseHandler);
+        listHandler.sortNonLimitBrokenCharacters();
     }
 }
