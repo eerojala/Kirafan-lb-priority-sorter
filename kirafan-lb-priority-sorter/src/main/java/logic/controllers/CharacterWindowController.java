@@ -263,8 +263,6 @@ public class CharacterWindowController extends Controller implements Initializab
         character.setLimitBroken(checkBoxLimitBroken.isSelected());
 
         if (databaseHandler.updateCharacter(character)) {
-            // The GUI only updates when objects are added to or removed from ObservableLists. Updating objects (which are
-            // in the observable lists) does not update the GUI.
             listHandler.updateCharacter(character);
             listHandler.sortAllCharacters();
             listHandler.sortNonLimitBrokenCharacters();

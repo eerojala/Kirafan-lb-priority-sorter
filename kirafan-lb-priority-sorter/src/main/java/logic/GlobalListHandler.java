@@ -29,8 +29,12 @@ import java.util.stream.Collectors;
 * NOTE: This class does NOT handle skill lists, since they exist only as part of characters and weapons, and thus there
 * is no global list of all skills (instead there are only smaller character- and weapon specific skill lists) that would
 * need to be managed in the case of character/weapon deletion etc..
+*
+* NOTE2: ListView.getSelectionModel().getSelectedItem() returns only a snapshot of the selected object, not the actual
+* object contained in the lists. This is why in all the update functions of this class we first remove the old object
+* from the list and then add the new object (with the same id but possible changes done in the update window) so that the
+* list has correct fields for the object and the ListView is refreshed automatically.
 */
-
 public class GlobalListHandler {
     private boolean filterOn;
     private GameEvent event;
