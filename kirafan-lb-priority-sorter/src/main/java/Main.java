@@ -14,7 +14,7 @@ import java.net.URL;
 public class Main extends Application {
     @Override
     public void start(Stage window) throws Exception {
-        String dbFilesLocation = "kirafan-lb-priority-sorter/src/main/resources/json";
+        String dbFilesLocation = System.getProperty("user.dir") + "/json";
         String modelPackageName = "domain.model";
 
         Database<GameCharacter> characterDatabase = new Database<>(dbFilesLocation, modelPackageName, "characters");

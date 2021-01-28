@@ -1,11 +1,11 @@
-domain\CreaStatus.class
-domain\CharacterElement.class
 domain\model\Series.class
 logic\Database.class
-domain\CharacterClass.class
 domain\SkillType.class
-domain\SkillChange.class
+domain\CharacterElement.class
 domain\Skill.class
-domain\SkillTarget.class
 Main.class
+domain\CreaStatus.class
+domain\CharacterClass.class
+domain\SkillChange.class
+domain\SkillTarget.class
 domain\model\GameEvent.class
