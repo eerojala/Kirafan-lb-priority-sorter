@@ -259,7 +259,8 @@ public class DatabaseHandler extends DataHandler {
         return updateEvent();
     }
 
-    public boolean clearEventCharacters() {
+    @Override
+    protected boolean removeAllFromEventCharacters() {
         event.clearBonusCharacters();
 
         return updateEvent();

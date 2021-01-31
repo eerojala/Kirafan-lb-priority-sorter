@@ -291,8 +291,11 @@ public class GlobalListHandler extends DataHandler {
         return true;
     }
 
-    public void clearEventCharacters() {
+    @Override
+    protected boolean removeAllFromEventCharacters() {
         eventCharacters.clear();
+
+        return true;
     }
 
     public List<GameCharacter> getNonLimitBrokenCharacters() {

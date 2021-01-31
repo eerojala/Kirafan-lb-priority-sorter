@@ -148,4 +148,15 @@ public abstract class DataHandler {
     }
 
     protected abstract boolean removeFromEventCharacters(GameCharacter character);
+
+    public boolean clearEventCharacters() {
+        if (!removeAllFromEventCharacters()) {
+            System.out.println("Failed to remove all characters from event");
+            return false;
+        }
+
+        return true;
+    }
+
+    protected abstract boolean removeAllFromEventCharacters();
 }
