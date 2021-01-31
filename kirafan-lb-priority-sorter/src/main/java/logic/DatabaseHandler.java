@@ -53,7 +53,7 @@ public class DatabaseHandler extends DataHandler {
     }
 
     @Override
-    protected boolean insertSeriesToData(Series series) {
+    protected boolean insertToAllSeries(Series series) {
         return seriesDatabase.insert(series);
     }
 
@@ -101,8 +101,20 @@ public class DatabaseHandler extends DataHandler {
         return true;
     }
 
+    @Override
     public List<GameCharacter> getAllCharacters() {
         return characterDatabase.findAll();
+    }
+
+    @Override
+    protected boolean insertToAllCharacters(GameCharacter character) {
+        return characterDatabase.insert(character);
+    }
+
+    @Override
+    protected boolean insertToNonLBCharacters(GameCharacter character) {
+        // We do not store non-limit broken characters on a separate JSON, so this function always returns true
+        return true;
     }
 
     public List<GameCharacter> getNonLimitBrokenCharacters() {
@@ -111,14 +123,7 @@ public class DatabaseHandler extends DataHandler {
                 .collect(Collectors.toList());
     }
 
-    public boolean createCharacter(GameCharacter character) {
-        if (characterDatabase.insert(character)) {
-            return true;
-        } else {
-            System.out.println("Failed to add character " + character +" to json");
-            return false;
-        }
-    }
+
 
     public boolean updateCharacter(GameCharacter character) {
         if (characterDatabase.update(character)) {

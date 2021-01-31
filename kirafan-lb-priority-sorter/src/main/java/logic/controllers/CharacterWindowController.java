@@ -239,8 +239,8 @@ public class CharacterWindowController extends Controller implements Initializab
                 .limitBroken(limitBroken)
                 .build();
 
-        if (databaseHandler.createCharacter(newCharacter)) {
-            listHandler.createCharacter(newCharacter);
+        if (databaseHandler.addNewCharacter(newCharacter)) {
+            listHandler.addNewCharacter(newCharacter);
             listHandler.sortAllCharacters();
             listHandler.sortNonLimitBrokenCharacters();
         } else {

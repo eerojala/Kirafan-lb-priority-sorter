@@ -76,11 +76,13 @@ public class GlobalListHandler extends DataHandler {
     }
 
     @Override
-    protected boolean insertSeriesToData(Series series) {
+    protected boolean insertToAllSeries(Series series) {
         allSeries.add(series);
 
         return true;
     }
+
+
 
 
 
@@ -146,12 +148,35 @@ public class GlobalListHandler extends DataHandler {
         }
     }
 
+    @Override
     public List<GameCharacter> getAllCharacters() {
         return allCharacters;
     }
 
     public void setAllCharacters(List<GameCharacter> charactersAll) {
         this.allCharacters = charactersAll;
+    }
+
+    @Override
+    protected boolean insertToAllCharacters(GameCharacter character) {
+        allCharacters.add(character);
+
+        return true;
+    }
+
+    @Override
+    protected boolean insertToNonLBCharacters(GameCharacter character) {
+        if (characterGetsPastEventSeriesFilter(character)) {
+            nonLimitBrokenCharacters.add(character);
+        }
+
+        return true;
+    }
+
+    private boolean characterGetsPastEventSeriesFilter(GameCharacter character) {
+        // Returns true if the character belongs to a series that has lb mats currently available in the event or if
+        // the filter is not currently on.
+        return (filterOn && eventSeries.contains(character.getSeries())) || !filterOn;
     }
 
     public List<GameCharacter> getEventCharacters() {
@@ -186,19 +211,7 @@ public class GlobalListHandler extends DataHandler {
         }
     }
 
-    public void createCharacter(GameCharacter character) {
-        allCharacters.add(character);
 
-        if (!character.isLimitBroken() && characterGetsPastEventSeriesFilter(character)) {
-            nonLimitBrokenCharacters.add(character);
-        }
-    }
-
-    private boolean characterGetsPastEventSeriesFilter(GameCharacter character) {
-        // Returns true if the character belongs to a series that has lb mats currently available in the event or if
-        // the filter is not currently on.
-        return (filterOn && eventSeries.contains(character.getSeries())) || !filterOn;
-    }
 
     public void addCharacterToEventCharacters(GameCharacter character) {
         if (!eventCharacters.contains(character)) {
