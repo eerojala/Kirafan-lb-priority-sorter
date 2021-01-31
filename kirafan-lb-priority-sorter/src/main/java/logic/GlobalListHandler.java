@@ -87,7 +87,7 @@ public class GlobalListHandler extends DataHandler {
         allSeries.add(series);
 
         if (eventSeriesContains(series)) {
-            removeSeriesFromEventSeries(series);
+            removeFromEventSeries(series);
             insertToEventSeries(series);
         }
 
@@ -108,7 +108,7 @@ public class GlobalListHandler extends DataHandler {
 
     public void deleteSeries(Series series) {
         allSeries.remove(series);
-        removeSeriesFromEventSeries(series);
+        removeFromEventSeries(series);
 
         // remove the characters belonging to the series
         List<GameCharacter> seriesCharacters = getSeriesCharacters(series);
@@ -149,7 +149,6 @@ public class GlobalListHandler extends DataHandler {
         return (filterOn && eventSeriesContains(character.getSeries())) || !filterOn;
 
     }
-
 
     public void updateCharacter(GameCharacter character) {
         allCharacters.remove(character);
@@ -250,8 +249,11 @@ public class GlobalListHandler extends DataHandler {
         return true;
     }
 
-    public void removeSeriesFromEventSeries(Series series) {
+    @Override
+    protected boolean removeFromEventSeries(Series series) {
         eventSeries.remove(series);
+
+        return true;
     }
 
     public void clearEventSeries() {

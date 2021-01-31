@@ -335,7 +335,7 @@ public class MainWindowController extends Controller implements Initializable {
         Series series = listViewSeriesEvent.getSelectionModel().getSelectedItem();
 
         if (databaseHandler.removeEventSeries(series)) {
-            listHandler.removeSeriesFromEventSeries(series);
+            listHandler.removeEventSeries(series);
         } else {
             openErrorWindow("Updating event.json failed", "Changes were not saved to event.json");
         }

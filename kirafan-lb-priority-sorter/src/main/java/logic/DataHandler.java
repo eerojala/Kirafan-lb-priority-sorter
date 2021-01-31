@@ -99,6 +99,17 @@ public abstract class DataHandler {
 
     protected abstract boolean insertToEventSeries(Series series);
 
+    public boolean removeEventSeries(Series series) {
+        if (!removeFromEventSeries(series)) {
+            System.out.printf("Failed to remove series " + series + " from bonus characters");
+            return false;
+        }
+
+        return true;
+    }
+
+    protected abstract boolean removeFromEventSeries(Series series);
+
     public abstract List<GameCharacter> getEventCharacters();
 
     public boolean addEventCharacter(GameCharacter character) {

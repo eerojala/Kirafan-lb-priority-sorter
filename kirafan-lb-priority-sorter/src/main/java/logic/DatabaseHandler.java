@@ -214,7 +214,8 @@ public class DatabaseHandler extends DataHandler {
         return eventDatabase.update(event);
     }
 
-    public boolean removeEventSeries(Series series) {
+    @Override
+    protected boolean removeFromEventSeries(Series series) {
         event.removeAvailableSeries(series);
 
         return updateEvent();
