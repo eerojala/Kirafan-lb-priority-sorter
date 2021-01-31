@@ -178,8 +178,8 @@ public class WeaponWindowController extends Controller implements Initializable 
                 .withSkills(skills)
                 .build();
 
-        if (databaseHandler.createWeapon(newWeapon)) {
-            listHandler.addWeaponToAllWeapons(newWeapon);
+        if (databaseHandler.addNewWeapon(newWeapon)) {
+            listHandler.addNewWeapon(newWeapon);
             listHandler.sortAllWeapons();
             listHandler.sortNonLimitBrokenCharacters();
         } else {

@@ -155,17 +155,14 @@ public class DatabaseHandler extends DataHandler {
         return true;
     }
 
+    @Override
     public List<Weapon> getAllWeapons() {
         return weaponDatabase.findAll();
     }
 
-    public boolean createWeapon(Weapon weapon) {
-        if (weaponDatabase.insert(weapon)) {
-            return true;
-        } else {
-            System.out.println("Failed to add weapon " + weapon + " to json");
-            return false;
-        }
+    @Override
+    protected boolean insertToAllWeapons(Weapon weapon) {
+        return weaponDatabase.insert(weapon);
     }
 
     public boolean updateWeapon(Weapon weapon) {

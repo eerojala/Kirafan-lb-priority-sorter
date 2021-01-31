@@ -82,36 +82,6 @@ public class GlobalListHandler extends DataHandler {
         return true;
     }
 
-
-
-
-
-    public List<Series> getEventSeries() {
-        return eventSeries;
-    }
-
-    public void setEventSeries(List<Series> eventSeries) {
-        this.eventSeries = eventSeries;
-    }
-
-    public void addSeriesToEventSeries(Series series) {
-        if (!eventSeries.contains(series)) {
-            eventSeries.add(series);
-        }
-    }
-
-    public void removeSeriesFromEventSeries(Series series) {
-        eventSeries.remove(series);
-    }
-
-    public void clearEventSeries() {
-        eventSeries.clear();
-    }
-
-    public boolean isSeriesInEventSeries(Series series) {
-        return eventSeries.contains(series);
-    }
-
     public void updateSeries(Series series) {
         allSeries.remove(series);
         allSeries.add(series);
@@ -179,57 +149,6 @@ public class GlobalListHandler extends DataHandler {
         return (filterOn && eventSeries.contains(character.getSeries())) || !filterOn;
     }
 
-    public List<GameCharacter> getEventCharacters() {
-        return eventCharacters;
-    }
-
-    public void setEventCharacters(List<GameCharacter> eventCharacters) {
-        this.eventCharacters = eventCharacters;
-    }
-
-    public List<GameCharacter> getNonLimitBrokenCharacters() {
-        return nonLimitBrokenCharacters;
-    }
-
-    public void setNonLimitBrokenCharacters(List<GameCharacter> nonLimitBrokenCharacters) {
-        this.nonLimitBrokenCharacters = nonLimitBrokenCharacters;
-    }
-
-    public void filterNonLimitBrokenCharacters(boolean filterOn, DatabaseHandler databaseHandler) {
-        this.filterOn = filterOn;
-
-        if (this.filterOn) {
-            List<GameCharacter> filteredNonLBCharacters = nonLimitBrokenCharacters.stream()
-                    .filter(c -> eventSeries.contains(c.getSeries()))
-                    .collect(Collectors.toList());
-
-            nonLimitBrokenCharacters.clear();
-            nonLimitBrokenCharacters.addAll(filteredNonLBCharacters);
-        } else {
-            nonLimitBrokenCharacters.clear();
-            nonLimitBrokenCharacters.addAll(databaseHandler.getNonLimitBrokenCharacters());
-        }
-    }
-
-
-
-    public void addCharacterToEventCharacters(GameCharacter character) {
-        if (!eventCharacters.contains(character)) {
-            eventCharacters.add(character);
-        }
-    }
-
-    public void removeCharacterFromEventCharacters(GameCharacter character) {
-        eventCharacters.remove(character);
-    }
-
-    public void clearEventCharacters() {
-        eventCharacters.clear();
-    }
-
-    public boolean isCharacterInEventCharacters(GameCharacter character) {
-        return eventCharacters.contains(character);
-    }
 
     public void updateCharacter(GameCharacter character) {
         allCharacters.remove(character);
@@ -261,6 +180,7 @@ public class GlobalListHandler extends DataHandler {
         }
     }
 
+    @Override
     public List<Weapon> getAllWeapons() {
         return allWeapons;
     }
@@ -284,17 +204,19 @@ public class GlobalListHandler extends DataHandler {
                 .collect(Collectors.toList());
     }
 
-    public void addWeaponToAllWeapons(Weapon weapon) {
+    @Override
+    protected boolean insertToAllWeapons(Weapon weapon) {
         allWeapons.add(weapon);
-    }
 
+        return true;
+    }
     public void removeWeaponFromAllWeapons(Weapon weapon) {
         allWeapons.remove(weapon);
     }
 
     public void updateWeapon(Weapon weapon) {
         removeWeaponFromAllWeapons(weapon);
-        addWeaponToAllWeapons(weapon);
+        insertToAllWeapons(weapon);
     }
 
     public void deleteWeapon(Weapon weapon) {
@@ -304,6 +226,82 @@ public class GlobalListHandler extends DataHandler {
         getAllCharacters().stream()
                 .filter(c -> weapon.equals(c.getPreferredWeapon())) // c.getPreferredWeapon can be null
                 .forEach(c -> c.setPreferredWeapon(null));
+    }
+
+    public List<GameCharacter> getEventCharacters() {
+        return eventCharacters;
+    }
+
+    public List<Series> getEventSeries() {
+        return eventSeries;
+    }
+
+    public void setEventSeries(List<Series> eventSeries) {
+        this.eventSeries = eventSeries;
+    }
+
+    public void addSeriesToEventSeries(Series series) {
+        if (!eventSeries.contains(series)) {
+            eventSeries.add(series);
+        }
+    }
+
+    public void removeSeriesFromEventSeries(Series series) {
+        eventSeries.remove(series);
+    }
+
+    public void clearEventSeries() {
+        eventSeries.clear();
+    }
+
+    public boolean isSeriesInEventSeries(Series series) {
+        return eventSeries.contains(series);
+    }
+
+    public void setEventCharacters(List<GameCharacter> eventCharacters) {
+        this.eventCharacters = eventCharacters;
+    }
+
+    public List<GameCharacter> getNonLimitBrokenCharacters() {
+        return nonLimitBrokenCharacters;
+    }
+
+    public void setNonLimitBrokenCharacters(List<GameCharacter> nonLimitBrokenCharacters) {
+        this.nonLimitBrokenCharacters = nonLimitBrokenCharacters;
+    }
+
+    public void filterNonLimitBrokenCharacters(boolean filterOn, DatabaseHandler databaseHandler) {
+        this.filterOn = filterOn;
+
+        if (this.filterOn) {
+            List<GameCharacter> filteredNonLBCharacters = nonLimitBrokenCharacters.stream()
+                    .filter(c -> eventSeries.contains(c.getSeries()))
+                    .collect(Collectors.toList());
+
+            nonLimitBrokenCharacters.clear();
+            nonLimitBrokenCharacters.addAll(filteredNonLBCharacters);
+        } else {
+            nonLimitBrokenCharacters.clear();
+            nonLimitBrokenCharacters.addAll(databaseHandler.getNonLimitBrokenCharacters());
+        }
+    }
+
+    public void addCharacterToEventCharacters(GameCharacter character) {
+        if (!eventCharacters.contains(character)) {
+            eventCharacters.add(character);
+        }
+    }
+
+    public void removeCharacterFromEventCharacters(GameCharacter character) {
+        eventCharacters.remove(character);
+    }
+
+    public void clearEventCharacters() {
+        eventCharacters.clear();
+    }
+
+    public boolean isCharacterInEventCharacters(GameCharacter character) {
+        return eventCharacters.contains(character);
     }
 
     public void sortAllLists() {

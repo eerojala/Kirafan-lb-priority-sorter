@@ -1,1 +1,3 @@
 {"schemaVersion":"1.0"}
+{"id":"Sun Jan 31 14:43:09 EET 2021","name":"test_weapon1","offensiveStat":0,"defense":0,"magicDefense":0,"skills":[],"exclusiveCharacterId":null}
+{"id":"Sun Jan 31 14:43:17 EET 2021","name":"test_weapon2","offensiveStat":100,"defense":0,"magicDefense":0,"skills":[],"exclusiveCharacterId":"Sun Jan 31 14:30:22 EET 2021"}

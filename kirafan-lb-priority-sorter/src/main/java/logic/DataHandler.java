@@ -2,6 +2,7 @@ package logic;
 
 import domain.model.GameCharacter;
 import domain.model.Series;
+import domain.model.Weapon;
 
 import java.util.List;
 
@@ -68,5 +69,16 @@ public abstract class DataHandler {
 
     protected abstract boolean insertToNonLBCharacters(GameCharacter character);
 
+    protected abstract List<Weapon> getAllWeapons();
 
+    public boolean addNewWeapon(Weapon weapon) {
+        if (!insertToAllWeapons(weapon)) {
+            System.out.println("Failed to add weapon " + weapon);
+            return false;
+        }
+
+        return true;
+    }
+
+    protected abstract boolean insertToAllWeapons(Weapon weapon);
 }
