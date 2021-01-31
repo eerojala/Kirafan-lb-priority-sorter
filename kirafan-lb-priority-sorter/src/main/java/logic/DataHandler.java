@@ -137,4 +137,15 @@ public abstract class DataHandler {
     public abstract boolean eventCharactersContain(GameCharacter character);
 
     protected abstract boolean insertToEventCharacters(GameCharacter character);
+
+    public boolean removeEventCharacter(GameCharacter character) {
+        if (!removeFromEventCharacters(character)) {
+            System.out.println("Failed to remove character " + character + " from event bonus characters");
+            return false;
+        }
+
+        return true;
+    }
+
+    protected abstract boolean removeFromEventCharacters(GameCharacter character);
 }

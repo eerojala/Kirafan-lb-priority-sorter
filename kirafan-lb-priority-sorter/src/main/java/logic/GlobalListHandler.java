@@ -160,14 +160,14 @@ public class GlobalListHandler extends DataHandler {
         }
 
         if (eventCharacters.contains(character)) {
-            removeCharacterFromEventCharacters(character);
+            removeFromEventCharacters(character);
             insertToEventCharacters(character);
         }
     }
 
     public void deleteCharacter(GameCharacter character) {
         allCharacters.remove(character);
-        removeCharacterFromEventCharacters(character);
+        removeFromEventCharacters(character);
         nonLimitBrokenCharacters.remove(character);
 
         List<Weapon> weaponsExclusiveToCharacter = getAllWeapons().stream()
@@ -284,8 +284,11 @@ public class GlobalListHandler extends DataHandler {
         return true;
     }
 
-    public void removeCharacterFromEventCharacters(GameCharacter character) {
+    @Override
+    protected boolean removeFromEventCharacters(GameCharacter character) {
         eventCharacters.remove(character);
+
+        return true;
     }
 
     public void clearEventCharacters() {

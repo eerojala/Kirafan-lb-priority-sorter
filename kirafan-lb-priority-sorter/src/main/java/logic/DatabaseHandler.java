@@ -252,7 +252,8 @@ public class DatabaseHandler extends DataHandler {
         return updateEvent();
     }
 
-    public boolean removeEventCharacter(GameCharacter character) {
+    @Override
+    protected boolean removeFromEventCharacters(GameCharacter character) {
         event.removeBonusCharacter(character);
 
         return updateEvent();

@@ -314,7 +314,7 @@ public class MainWindowController extends Controller implements Initializable {
         GameCharacter character = listViewCharactersEvent.getSelectionModel().getSelectedItem();
 
         if (databaseHandler.removeEventCharacter(character)) {
-            listHandler.removeCharacterFromEventCharacters(character);
+            listHandler.removeEventCharacter(character);
             listHandler.sortNonLimitBrokenCharacters();
         } else {
             openErrorWindow("Updating event.json failed", "Changes were not saved to event.json");
