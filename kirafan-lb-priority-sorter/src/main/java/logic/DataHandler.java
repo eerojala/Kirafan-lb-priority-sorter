@@ -69,7 +69,7 @@ public abstract class DataHandler {
 
     protected abstract boolean insertToNonLBCharacters(GameCharacter character);
 
-    protected abstract List<Weapon> getAllWeapons();
+    public abstract List<Weapon> getAllWeapons();
 
     public boolean addNewWeapon(Weapon weapon) {
         if (!insertToAllWeapons(weapon)) {
@@ -81,4 +81,21 @@ public abstract class DataHandler {
     }
 
     protected abstract boolean insertToAllWeapons(Weapon weapon);
+
+    public abstract List<Series> getEventSeries();
+
+    public boolean addEventSeries (Series series) {
+        if (!eventSeriesContains(series)) {
+            if (!insertToEventSeries(series)) {
+                System.out.println("Failed to add series " + series + " to event series");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    protected abstract boolean eventSeriesContains(Series series);
+
+    protected abstract boolean insertToEventSeries(Series series);
 }

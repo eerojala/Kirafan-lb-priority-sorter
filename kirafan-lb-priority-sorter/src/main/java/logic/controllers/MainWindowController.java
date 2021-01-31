@@ -249,7 +249,7 @@ public class MainWindowController extends Controller implements Initializable {
         Series series = listViewSeriesAll.getSelectionModel().getSelectedItem();
 
         if (databaseHandler.addEventSeries(series)) {
-            listHandler.addSeriesToEventSeries(series);
+            listHandler.addEventSeries(series);
             listHandler.sortEventSeries();
         } else {
             openErrorWindow("Updating event.json failed", "Changes were not saved to event.json");

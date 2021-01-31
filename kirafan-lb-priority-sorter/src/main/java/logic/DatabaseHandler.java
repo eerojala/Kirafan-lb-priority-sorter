@@ -123,8 +123,6 @@ public class DatabaseHandler extends DataHandler {
                 .collect(Collectors.toList());
     }
 
-
-
     public boolean updateCharacter(GameCharacter character) {
         if (characterDatabase.update(character)) {
             if (event.getBonusCharacters().contains(character)) {
@@ -191,56 +189,25 @@ public class DatabaseHandler extends DataHandler {
        return true;
     }
 
-    public GameEvent getEvent() {
-        return this.event;
-    }
-
-    public List<GameCharacter> getEventCharacters() {
-        return event.getBonusCharacters();
-    }
-
-    public boolean addEventCharacter(GameCharacter character) {
-        event.addBonusCharacter(character);
-
-       return updateEvent();
-    }
-
-    private boolean updateEvent() {
-        if (eventDatabase.update(event)) {
-            return true;
-        } else {
-            System.out.println("Failed to update event to json");
-            return false;
-        }
-    }
-
-    public boolean removeEventCharacter(GameCharacter character) {
-        event.removeBonusCharacter(character);
-
-        return updateEvent();
-    }
-
-    public boolean clearEventCharacters() {
-        event.clearBonusCharacters();
-
-        return updateEvent();
-    }
-
-    private boolean removeAndAddEventCharacter(GameCharacter character) {
-        event.removeBonusCharacter(character);
-        event.addBonusCharacter(character);
-
-        return updateEvent();
-    }
-
+    @Override
     public List<Series> getEventSeries() {
         return event.getAvailableSeries();
     }
 
-    public boolean addEventSeries(Series series) {
+    @Override
+    protected boolean eventSeriesContains(Series series) {
+        return event.getAvailableSeries().contains(series);
+    }
+
+    @Override
+    protected boolean insertToEventSeries(Series series) {
         event.addAvailableSeries(series);
 
         return updateEvent();
+    }
+
+    private boolean updateEvent() {
+        return eventDatabase.update(event);
     }
 
     public boolean removeEventSeries(Series series) {
@@ -258,6 +225,41 @@ public class DatabaseHandler extends DataHandler {
     private boolean removeAndAddAvailableSeries(Series series) {
         event.removeAvailableSeries(series);
         event.addAvailableSeries(series);
+
+        return updateEvent();
+    }
+
+    public GameEvent getEvent() {
+        return this.event;
+    }
+
+    public List<GameCharacter> getEventCharacters() {
+        return event.getBonusCharacters();
+    }
+
+    public boolean addEventCharacter(GameCharacter character) {
+        event.addBonusCharacter(character);
+
+       return updateEvent();
+    }
+
+
+
+    public boolean removeEventCharacter(GameCharacter character) {
+        event.removeBonusCharacter(character);
+
+        return updateEvent();
+    }
+
+    public boolean clearEventCharacters() {
+        event.clearBonusCharacters();
+
+        return updateEvent();
+    }
+
+    private boolean removeAndAddEventCharacter(GameCharacter character) {
+        event.removeBonusCharacter(character);
+        event.addBonusCharacter(character);
 
         return updateEvent();
     }

@@ -10,7 +10,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.util.Optional;
 
 public abstract class Controller {
     public static void openWindow(URL url, Controller controller, String windowTitle) {
