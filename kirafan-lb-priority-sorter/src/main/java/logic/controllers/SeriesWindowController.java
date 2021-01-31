@@ -135,7 +135,7 @@ public class SeriesWindowController extends Controller implements Initializable 
             listHandler.sortAllSeries();
             listHandler.sortNonLimitBrokenCharacters();
 
-            if (listHandler.isSeriesInEventSeries(series)) {
+            if (listHandler.eventSeriesContains(series)) {
                 listHandler.sortEventSeries();
             }
         } else {

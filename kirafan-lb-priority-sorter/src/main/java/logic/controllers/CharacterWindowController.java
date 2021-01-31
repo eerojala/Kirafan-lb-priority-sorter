@@ -267,7 +267,7 @@ public class CharacterWindowController extends Controller implements Initializab
             listHandler.sortAllCharacters();
             listHandler.sortNonLimitBrokenCharacters();
 
-            if (listHandler.isCharacterInEventCharacters(character)) {
+            if (listHandler.eventCharactersContain(character)) {
                 listHandler.sortEventCharacters();
             }
         } else {

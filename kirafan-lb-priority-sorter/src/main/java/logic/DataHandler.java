@@ -84,7 +84,7 @@ public abstract class DataHandler {
 
     public abstract List<Series> getEventSeries();
 
-    public boolean addEventSeries (Series series) {
+    public boolean addEventSeries(Series series) {
         if (!eventSeriesContains(series)) {
             if (!insertToEventSeries(series)) {
                 System.out.println("Failed to add series " + series + " to event series");
@@ -95,7 +95,24 @@ public abstract class DataHandler {
         return true;
     }
 
-    protected abstract boolean eventSeriesContains(Series series);
+    public abstract boolean eventSeriesContains(Series series);
 
     protected abstract boolean insertToEventSeries(Series series);
+
+    public abstract List<GameCharacter> getEventCharacters();
+
+    public boolean addEventCharacter(GameCharacter character) {
+        if (!eventCharactersContain(character)) {
+            if (!insertToEventCharacters(character)) {
+                System.out.println("Failed to add character " + character + " to bonus characters");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public abstract boolean eventCharactersContain(GameCharacter character);
+
+    protected abstract boolean insertToEventCharacters(GameCharacter character);
 }

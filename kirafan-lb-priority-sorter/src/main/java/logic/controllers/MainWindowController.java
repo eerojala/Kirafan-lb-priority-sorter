@@ -194,7 +194,7 @@ public class MainWindowController extends Controller implements Initializable {
         GameCharacter character = listViewCharactersAll.getSelectionModel().getSelectedItem();
 
         if (databaseHandler.addEventCharacter(character)) {
-            listHandler.addCharacterToEventCharacters(character);
+            listHandler.addEventCharacter(character);
             listHandler.sortEventCharacters();
             listHandler.sortNonLimitBrokenCharacters();
         } else {

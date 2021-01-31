@@ -189,13 +189,17 @@ public class DatabaseHandler extends DataHandler {
        return true;
     }
 
+    public GameEvent getEvent() {
+        return this.event;
+    }
+
     @Override
     public List<Series> getEventSeries() {
         return event.getAvailableSeries();
     }
 
     @Override
-    protected boolean eventSeriesContains(Series series) {
+    public boolean eventSeriesContains(Series series) {
         return event.getAvailableSeries().contains(series);
     }
 
@@ -229,21 +233,22 @@ public class DatabaseHandler extends DataHandler {
         return updateEvent();
     }
 
-    public GameEvent getEvent() {
-        return this.event;
-    }
-
+    @Override
     public List<GameCharacter> getEventCharacters() {
         return event.getBonusCharacters();
     }
 
-    public boolean addEventCharacter(GameCharacter character) {
-        event.addBonusCharacter(character);
-
-       return updateEvent();
+    @Override
+    public boolean eventCharactersContain(GameCharacter character) {
+        return event.getBonusCharacters().contains(character);
     }
 
+    @Override
+    protected boolean insertToEventCharacters(GameCharacter character) {
+        event.addBonusCharacter(character);
 
+        return updateEvent();
+    }
 
     public boolean removeEventCharacter(GameCharacter character) {
         event.removeBonusCharacter(character);
