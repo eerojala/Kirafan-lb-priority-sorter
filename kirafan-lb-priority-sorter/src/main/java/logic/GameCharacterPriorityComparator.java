@@ -33,7 +33,7 @@ public class GameCharacterPriorityComparator implements Comparator<GameCharacter
     }
     /*
     * Sorting priority (from highest to lowest)
-    * 01: Is a bonus character for current element
+    * 01: Is a bonus character for current event
     * 02: Has a high personal preference (>=9)
     * 03: Has a class and element combination which no already limit broken character has (See MissingElementClassCombinationCheck for priority between different classes)
     * 04: Belongs to a series with incomplete crea

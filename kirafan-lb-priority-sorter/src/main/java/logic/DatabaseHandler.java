@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 * is to encapsulate those deletions behind single function calls (e.g deleting a series should also delete the characters
 * which belong to that series)
 */
-public class DatabaseHandler {
+public class DatabaseHandler extends DataHandler {
     private final static String EVENT_ID = "1";
 
     private Database<GameCharacter> characterDatabase;
@@ -47,17 +47,14 @@ public class DatabaseHandler {
         }
     }
 
+    @Override
     public List<Series> getAllSeries() {
         return seriesDatabase.findAll();
     }
 
-    public boolean createSeries(Series series) {
-        if (seriesDatabase.insert(series)) {
-            return true;
-        } else {
-            System.out.println("Failed to add series " + series + " to json");
-            return false;
-        }
+    @Override
+    protected boolean insertSeriesToData(Series series) {
+        return seriesDatabase.insert(series);
     }
 
     public boolean updateSeries(Series series) {
@@ -67,18 +64,25 @@ public class DatabaseHandler {
                 removeAndAddAvailableSeries(series);
             }
 
+            // apparently JsonDB automatically updates the characters of the updated series, so this is unnecessary
+            // ^^^ Turns out I was wrong
+            getSeriesCharacters(series).stream()
+                    .forEach(c -> {
+                        c.setSeries(series);
+                        updateCharacter(c);
+                    });
+
             return true;
         } else {
             System.out.println("Failed to update series " + series + " to json");
             return false;
         }
-        // apparently JsonDB automatically updates the characters of the updated series, so this is unnecessary
-//        List<GameCharacter> seriesCharacters = getSeriesCharacters(series);
-//
-//        for (GameCharacter character : seriesCharacters) {
-//            character.setSeries(series);
-//            updateCharacter(character);
-//        }
+    }
+
+    private List<GameCharacter> getSeriesCharacters(Series series) {
+        return getAllCharacters().stream()
+                .filter(c -> c.getSeries().equals(series))
+                .collect(Collectors.toList());
     }
 
     public boolean deleteSeries(Series series) {

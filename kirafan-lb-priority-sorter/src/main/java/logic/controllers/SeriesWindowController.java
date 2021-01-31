@@ -118,8 +118,8 @@ public class SeriesWindowController extends Controller implements Initializable 
     private void createSeries() {
         Series newSeries = new Series(textFieldName.getText(), cmbBoxCrea.getValue());
 
-        if (databaseHandler.createSeries(newSeries)) {
-            listHandler.createSeries(newSeries);
+        if (databaseHandler.addNewSeries(newSeries)) {
+            listHandler.addNewSeries(newSeries);
             listHandler.sortAllSeries();
         } else {
             openErrorWindow("Updating series.json failed", "New series was not saved to series.json");

@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 * from the list and then add the new object (with the same id but possible changes done in the update window) so that the
 * list has correct fields for the object and the ListView is refreshed automatically.
 */
-public class GlobalListHandler {
+public class GlobalListHandler extends DataHandler {
     private boolean filterOn;
     private GameEvent event;
     private List<GameCharacter> allCharacters;
@@ -66,6 +66,7 @@ public class GlobalListHandler {
         Mapper.assignExclusiveCharactersToWeapons(allCharacters, allWeapons);
     }
 
+    @Override
     public List<Series> getAllSeries() {
         return allSeries;
     }
@@ -74,16 +75,21 @@ public class GlobalListHandler {
         this.allSeries = allSeries;
     }
 
+    @Override
+    protected boolean insertSeriesToData(Series series) {
+        allSeries.add(series);
+
+        return true;
+    }
+
+
+
     public List<Series> getEventSeries() {
         return eventSeries;
     }
 
     public void setEventSeries(List<Series> eventSeries) {
         this.eventSeries = eventSeries;
-    }
-
-    public void createSeries(Series series) {
-        allSeries.add(series);
     }
 
     public void addSeriesToEventSeries(Series series) {
@@ -112,6 +118,20 @@ public class GlobalListHandler {
             removeSeriesFromEventSeries(series);
             addSeriesToEventSeries(series);
         }
+
+        // update also the characters which belong to the series (otherwise they will continue to have the old version of the series)
+        getSeriesCharacters(series).stream()
+                .forEach(c -> {
+                    c.setSeries(series);
+                    updateCharacter(c);
+                });
+    }
+
+    private List<GameCharacter> getSeriesCharacters(Series series) {
+        return getAllCharacters().stream()
+                .filter(c -> c.getSeries().equals(series))
+                .collect(Collectors.toList());
+
     }
 
     public void deleteSeries(Series series) {
@@ -119,9 +139,7 @@ public class GlobalListHandler {
         removeSeriesFromEventSeries(series);
 
         // remove the characters belonging to the series
-        List<GameCharacter> seriesCharacters = getAllCharacters().stream()
-                .filter(c -> c.getSeries().equals(series))
-                .collect(Collectors.toList());
+        List<GameCharacter> seriesCharacters = getSeriesCharacters(series);
 
         for (GameCharacter character : seriesCharacters) {
             deleteCharacter(character);
