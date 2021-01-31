@@ -110,6 +110,17 @@ public abstract class DataHandler {
 
     protected abstract boolean removeFromEventSeries(Series series);
 
+    public boolean clearEventSeries() {
+        if (!removeAllFromEventSeries()) {
+            System.out.println("Failed to remove all series from event");
+            return false;
+        }
+
+        return true;
+    }
+
+    protected abstract boolean removeAllFromEventSeries();
+
     public abstract List<GameCharacter> getEventCharacters();
 
     public boolean addEventCharacter(GameCharacter character) {

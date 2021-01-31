@@ -256,8 +256,11 @@ public class GlobalListHandler extends DataHandler {
         return true;
     }
 
-    public void clearEventSeries() {
+    @Override
+    protected boolean removeAllFromEventSeries() {
         eventSeries.clear();
+
+        return true;
     }
 
     @Override

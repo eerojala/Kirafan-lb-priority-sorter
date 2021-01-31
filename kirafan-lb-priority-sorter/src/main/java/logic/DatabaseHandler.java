@@ -221,7 +221,8 @@ public class DatabaseHandler extends DataHandler {
         return updateEvent();
     }
 
-    public boolean clearEventSeries() {
+    @Override
+    protected boolean removeAllFromEventSeries() {
         event.clearAvailableSeries();
 
         return updateEvent();
