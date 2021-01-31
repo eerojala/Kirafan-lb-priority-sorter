@@ -198,8 +198,8 @@ public class WeaponWindowController extends Controller implements Initializable 
         weapon.setExclusiveCharacterId(exclusiveCharacterId);
         weapon.setSkills(weaponSkills);
 
-        if (databaseHandler.updateWeapon(weapon)) {
-            listHandler.updateWeapon(weapon);
+        if (databaseHandler.updateWeapon(weapon, true)) {
+            listHandler.updateWeapon(weapon, true);
             listHandler.sortAllWeapons();
             listHandler.sortNonLimitBrokenCharacters();
         } else {

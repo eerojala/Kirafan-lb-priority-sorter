@@ -95,7 +95,7 @@ public class GlobalListHandler extends DataHandler {
         getSeriesCharacters(series).stream()
                 .forEach(c -> {
                     c.setSeries(series);
-                    updateCharacter(c);
+                    updateCharacter(c, true);
                 });
     }
 
@@ -150,19 +150,31 @@ public class GlobalListHandler extends DataHandler {
 
     }
 
-    public void updateCharacter(GameCharacter character) {
+    @Override
+    protected boolean updateCharacterInAllCharacters(GameCharacter character) {
         allCharacters.remove(character);
         allCharacters.add(character);
+
+        return true;
+    }
+
+    @Override
+    protected boolean updateCharacterInEventCharacters(GameCharacter character) {
+        removeFromEventCharacters(character);
+        insertToEventCharacters(character);
+
+        return true;
+    }
+
+    @Override
+    protected boolean updateCharacterInLBCharacters(GameCharacter character) {
         nonLimitBrokenCharacters.remove(character);
 
-        if (characterGetsPastEventSeriesFilter(character) && !character.isLimitBroken()) {
+        if (characterGetsPastEventSeriesFilter(character)) {
             nonLimitBrokenCharacters.add(character);
         }
 
-        if (eventCharacters.contains(character)) {
-            removeFromEventCharacters(character);
-            insertToEventCharacters(character);
-        }
+        return true;
     }
 
     public void deleteCharacter(GameCharacter character) {
@@ -210,13 +222,13 @@ public class GlobalListHandler extends DataHandler {
 
         return true;
     }
-    public void removeWeaponFromAllWeapons(Weapon weapon) {
-        allWeapons.remove(weapon);
-    }
 
-    public void updateWeapon(Weapon weapon) {
+    @Override
+    protected boolean updateWeaponInAllWeapons(Weapon weapon) {
         removeWeaponFromAllWeapons(weapon);
         insertToAllWeapons(weapon);
+
+        return true;
     }
 
     public void deleteWeapon(Weapon weapon) {
@@ -226,6 +238,10 @@ public class GlobalListHandler extends DataHandler {
         getAllCharacters().stream()
                 .filter(c -> weapon.equals(c.getPreferredWeapon())) // c.getPreferredWeapon can be null
                 .forEach(c -> c.setPreferredWeapon(null));
+    }
+
+    public void removeWeaponFromAllWeapons(Weapon weapon) {
+        allWeapons.remove(weapon);
     }
 
     @Override

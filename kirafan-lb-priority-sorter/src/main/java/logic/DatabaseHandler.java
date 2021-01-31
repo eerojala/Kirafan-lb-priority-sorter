@@ -69,7 +69,7 @@ public class DatabaseHandler extends DataHandler {
             getSeriesCharacters(series).stream()
                     .forEach(c -> {
                         c.setSeries(series);
-                        updateCharacter(c);
+                        updateCharacter(c, true);
                     });
 
             return true;
@@ -113,7 +113,7 @@ public class DatabaseHandler extends DataHandler {
 
     @Override
     protected boolean insertToNonLBCharacters(GameCharacter character) {
-        // We do not store non-limit broken characters on a separate JSON, so this function always returns true
+        // We do not store non-limit broken characters on a separate JSON file, so this function always returns true
         return true;
     }
 
@@ -123,18 +123,23 @@ public class DatabaseHandler extends DataHandler {
                 .collect(Collectors.toList());
     }
 
-    public boolean updateCharacter(GameCharacter character) {
-        if (characterDatabase.update(character)) {
-            if (event.getBonusCharacters().contains(character)) {
-                // update also the character in the event's available character list (JsonDB doesn't automatically update this)
-                removeAndAddEventCharacter(character);
-            }
+    @Override
+    protected boolean updateCharacterInAllCharacters(GameCharacter character) {
+        return characterDatabase.update(character);
+    }
 
-            return true;
-        } else {
-            System.out.println("Failed to update character " + character);
-            return false;
-        }
+    @Override
+    protected boolean updateCharacterInEventCharacters(GameCharacter character) {
+        event.removeBonusCharacter(character);
+        event.addBonusCharacter(character);
+
+        return updateEvent();
+    }
+
+    @Override
+    protected boolean updateCharacterInLBCharacters(GameCharacter character) {
+        // We do not store non-limit broken characters on a separate JSON file, so this function always returns true
+        return true;
     }
 
     public boolean deleteCharacter(GameCharacter character) {
@@ -163,13 +168,9 @@ public class DatabaseHandler extends DataHandler {
         return weaponDatabase.insert(weapon);
     }
 
-    public boolean updateWeapon(Weapon weapon) {
-        if (weaponDatabase.update(weapon)) {
-            return true;
-        } else {
-            System.out.println("Failed to update weapon " + weapon);
-            return false;
-        }
+    @Override
+    protected boolean updateWeaponInAllWeapons(Weapon weapon) {
+        return weaponDatabase.update(weapon);
     }
 
     public boolean deleteWeapon(Weapon weapon) {
@@ -183,7 +184,7 @@ public class DatabaseHandler extends DataHandler {
                 .filter(c -> weapon.equals(c.getPreferredWeapon())) // c.getPreferredWeapon can be null
                 .forEach(c -> {
                     c.setPreferredWeapon(null);
-                    updateCharacter(c);
+                    updateCharacter(c, false);
                 });
 
        return true;
@@ -266,10 +267,4 @@ public class DatabaseHandler extends DataHandler {
         return updateEvent();
     }
 
-    private boolean removeAndAddEventCharacter(GameCharacter character) {
-        event.removeBonusCharacter(character);
-        event.addBonusCharacter(character);
-
-        return updateEvent();
-    }
 }

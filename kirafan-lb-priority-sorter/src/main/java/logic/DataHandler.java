@@ -5,6 +5,7 @@ import domain.model.Series;
 import domain.model.Weapon;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class DataHandler {
     public DataHandler() {
@@ -22,8 +23,6 @@ public abstract class DataHandler {
     }
 
     protected abstract boolean insertToAllSeries(Series series);
-
-
 
 //    protected abstract boolean updateSeriesInData(Series series);
 //
@@ -69,6 +68,57 @@ public abstract class DataHandler {
 
     protected abstract boolean insertToNonLBCharacters(GameCharacter character);
 
+    public boolean updateCharacter(GameCharacter character, boolean updateExclusiveWeapon) {
+        if (!updateCharacterInAllCharacters(character)) {
+            System.out.println("Failed to update character " + character);
+            return false;
+        }
+
+        if (eventCharactersContain(character)) {
+            if (!updateCharacterInEventCharacters(character)) {
+                System.out.println("Failed to update character " + character + " in event characters");
+            }
+
+        }
+
+        if (!character.isLimitBroken()) {
+            if (!updateCharacterInLBCharacters(character)) {
+                System.out.println("Failed to update character " + character + " in non-limit broken characters");
+            }
+        }
+
+        if (updateExclusiveWeapon) {
+            Weapon exclusiveWeapon = getExclusiveWeapon(character);
+
+            if (exclusiveWeapon != null) {
+                exclusiveWeapon.setExclusiveCharacterId(character.getId());
+                exclusiveWeapon.setExclusiveCharacter(character);
+
+                // we input false as parameter so we not incur an infinite recursion of updating character.preferredWeapon
+                // and weapon.exclusiveCharacter
+                if (!updateWeapon(exclusiveWeapon, false)) {
+                    System.out.println("Failed to update exlusive weapon " + exclusiveWeapon + " belonging to " + character);
+                }
+
+            }
+        }
+
+        return true;
+    }
+
+    protected abstract boolean updateCharacterInAllCharacters(GameCharacter character);
+
+    protected abstract boolean updateCharacterInEventCharacters(GameCharacter character);
+
+    protected abstract boolean updateCharacterInLBCharacters(GameCharacter character);
+
+    private Weapon getExclusiveWeapon(GameCharacter character) {
+        return getAllWeapons().stream()
+                .filter(w -> character.equals(w.getExclusiveCharacter())) // w.exclusiveCharacter can be null
+                .findAny()
+                .orElse(null);
+    }
+
     public abstract List<Weapon> getAllWeapons();
 
     public boolean addNewWeapon(Weapon weapon) {
@@ -81,6 +131,33 @@ public abstract class DataHandler {
     }
 
     protected abstract boolean insertToAllWeapons(Weapon weapon);
+
+    public boolean updateWeapon(Weapon weapon, boolean updateWeaponUsers) {
+        if (!updateWeaponInAllWeapons(weapon)) {
+            System.out.println("Failed to update weapon " + weapon);
+            return false;
+        }
+
+        if (updateWeaponUsers) {
+            getWeaponUsers(weapon).stream()
+                    .forEach(c -> {
+                        c.setPreferredWeapon(weapon);
+                        if (!updateCharacter(c, false)) { // false so we prevent infinite recursions
+                            System.out.println("Failed to update character " + c + " who uses weapon " + weapon);
+                        }
+                    });
+        }
+
+        return true;
+    }
+
+    protected abstract boolean updateWeaponInAllWeapons(Weapon weapon);
+
+    private List<GameCharacter> getWeaponUsers(Weapon weapon) {
+        return getAllCharacters().stream()
+                .filter(c -> weapon.equals(c.getPreferredWeapon())) // c.preferredWeapon can be null
+                .collect(Collectors.toList());
+    }
 
     public abstract List<Series> getEventSeries();
 

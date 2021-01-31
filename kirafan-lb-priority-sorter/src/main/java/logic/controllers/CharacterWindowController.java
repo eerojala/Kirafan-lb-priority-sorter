@@ -262,8 +262,8 @@ public class CharacterWindowController extends Controller implements Initializab
         character.setSkills(characterSkills);
         character.setLimitBroken(checkBoxLimitBroken.isSelected());
 
-        if (databaseHandler.updateCharacter(character)) {
-            listHandler.updateCharacter(character);
+        if (databaseHandler.updateCharacter(character, true)) {
+            listHandler.updateCharacter(character, true);
             listHandler.sortAllCharacters();
             listHandler.sortNonLimitBrokenCharacters();
 
