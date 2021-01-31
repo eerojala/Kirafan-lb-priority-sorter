@@ -82,28 +82,26 @@ public class GlobalListHandler extends DataHandler {
         return true;
     }
 
-    public void updateSeries(Series series) {
+    @Override
+    protected boolean updateSeriesInAllSeries(Series series) {
         allSeries.remove(series);
         allSeries.add(series);
 
-        if (eventSeriesContains(series)) {
-            removeFromEventSeries(series);
-            insertToEventSeries(series);
-        }
+        return true;
+    }
 
-        // update also the characters which belong to the series (otherwise they will continue to have the old version of the series)
-        getSeriesCharacters(series).stream()
-                .forEach(c -> {
-                    c.setSeries(series);
-                    updateCharacter(c, true);
-                });
+    @Override
+    protected boolean updateSeriesInEventSeries(Series series) {
+        eventSeries.remove(series);
+        eventSeries.add(series);
+
+        return true;
     }
 
     private List<GameCharacter> getSeriesCharacters(Series series) {
         return getAllCharacters().stream()
                 .filter(c -> c.getSeries().equals(series))
                 .collect(Collectors.toList());
-
     }
 
     public void deleteSeries(Series series) {
@@ -160,8 +158,8 @@ public class GlobalListHandler extends DataHandler {
 
     @Override
     protected boolean updateCharacterInEventCharacters(GameCharacter character) {
-        removeFromEventCharacters(character);
-        insertToEventCharacters(character);
+        eventCharacters.remove(character);
+        eventCharacters.add(character);
 
         return true;
     }
@@ -225,8 +223,8 @@ public class GlobalListHandler extends DataHandler {
 
     @Override
     protected boolean updateWeaponInAllWeapons(Weapon weapon) {
-        removeWeaponFromAllWeapons(weapon);
-        insertToAllWeapons(weapon);
+        allWeapons.remove(weapon);
+        allWeapons.add(weapon);
 
         return true;
     }

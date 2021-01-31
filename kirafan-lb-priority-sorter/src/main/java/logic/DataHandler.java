@@ -24,28 +24,42 @@ public abstract class DataHandler {
 
     protected abstract boolean insertToAllSeries(Series series);
 
-//    protected abstract boolean updateSeriesInData(Series series);
-//
-//    protected abstract boolean isEventSeries(Series series);
-//
-//    protected abstract boolean updateEventSeriesInData(Series series);
-//
-//
-//    public boolean updateSeries(Series series) {
-//        if (!updateSeriesInData(series)) {
-//            System.out.println("Failed to update series " + series);
-//            return false;
-//        }
-//
-//        if (isEventSeries(series)) {
-//            if(!updateEventSeriesInData(series)) {
-//                System.out.println("Failed to update the series " + series + " in the event series list.");
-//                System.out.println("The old version of the series still remains in the event series list.");
-//                System.out.println("If you wish the event series list to have an updated version of the series, " +
-//                        "remove it manually from the event series list and then add it back again.");
-//            }
-//        }
-//    }
+    public boolean updateSeries(Series series) {
+        if (!updateSeriesInAllSeries(series)) {
+            System.out.println("Failed to update series " + series);
+            return false;
+        }
+
+        if (eventSeriesContains(series)) {
+            if(!updateSeriesInEventSeries(series)) {
+                System.out.println("Failed to update the series " + series + " in the event series list.");
+            }
+        }
+
+        getSeriesCharacters(series).stream()
+                .forEach(c -> {
+                    c.setSeries(series);
+
+                    if (!updateCharacter(c, true)) {
+                        System.out.println("Failed to update character " + c + " who belongs to series " + series);
+                    }
+                });
+
+        return true;
+    }
+
+
+    protected abstract boolean updateSeriesInAllSeries(Series series);
+
+    public abstract boolean eventSeriesContains(Series series);
+
+    protected abstract boolean updateSeriesInEventSeries(Series series);
+
+    private List<GameCharacter> getSeriesCharacters(Series series) {
+        return getAllCharacters().stream()
+                .filter(c -> series.equals(c.getSeries())) // c.series should never be null, but just in case
+                .collect(Collectors.toList());
+    }
 
     public abstract List<GameCharacter> getAllCharacters();
 
@@ -171,8 +185,6 @@ public abstract class DataHandler {
 
         return true;
     }
-
-    public abstract boolean eventSeriesContains(Series series);
 
     protected abstract boolean insertToEventSeries(Series series);
 

@@ -57,32 +57,17 @@ public class DatabaseHandler extends DataHandler {
         return seriesDatabase.insert(series);
     }
 
-    public boolean updateSeries(Series series) {
-        if (seriesDatabase.update(series)) {
-            // update also the series in the event's available series list (JsonDB doesn't automatically update this)
-            if (event.getAvailableSeries().contains(series)) {
-                removeAndAddAvailableSeries(series);
-            }
-
-            // apparently JsonDB automatically updates the characters of the updated series, so this is unnecessary
-            // ^^^ Turns out I was wrong
-            getSeriesCharacters(series).stream()
-                    .forEach(c -> {
-                        c.setSeries(series);
-                        updateCharacter(c, true);
-                    });
-
-            return true;
-        } else {
-            System.out.println("Failed to update series " + series + " to json");
-            return false;
-        }
+    @Override
+    protected boolean updateSeriesInAllSeries(Series series) {
+        return seriesDatabase.update(series);
     }
 
-    private List<GameCharacter> getSeriesCharacters(Series series) {
-        return getAllCharacters().stream()
-                .filter(c -> c.getSeries().equals(series))
-                .collect(Collectors.toList());
+    @Override
+    protected boolean updateSeriesInEventSeries(Series series) {
+        event.removeAvailableSeries(series);
+        event.addAvailableSeries(series);
+
+        return updateEvent();
     }
 
     public boolean deleteSeries(Series series) {
@@ -225,13 +210,6 @@ public class DatabaseHandler extends DataHandler {
     @Override
     protected boolean removeAllFromEventSeries() {
         event.clearAvailableSeries();
-
-        return updateEvent();
-    }
-
-    private boolean removeAndAddAvailableSeries(Series series) {
-        event.removeAvailableSeries(series);
-        event.addAvailableSeries(series);
 
         return updateEvent();
     }
