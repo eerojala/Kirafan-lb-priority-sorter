@@ -229,17 +229,11 @@ public class GlobalListHandler extends DataHandler {
         return true;
     }
 
-    public void deleteWeapon(Weapon weapon) {
-        removeWeaponFromAllWeapons(weapon);
-
-        // Set preferred weapon as null to characters who have their preferred weapon as the deleted weapon
-        getAllCharacters().stream()
-                .filter(c -> weapon.equals(c.getPreferredWeapon())) // c.getPreferredWeapon can be null
-                .forEach(c -> c.setPreferredWeapon(null));
-    }
-
-    public void removeWeaponFromAllWeapons(Weapon weapon) {
+    @Override
+    protected boolean removeWeaponFromAllWeapons(Weapon weapon) {
         allWeapons.remove(weapon);
+
+        return true;
     }
 
     @Override

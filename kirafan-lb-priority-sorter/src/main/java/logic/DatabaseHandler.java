@@ -158,21 +158,9 @@ public class DatabaseHandler extends DataHandler {
         return weaponDatabase.update(weapon);
     }
 
-    public boolean deleteWeapon(Weapon weapon) {
-       if (!weaponDatabase.remove(weapon)) {
-           System.out.println("Failed to delete weapon " + weapon + " from json");
-           return false;
-       }
-
-       // Set the preferred weapon to null for characters whose preferred weapon is weapon
-        getAllCharacters().stream()
-                .filter(c -> weapon.equals(c.getPreferredWeapon())) // c.getPreferredWeapon can be null
-                .forEach(c -> {
-                    c.setPreferredWeapon(null);
-                    updateCharacter(c, false);
-                });
-
-       return true;
+    @Override
+    protected boolean removeWeaponFromAllWeapons(Weapon weapon) {
+        return weaponDatabase.remove((weapon));
     }
 
     public GameEvent getEvent() {

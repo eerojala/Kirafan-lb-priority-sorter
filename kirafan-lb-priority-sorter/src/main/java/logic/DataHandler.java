@@ -173,6 +173,26 @@ public abstract class DataHandler {
                 .collect(Collectors.toList());
     }
 
+    public boolean deleteWeapon(Weapon weapon) {
+        if (!removeWeaponFromAllWeapons(weapon)) {
+            System.out.println("Failed to delete weapon " + weapon);
+            return false;
+        }
+
+        // Set the preferred weapon to null for all characters who had this weapon as their preferred weapon
+        getWeaponUsers(weapon).stream()
+                .forEach(c -> {
+                    c.setPreferredWeapon(null);
+                    if (!updateCharacter(c, false)) {
+                        System.out.println("Failed to update character " + c + " who used weapon " + weapon);
+                    }
+                });
+
+        return true;
+    }
+
+    protected abstract boolean removeWeaponFromAllWeapons(Weapon weapon);
+
     public abstract List<Series> getEventSeries();
 
     public boolean addEventSeries(Series series) {
