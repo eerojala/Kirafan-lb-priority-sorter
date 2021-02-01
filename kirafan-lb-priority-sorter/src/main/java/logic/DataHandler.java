@@ -77,6 +77,27 @@ public abstract class DataHandler {
                 .collect(Collectors.toList());
     }
 
+    public boolean deleteSeries(Series series) {
+        if (!removeFromAllSeries(series)) {
+            System.out.println("Failed to delete series " + series);
+            return false;
+        }
+
+        removeEventSeries(series);
+
+        List<GameCharacter> seriesCharacters = getSeriesCharacters(series);
+
+        // Delete all the character belonging to the deleted series
+        for (GameCharacter character : seriesCharacters) {
+            deleteCharacter(character);
+        }
+
+        return true;
+    }
+
+    protected abstract boolean removeFromAllSeries(Series series);
+
+
     public boolean removeEventSeries(Series series) {
         if (!removeFromEventSeries(series)) {
             System.out.printf("Failed to remove series " + series + " from bonus characters");

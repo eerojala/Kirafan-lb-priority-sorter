@@ -119,22 +119,11 @@ public class GlobalListHandler extends DataHandler {
         return true;
     }
 
-    private List<GameCharacter> getSeriesCharacters(Series series) {
-        return getAllCharacters().stream()
-                .filter(c -> c.getSeries().equals(series))
-                .collect(Collectors.toList());
-    }
-
-    public void deleteSeries(Series series) {
+    @Override
+    protected boolean removeFromAllSeries(Series series) {
         allSeries.remove(series);
-        removeFromEventSeries(series);
 
-        // remove the characters belonging to the series
-        List<GameCharacter> seriesCharacters = getSeriesCharacters(series);
-
-        for (GameCharacter character : seriesCharacters) {
-            deleteCharacter(character);
-        }
+        return true;
     }
 
     @Override

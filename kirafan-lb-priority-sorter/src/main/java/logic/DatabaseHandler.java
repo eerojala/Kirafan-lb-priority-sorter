@@ -109,20 +109,9 @@ public class DatabaseHandler extends DataHandler {
         return updateEvent();
     }
 
-    public boolean deleteSeries(Series series) {
-        if (!seriesDatabase.remove(series)) {
-            System.out.println("Failed to delete series " + series + " from json");
-            return false;
-        }
-        // Remove the series from the event available series list
-        removeEventSeries(series);
-
-        // Delete the characters belonging to the series as well
-        getAllCharacters().stream()
-                .filter(c -> c.getSeries().equals(series)) // c.getSeries() should never be null
-                .forEach(c -> deleteCharacter(c));
-
-        return true;
+    @Override
+    protected boolean removeFromAllSeries(Series series) {
+        return seriesDatabase.remove(series);
     }
 
     @Override
