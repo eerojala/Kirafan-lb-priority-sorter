@@ -213,6 +213,7 @@ public class GlobalListHandler extends DataHandler {
     protected boolean updateInLBCharacters(GameCharacter character) {
         nonLimitBrokenCharacters.remove(character);
 
+        // If the character does not get past the event series filter, it will not be added to the list back again
         if (characterGetsPastEventSeriesFilter(character)) {
             nonLimitBrokenCharacters.add(character);
         }
@@ -275,6 +276,7 @@ public class GlobalListHandler extends DataHandler {
     }
 
     public List<Weapon> getNonExclusiveWeapons() {
+        // Returns all of the weapons which have no exclusive character
         return getAllWeapons().stream()
                 .filter(w -> w.getExclusiveCharacter() == null)
                 .collect(Collectors.toList());
