@@ -47,9 +47,18 @@ public class DatabaseHandler extends DataHandler {
         }
     }
 
+    public GameEvent getEvent() {
+        return this.event;
+    }
+
     @Override
     public List<Series> getAllSeries() {
         return seriesDatabase.findAll();
+    }
+
+    @Override
+    public List<Series> getEventSeries() {
+        return event.getAvailableSeries();
     }
 
     @Override
@@ -58,14 +67,44 @@ public class DatabaseHandler extends DataHandler {
     }
 
     @Override
-    protected boolean updateSeriesInAllSeries(Series series) {
+    public boolean eventSeriesContains(Series series) {
+        return event.getAvailableSeries().contains(series);
+    }
+
+    @Override
+    protected boolean insertToEventSeries(Series series) {
+        event.addAvailableSeries(series);
+
+        return updateEvent();
+    }
+
+    private boolean updateEvent() {
+        return eventDatabase.update(event);
+    }
+
+    @Override
+    protected boolean updateInAllSeries(Series series) {
         return seriesDatabase.update(series);
     }
 
     @Override
-    protected boolean updateSeriesInEventSeries(Series series) {
+    protected boolean updateInEventSeries(Series series) {
         event.removeAvailableSeries(series);
         event.addAvailableSeries(series);
+
+        return updateEvent();
+    }
+
+    @Override
+    protected boolean removeFromEventSeries(Series series) {
+        event.removeAvailableSeries(series);
+
+        return updateEvent();
+    }
+
+    @Override
+    protected boolean removeAllFromEventSeries() {
+        event.clearAvailableSeries();
 
         return updateEvent();
     }
@@ -92,6 +131,17 @@ public class DatabaseHandler extends DataHandler {
     }
 
     @Override
+    public List<GameCharacter> getEventCharacters() {
+        return event.getBonusCharacters();
+    }
+
+    public List<GameCharacter> getNonLimitBrokenCharacters() {
+        return getAllCharacters().stream()
+                .filter(c -> !c.isLimitBroken())
+                .collect(Collectors.toList());
+    }
+
+    @Override
     protected boolean insertToAllCharacters(GameCharacter character) {
         return characterDatabase.insert(character);
     }
@@ -102,19 +152,26 @@ public class DatabaseHandler extends DataHandler {
         return true;
     }
 
-    public List<GameCharacter> getNonLimitBrokenCharacters() {
-        return getAllCharacters().stream()
-                .filter(c -> !c.isLimitBroken())
-                .collect(Collectors.toList());
+    @Override
+    public boolean eventCharactersContain(GameCharacter character) {
+        return event.getBonusCharacters().contains(character);
     }
 
     @Override
-    protected boolean updateCharacterInAllCharacters(GameCharacter character) {
+    protected boolean insertToEventCharacters(GameCharacter character) {
+        event.addBonusCharacter(character);
+
+        return updateEvent();
+    }
+
+
+    @Override
+    protected boolean updateInAllCharacters(GameCharacter character) {
         return characterDatabase.update(character);
     }
 
     @Override
-    protected boolean updateCharacterInEventCharacters(GameCharacter character) {
+    protected boolean updateInEventCharacters(GameCharacter character) {
         event.removeBonusCharacter(character);
         event.addBonusCharacter(character);
 
@@ -122,7 +179,7 @@ public class DatabaseHandler extends DataHandler {
     }
 
     @Override
-    protected boolean updateCharacterInLBCharacters(GameCharacter character) {
+    protected boolean updateInLBCharacters(GameCharacter character) {
         // We do not store non-limit broken characters on a separate JSON file, so this function always returns true
         return true;
     }
@@ -144,82 +201,6 @@ public class DatabaseHandler extends DataHandler {
     }
 
     @Override
-    public List<Weapon> getAllWeapons() {
-        return weaponDatabase.findAll();
-    }
-
-    @Override
-    protected boolean insertToAllWeapons(Weapon weapon) {
-        return weaponDatabase.insert(weapon);
-    }
-
-    @Override
-    protected boolean updateWeaponInAllWeapons(Weapon weapon) {
-        return weaponDatabase.update(weapon);
-    }
-
-    @Override
-    protected boolean removeWeaponFromAllWeapons(Weapon weapon) {
-        return weaponDatabase.remove((weapon));
-    }
-
-    public GameEvent getEvent() {
-        return this.event;
-    }
-
-    @Override
-    public List<Series> getEventSeries() {
-        return event.getAvailableSeries();
-    }
-
-    @Override
-    public boolean eventSeriesContains(Series series) {
-        return event.getAvailableSeries().contains(series);
-    }
-
-    @Override
-    protected boolean insertToEventSeries(Series series) {
-        event.addAvailableSeries(series);
-
-        return updateEvent();
-    }
-
-    private boolean updateEvent() {
-        return eventDatabase.update(event);
-    }
-
-    @Override
-    protected boolean removeFromEventSeries(Series series) {
-        event.removeAvailableSeries(series);
-
-        return updateEvent();
-    }
-
-    @Override
-    protected boolean removeAllFromEventSeries() {
-        event.clearAvailableSeries();
-
-        return updateEvent();
-    }
-
-    @Override
-    public List<GameCharacter> getEventCharacters() {
-        return event.getBonusCharacters();
-    }
-
-    @Override
-    public boolean eventCharactersContain(GameCharacter character) {
-        return event.getBonusCharacters().contains(character);
-    }
-
-    @Override
-    protected boolean insertToEventCharacters(GameCharacter character) {
-        event.addBonusCharacter(character);
-
-        return updateEvent();
-    }
-
-    @Override
     protected boolean removeFromEventCharacters(GameCharacter character) {
         event.removeBonusCharacter(character);
 
@@ -233,4 +214,23 @@ public class DatabaseHandler extends DataHandler {
         return updateEvent();
     }
 
+    @Override
+    public List<Weapon> getAllWeapons() {
+        return weaponDatabase.findAll();
+    }
+
+    @Override
+    protected boolean insertToAllWeapons(Weapon weapon) {
+        return weaponDatabase.insert(weapon);
+    }
+
+    @Override
+    protected boolean updateInAllWeapons(Weapon weapon) {
+        return weaponDatabase.update(weapon);
+    }
+
+    @Override
+    protected boolean removeFromAllWeapons(Weapon weapon) {
+        return weaponDatabase.remove((weapon));
+    }
 }

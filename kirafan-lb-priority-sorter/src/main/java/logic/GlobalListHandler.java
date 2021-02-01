@@ -71,6 +71,15 @@ public class GlobalListHandler extends DataHandler {
         return allSeries;
     }
 
+    @Override
+    public List<Series> getEventSeries() {
+        return eventSeries;
+    }
+
+    public void setEventSeries(List<Series> eventSeries) {
+        this.eventSeries = eventSeries;
+    }
+
     public void setAllSeries(List<Series> allSeries) {
         this.allSeries = allSeries;
     }
@@ -83,7 +92,19 @@ public class GlobalListHandler extends DataHandler {
     }
 
     @Override
-    protected boolean updateSeriesInAllSeries(Series series) {
+    public boolean eventSeriesContains(Series series) {
+        return eventSeries.contains(series);
+    }
+
+    @Override
+    protected boolean insertToEventSeries(Series series) {
+        eventSeries.add(series);
+
+        return true;
+    }
+
+    @Override
+    protected boolean updateInAllSeries(Series series) {
         allSeries.remove(series);
         allSeries.add(series);
 
@@ -91,7 +112,7 @@ public class GlobalListHandler extends DataHandler {
     }
 
     @Override
-    protected boolean updateSeriesInEventSeries(Series series) {
+    protected boolean updateInEventSeries(Series series) {
         eventSeries.remove(series);
         eventSeries.add(series);
 
@@ -117,8 +138,39 @@ public class GlobalListHandler extends DataHandler {
     }
 
     @Override
+    protected boolean removeFromEventSeries(Series series) {
+        eventSeries.remove(series);
+
+        return true;
+    }
+
+    @Override
+    protected boolean removeAllFromEventSeries() {
+        eventSeries.clear();
+
+        return true;
+    }
+
+    @Override
     public List<GameCharacter> getAllCharacters() {
         return allCharacters;
+    }
+
+    public List<GameCharacter> getNonLimitBrokenCharacters() {
+        return nonLimitBrokenCharacters;
+    }
+
+    public void setNonLimitBrokenCharacters(List<GameCharacter> nonLimitBrokenCharacters) {
+        this.nonLimitBrokenCharacters = nonLimitBrokenCharacters;
+    }
+
+    @Override
+    public List<GameCharacter> getEventCharacters() {
+        return eventCharacters;
+    }
+
+    public void setEventCharacters(List<GameCharacter> eventCharacters) {
+        this.eventCharacters = eventCharacters;
     }
 
     public void setAllCharacters(List<GameCharacter> charactersAll) {
@@ -141,6 +193,18 @@ public class GlobalListHandler extends DataHandler {
         return true;
     }
 
+    @Override
+    public boolean eventCharactersContain(GameCharacter character) {
+        return eventCharacters.contains(character);
+    }
+
+    @Override
+    protected boolean insertToEventCharacters(GameCharacter character) {
+        eventCharacters.add(character);
+
+        return true;
+    }
+
     private boolean characterGetsPastEventSeriesFilter(GameCharacter character) {
         // Returns true if the character belongs to a series that has lb mats currently available in the event or if
         // the filter is not currently on.
@@ -149,7 +213,7 @@ public class GlobalListHandler extends DataHandler {
     }
 
     @Override
-    protected boolean updateCharacterInAllCharacters(GameCharacter character) {
+    protected boolean updateInAllCharacters(GameCharacter character) {
         allCharacters.remove(character);
         allCharacters.add(character);
 
@@ -157,7 +221,7 @@ public class GlobalListHandler extends DataHandler {
     }
 
     @Override
-    protected boolean updateCharacterInEventCharacters(GameCharacter character) {
+    protected boolean updateInEventCharacters(GameCharacter character) {
         eventCharacters.remove(character);
         eventCharacters.add(character);
 
@@ -165,7 +229,7 @@ public class GlobalListHandler extends DataHandler {
     }
 
     @Override
-    protected boolean updateCharacterInLBCharacters(GameCharacter character) {
+    protected boolean updateInLBCharacters(GameCharacter character) {
         nonLimitBrokenCharacters.remove(character);
 
         if (characterGetsPastEventSeriesFilter(character)) {
@@ -188,6 +252,20 @@ public class GlobalListHandler extends DataHandler {
         for (Weapon weapon : weaponsExclusiveToCharacter) {
             deleteWeapon(weapon);
         }
+    }
+
+    @Override
+    protected boolean removeFromEventCharacters(GameCharacter character) {
+        eventCharacters.remove(character);
+
+        return true;
+    }
+
+    @Override
+    protected boolean removeAllFromEventCharacters() {
+        eventCharacters.clear();
+
+        return true;
     }
 
     @Override
@@ -222,7 +300,7 @@ public class GlobalListHandler extends DataHandler {
     }
 
     @Override
-    protected boolean updateWeaponInAllWeapons(Weapon weapon) {
+    protected boolean updateInAllWeapons(Weapon weapon) {
         allWeapons.remove(weapon);
         allWeapons.add(weapon);
 
@@ -230,91 +308,16 @@ public class GlobalListHandler extends DataHandler {
     }
 
     @Override
-    protected boolean removeWeaponFromAllWeapons(Weapon weapon) {
+    protected boolean removeFromAllWeapons(Weapon weapon) {
         allWeapons.remove(weapon);
 
         return true;
     }
 
-    @Override
-    public List<Series> getEventSeries() {
-        return eventSeries;
-    }
-
-    public void setEventSeries(List<Series> eventSeries) {
-        this.eventSeries = eventSeries;
-    }
-
-    @Override
-    public boolean eventSeriesContains(Series series) {
-        return eventSeries.contains(series);
-    }
-
-    @Override
-    protected boolean insertToEventSeries(Series series) {
-        eventSeries.add(series);
-
-        return true;
-    }
-
-    @Override
-    protected boolean removeFromEventSeries(Series series) {
-        eventSeries.remove(series);
-
-        return true;
-    }
-
-    @Override
-    protected boolean removeAllFromEventSeries() {
-        eventSeries.clear();
-
-        return true;
-    }
-
-    @Override
-    public List<GameCharacter> getEventCharacters() {
-        return eventCharacters;
-    }
-
-    public void setEventCharacters(List<GameCharacter> eventCharacters) {
-        this.eventCharacters = eventCharacters;
-    }
-
-    @Override
-    public boolean eventCharactersContain(GameCharacter character) {
-        return eventCharacters.contains(character);
-    }
-
-    @Override
-    protected boolean insertToEventCharacters(GameCharacter character) {
-        eventCharacters.add(character);
-
-        return true;
-    }
-
-    @Override
-    protected boolean removeFromEventCharacters(GameCharacter character) {
-        eventCharacters.remove(character);
-
-        return true;
-    }
-
-    @Override
-    protected boolean removeAllFromEventCharacters() {
-        eventCharacters.clear();
-
-        return true;
-    }
-
-    public List<GameCharacter> getNonLimitBrokenCharacters() {
-        return nonLimitBrokenCharacters;
-    }
-
-    public void setNonLimitBrokenCharacters(List<GameCharacter> nonLimitBrokenCharacters) {
-        this.nonLimitBrokenCharacters = nonLimitBrokenCharacters;
-    }
-
     public void filterNonLimitBrokenCharacters(boolean filterOn, DatabaseHandler databaseHandler) {
+        // This is for filtering non-limit broken characters based on the availability of limit-breakable series in the current event
+        // If the filter is ON then return non-limit broken characters that belong to series which are event series
+        // If the filter is OFF then return all non-limit broken characters
         this.filterOn = filterOn;
 
         if (this.filterOn) {
