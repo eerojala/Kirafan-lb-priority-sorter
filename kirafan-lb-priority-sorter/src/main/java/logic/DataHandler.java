@@ -140,10 +140,16 @@ public abstract class DataHandler {
 
     protected abstract boolean insertToEventCharacters(GameCharacter character);
 
-    public boolean updateCharacter(GameCharacter character, boolean updateExclusiveWeapon) {
+    public boolean updateCharacter(GameCharacter character, boolean updateExclusiveWeapons) {
         if (!updateInAllCharacters(character)) {
             System.out.println("Failed to update character " + character);
             return false;
+        }
+
+        if (!character.isLimitBroken()) {
+            if (!updateInLBCharacters(character)) {
+                System.out.println("Failed to update character " + character + " in non-limit broken characters");
+            }
         }
 
         if (eventCharactersContain(character)) {
@@ -153,26 +159,16 @@ public abstract class DataHandler {
 
         }
 
-        if (!character.isLimitBroken()) {
-            if (!updateInLBCharacters(character)) {
-                System.out.println("Failed to update character " + character + " in non-limit broken characters");
-            }
-        }
+        if (updateExclusiveWeapons) {
+            getExclusiveWeapons(character).stream()
+                    .forEach(w -> {
+                        w.setExclusiveCharacterId(character.getId());
+                        w.setExclusiveCharacter(character);
 
-        if (updateExclusiveWeapon) {
-            Weapon exclusiveWeapon = getExclusiveWeapon(character);
-
-            if (exclusiveWeapon != null) {
-                exclusiveWeapon.setExclusiveCharacterId(character.getId());
-                exclusiveWeapon.setExclusiveCharacter(character);
-
-                // we input false as parameter so we not incur an infinite recursion of updating character.preferredWeapon
-                // and weapon.exclusiveCharacter
-                if (!updateWeapon(exclusiveWeapon, false)) {
-                    System.out.println("Failed to update exlusive weapon " + exclusiveWeapon + " belonging to " + character);
-                }
-
-            }
+                        // we input false as parameter so we not incur an infinite recursion of updating character.preferredWeapon
+                        // and weapon.exclusiveCharacter
+                        updateWeapon(w, false);
+                    });
         }
 
         return true;
@@ -180,33 +176,47 @@ public abstract class DataHandler {
 
     protected abstract boolean updateInAllCharacters(GameCharacter character);
 
-    protected abstract boolean updateInEventCharacters(GameCharacter character);
-
     protected abstract boolean updateInLBCharacters(GameCharacter character);
 
-    private Weapon getExclusiveWeapon(GameCharacter character) {
+    protected abstract boolean updateInEventCharacters(GameCharacter character);
+
+    private List<Weapon> getExclusiveWeapons(GameCharacter character) {
+        /*
+        * We compare exclusiveCharacterIds because the field exclusiveCharacter is not stored into JSON (to prevent
+        * infinite recursions in (de-)serialization). If we would compare with field exclusiveCharacter this function
+        * would not work properly in DatabaseHandler (because the Weapon objects received from DatabaseHandlers
+        * getAllWeapons() do not have the the field exclusiveCharacter)
+        */
         return getAllWeapons().stream()
-                .filter(w -> character.equals(w.getExclusiveCharacter())) // w.exclusiveCharacter can be null
-                .findAny()
-                .orElse(null);
+                .filter(w -> character.getId().equals(w.getExclusiveCharacterId()))
+                .collect(Collectors.toList());
     }
 
-//    public boolean deleteCharacter(GameCharacter character) {
-//        if (!removeFromAllCharacters(character)) {
-//            System.out.println("Failed to delete character " + character);
-//            return false;
-//        }
-//
-//        removeEventCharacter(character); // function already prints an error message so we do not need to do it again
-//
-//        if (!removeFromNonLBCharacters(character)) {
-//            System.out.println("Failed to remove character from non-lb characters");
-//        }
-//
-//        return true;
-//    }
-//
-//    protected abstract boolean removeFromAllCharacters(GameCharacter character);
+    public boolean deleteCharacter(GameCharacter character) {
+        if (!removeFromAllCharacters(character)) {
+            System.out.println("Failed to delete character " + character);
+            return false;
+        }
+
+        if (!removeFromNonLBCharacters(character)) {
+            System.out.println("Failed to remove character from non-lb characters");
+        }
+
+        removeEventCharacter(character); // function already prints an error message so we do not need to do it again
+
+        List<Weapon> exclusiveWeapons = getExclusiveWeapons((character));
+
+        // Delete all weapons exclusive to character
+        for (Weapon exclusiveWeapon : exclusiveWeapons) {
+            deleteWeapon(exclusiveWeapon);
+        }
+
+        return true;
+    }
+
+    protected abstract boolean removeFromAllCharacters(GameCharacter character);
+
+    protected abstract boolean removeFromNonLBCharacters(GameCharacter character);
 
     public boolean removeEventCharacter(GameCharacter character) {
         if (!removeFromEventCharacters(character)) {
@@ -218,8 +228,6 @@ public abstract class DataHandler {
     }
 
     protected abstract boolean removeFromEventCharacters(GameCharacter character);
-
-//    protected abstract boolean removeFromNonLBCharacters(GameCharacter character);
 
     public boolean clearEventCharacters() {
         if (!removeAllFromEventCharacters()) {

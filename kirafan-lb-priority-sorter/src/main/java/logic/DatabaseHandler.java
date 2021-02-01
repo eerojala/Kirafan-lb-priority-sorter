@@ -171,6 +171,12 @@ public class DatabaseHandler extends DataHandler {
     }
 
     @Override
+    protected boolean updateInLBCharacters(GameCharacter character) {
+        // We do not store non-limit broken characters on a separate JSON file, so this function always returns true
+        return true;
+    }
+
+    @Override
     protected boolean updateInEventCharacters(GameCharacter character) {
         event.removeBonusCharacter(character);
         event.addBonusCharacter(character);
@@ -179,24 +185,13 @@ public class DatabaseHandler extends DataHandler {
     }
 
     @Override
-    protected boolean updateInLBCharacters(GameCharacter character) {
-        // We do not store non-limit broken characters on a separate JSON file, so this function always returns true
-        return true;
+    protected boolean removeFromAllCharacters(GameCharacter character) {
+        return characterDatabase.remove(character);
     }
 
-    public boolean deleteCharacter(GameCharacter character) {
-        if (!characterDatabase.remove(character)) {
-            System.out.println("Failed to delete character " + character + " from json");
-            return false;
-        }
-        // Remove the character from the event bonus character list
-        removeEventCharacter(character);
-
-        // Delete character's exclusive weapons as well
-        getAllWeapons().stream()
-                .filter(w -> character.getId().equals(w.getExclusiveCharacterId())) // w.getExclusiveCharacterId() can be null
-                .forEach(w -> deleteWeapon(w));
-
+    @Override
+    protected boolean removeFromNonLBCharacters(GameCharacter character) {
+        // We do not store non-limit broken characters on a separate JSON file, so this function always returns true
         return true;
     }
 

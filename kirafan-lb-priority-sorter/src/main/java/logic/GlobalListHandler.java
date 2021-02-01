@@ -221,14 +221,6 @@ public class GlobalListHandler extends DataHandler {
     }
 
     @Override
-    protected boolean updateInEventCharacters(GameCharacter character) {
-        eventCharacters.remove(character);
-        eventCharacters.add(character);
-
-        return true;
-    }
-
-    @Override
     protected boolean updateInLBCharacters(GameCharacter character) {
         nonLimitBrokenCharacters.remove(character);
 
@@ -239,19 +231,26 @@ public class GlobalListHandler extends DataHandler {
         return true;
     }
 
-    public void deleteCharacter(GameCharacter character) {
+    @Override
+    protected boolean updateInEventCharacters(GameCharacter character) {
+        eventCharacters.remove(character);
+        eventCharacters.add(character);
+
+        return true;
+    }
+
+    @Override
+    protected boolean removeFromAllCharacters(GameCharacter character) {
         allCharacters.remove(character);
-        removeFromEventCharacters(character);
+
+        return true;
+    }
+
+    @Override
+    protected boolean removeFromNonLBCharacters(GameCharacter character) {
         nonLimitBrokenCharacters.remove(character);
 
-        List<Weapon> weaponsExclusiveToCharacter = getAllWeapons().stream()
-                .filter(w -> character.equals(w.getExclusiveCharacter())) // w.getExclusiveCharacter can be null
-                .collect(Collectors.toList());
-
-        // remove weapons which are exclusive to the character
-        for (Weapon weapon : weaponsExclusiveToCharacter) {
-            deleteWeapon(weapon);
-        }
+        return true;
     }
 
     @Override
