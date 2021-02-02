@@ -264,12 +264,7 @@ public class CharacterWindowController extends Controller implements Initializab
 
         if (databaseHandler.updateCharacter(character, true)) {
             listHandler.updateCharacter(character, true);
-            listHandler.sortAllCharacters();
-            listHandler.sortNonLimitBrokenCharacters();
-
-            if (listHandler.eventCharactersContain(character)) {
-                listHandler.sortEventCharacters();
-            }
+            listHandler.sortAllLists();
         } else {
             openErrorWindow("Updating characters.json failed", "Changes were not saved to characters.json");
         }

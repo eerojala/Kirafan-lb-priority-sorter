@@ -200,8 +200,7 @@ public class WeaponWindowController extends Controller implements Initializable 
 
         if (databaseHandler.updateWeapon(weapon, true)) {
             listHandler.updateWeapon(weapon, true);
-            listHandler.sortAllWeapons();
-            listHandler.sortNonLimitBrokenCharacters();
+            listHandler.sortAllLists();
         } else {
             openErrorWindow("Updating weapons.json failed", "Changes were not saved to weapons.json");
         }

@@ -379,6 +379,7 @@ public abstract class DataHandler {
         getWeaponUsers(weapon).stream()
                 .forEach(c -> {
                     c.setPreferredWeapon(null);
+
                     updateCharacter(c, false);
                 });
 

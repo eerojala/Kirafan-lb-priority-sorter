@@ -132,12 +132,12 @@ public class SeriesWindowController extends Controller implements Initializable 
 
         if (databaseHandler.updateSeries(series)) {
             listHandler.updateSeries(series);
-            listHandler.sortAllSeries();
-            listHandler.sortNonLimitBrokenCharacters();
 
-            if (listHandler.eventSeriesContains(series)) {
-                listHandler.sortEventSeries();
-            }
+            /*
+            * updating a series might affect every list (since updating a series also updates it's characters which
+            * leads to updating their exclusive weapons etc..), so we sort every list after a series update
+            */
+            listHandler.sortAllLists();
         } else {
             openErrorWindow("Updating series.json failed", "Changes were not saved to series.json");
         }
