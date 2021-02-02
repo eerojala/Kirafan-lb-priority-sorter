@@ -214,7 +214,7 @@ public class GlobalListHandler extends DataHandler {
         nonLimitBrokenCharacters.remove(character);
 
         // If the character does not get past the event series filter, it will not be added to the list back again
-        if (characterGetsPastEventSeriesFilter(character)) {
+        if (!character.isLimitBroken() && characterGetsPastEventSeriesFilter(character)) {
             nonLimitBrokenCharacters.add(character);
         }
 

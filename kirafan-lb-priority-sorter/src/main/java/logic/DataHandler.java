@@ -204,11 +204,9 @@ public abstract class DataHandler {
             return false;
         }
 
-        // Update the character in the non-limit broken character list (if the character is non-limit broken)
-        if (!character.isLimitBroken()) {
-            if (!updateInLBCharacters(character)) {
-                System.out.println("Failed to update character " + character + " in non-limit broken characters");
-            }
+        // Update the character in the non-limit broken character list
+        if (!updateInLBCharacters(character)) {
+            System.out.println("Failed to update character " + character + " in non-limit broken characters");
         }
 
         // Update the character in the event character list (provided that the character is included in there)

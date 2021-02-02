@@ -13,3 +13,4 @@ This application has a JavaFX GUI which I created with Gluon Scene Builder. With
 * JavaFX (https://openjfx.io/) and Gluon Scene Builder (https://gluonhq.com/products/scene-builder/)
 * It is a good idea to develop the GUI simultaneously with the business logic, even in solo projects (agile vs waterfall), so you can adjust the business logic in earlier stages when its more easy.
 * Remember to always ```close()``` FileWriters, Scanners etc., especially in multi-thread environments (like JUnit tests!)
+* Remember that data stored in the client/GUI might be different from data in the server/files. Remember to check both during testing!
